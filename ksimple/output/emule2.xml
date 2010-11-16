@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<parent key="emule2">
+  <child key="server di emule"/>
+</parent>
