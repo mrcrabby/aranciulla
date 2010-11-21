@@ -24,12 +24,16 @@ class Google():
         
         keywords = list()
         g_json=__get_g_json(unicode(keyword, 'utf-8'))
+        print 'Prima ricerca:'
         for entry in g_json:
+            print '    '+entry
             keywords.append(entry)
         add_keywords = list()
         for keyword in keywords[1:]:
+            print 'Ricerca per '+ keyword
             g_json = __get_g_json(keyword)
             for entry in g_json[1:3]:
+                print '    '+entry
                 add_keywords.append(entry)
         keywords.extend(add_keywords)
         return keywords
