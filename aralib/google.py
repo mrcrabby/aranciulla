@@ -29,7 +29,7 @@ class Google():
             print '    '+entry
             keywords.append(entry)
         add_keywords = list()
-        for keyword in keywords[1:]:
+        for keyword in keywords:
             print 'Ricerca per '+ keyword
             g_json = __get_g_json(keyword)
             for entry in g_json[1:3]:
