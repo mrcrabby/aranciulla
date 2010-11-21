@@ -1,0 +1,19 @@
+--- output/velocità.xml	2010-11-21 16:50:58.000000000 +0100
++++ output/velocità-filtered.xml	2010-11-21 16:50:59.000000000 +0100
+@@ -6,7 +6,6 @@
+   <entry key="velocità"/>
+   <entry key="velocità connessione"/>
+   <entry key="velocità internet"/>
+-  <entry key="velocità angolare"/>
+   <entry key="velocità media"/>
+   <entry key="velocità della luce nel vuoto"/>
+   <entry key="velocità della luce e del suono"/>
+@@ -16,8 +15,6 @@
+   <entry key="velocità connessione adsl"/>
+   <entry key="velocità internet key"/>
+   <entry key="velocità internet wind"/>
+-  <entry key="velocità angolare della terra"/>
+-  <entry key="velocità angolare formula"/>
+   <entry key="velocità luce nell'aria"/>
+   <entry key="velocità suono aria"/>
+   <entry key="velocità media corsa"/>
