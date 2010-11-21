@@ -16,7 +16,7 @@ class Google():
     def getKeywords(self, keyword, *args, **kwargs):
         
         def __get_g_json(term): 
-            data = urllib2.urlopen('http://clients1.google.it/complete/search?'+urlencode({'q':term.encode('utf-8'), 'hl':'it', 'client':'hp'})).read()
+            data = urllib2.urlopen('http://clients1.google.it/complete/search?'+urlencode({'q':(term+u' ').encode('utf-8'), 'hl':'it', 'client':'hp'})).read()
             HTMLtag = re.compile('<\/*b>')      # Matches HTML tags
             data = unicode(data, 'iso-8859-15')
             g_list = json.loads(data[19:-1])
