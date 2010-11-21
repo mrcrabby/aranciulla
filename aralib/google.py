@@ -24,7 +24,7 @@ class Google():
         
         keywords = list()
         g_json=__get_g_json(unicode(keyword, 'utf-8'))
-        for entry in g_json:
+        for entry in g_json[1:]:
             keywords.append(entry)
         add_keywords = list()
         for keyword in keywords[1:]:
