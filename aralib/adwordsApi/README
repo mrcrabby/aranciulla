@@ -1,0 +1,196 @@
+
+AdWords API Python Client Library
+=================================
+
+Google's AdWords API service lets developers design computer programs that
+interact directly with the AdWords platform. With these applications,
+advertisers and third parties can more efficiently -- and creatively -- manage
+their large or complex AdWords accounts and campaigns.
+
+AdWords API Python Client Library makes it easier to write Python clients to
+programmatically access AdWords accounts. One of the main features of this
+client library is that it hides SOAP layer from end user, which makes it
+much more easier to interact with API. The outgoing and incoming SOAP messages
+are monitored and logged on demand. The response headers like responseTime,
+units, requestId, etc. can also be logged on demand. Another nice feature of
+this client library is that it handles data types for all API call parameters.
+No longer do you need to remember that CampaignId is of type int and CriterionId
+is long. Both of these variables can now be sent as simple strings, when
+passing them as parameters. In fact, all variables are passed as either dict,
+list, or str. The conversion to the right type is handled internally by
+the client library. Reports can be downloaded in XML or CSV format. Each client
+instance keeps track of its own number of API units and operations consumed
+during program run.
+
+The client library provides support for SOAPpy and ZSI, which are two well
+known web services toolkits from http://pywebsvcs.sourceforge.net/. A single
+implementation of the client code can be used with either toolkit. Once you
+decide which SOAP toolkit to use, client library will take care of proper type
+conversions, instantiation of classes, etc.
+
+The two toolkits are very different and both have their pluses and minuses. The
+SOAPpy toolkit hasn't been updated for some time. The latest version 0.12.0_rc1
+is dated 2005-02-22. However, from the tests, it seem to be faster than ZSI. On
+the other hand, ZSI is the primary and most active web services toolkit from
+the "Python Web Services" project.
+
+Two modules are supported for parsing SOAP XML messages. By default, the client
+library uses PyXML module in order to parse SOAP XML messages. In addition, the
+library also supports ElementTree module, which may be activated simply by
+setting the appropriate config value (i.e. config['xml_parser']). Note, if you
+already have an lxml module installed and wish to use ElementTree, you do not
+need to install ElementTree. The lxml module is mostly compatible with
+ElementTree.
+
+Although, there are projects out there that still support PyXML, it is no longer
+maintained. The last update for ElementTree library is dated 2007-09-12. Out of
+these three libraries, the lxml is the one that was updated most recently.
+
+Code examples, located in "examples/", demonstate how to use the client library.
+For additional examples, take a look at the unit tests in "tests/".
+
+Useful scripts are located in "scripts/" directory.
+
+Documentation was generated using Epydoc, a nice tool for generating API
+documentation for Python modules.
+
+Data files are a set of files in CSV format located in "aw_api/data/". These
+files contain information like countries and their codes, currencies, world
+cities and their codes, etc.
+
+The client library includes a set of unit tests located in "tests/". All unit
+tests are (and should be) executed against Sandbox environment. Whenever changes
+are made to the clien library, the appropriate unit test should be executed to
+make sure that everything is working as intended and no new bugs were
+introduced.
+
+NOTE: The client library now provides support for v2009 version of API. This
+version is availabe in production, "https://adwords.google.com", and in Sandbox
+environment, "https://adwords-sandbox.google.com". The Sandbox database is
+shared between v13 and v2009 versions. Thus, any campaigns, ad groups, keywords,
+etc. which you create via v13 are accessible via v200909 and vice-versa. An
+example for using both versions in the same program run is available from
+"examples/schedule_campaign_report.py".
+
+
+How do I start?
+---------------
+
+Start by making sure that you have Python and [SOAPpy or ZSI] installed on your
+machine. If you don't have one already, sign up for a Google Account at
+https://www.google.com/accounts/NewAccount. Once that's taken care of, proceed
+to the step-by-step guide below. Write some code and enjoy!
+
+
+Step-by-step guide for accessing Sandbox:
+-----------------------------------------
+
+1) Make sure you have Python v2.4 or above installed. The latest stable version
+   can be fetched from http://www.python.org/.
+
+2) One of the two web services toolkits is needed, either SOAPpy or ZSI. Both
+   of them can be fetched from http://pywebsvcs.sourceforge.net/.
+
+3) Fetch latest version of PyXML module from
+   http://sourceforge.net/projects/pyxml/, which is required by the client
+   library.
+
+4) Sign up for a Google Account. In later steps, I'll assume that the new login
+   is joe.shmoe@gmail.com.
+
+5) Run the "setup.py" script to install the module.
+
+   $ python setup.py build install
+
+6) Run the "aw_api_config.py" script to set authentication headers. More
+   information about the format of each header is at http://code.google.com/apis/adwords/docs/developer/adwords_api_sandbox.html#requestheaders.
+   Example,
+
+   Login email: joe.shmoe@gmail.com
+   Login password: secret
+   Login client email: client_1+joe.shmoe@gmail.com
+   Login client customer id:
+   User agent: GoogleTest
+   Developer token: joe.shmoe@gmail.com++USD
+   Application token: 01234567890123456789012
+
+   Select SOAP library [1=SOAPpy, 2=ZSI]: 1
+   Enable debugging mode [y/n]: n
+   Enable SOAP XML logging mode [y/n]: y
+   Enable API request logging mode [y/n]: y
+
+7) Run "examples/get_accounts_info.py", which will set up your Sandbox with five
+   client accounts as well as return info for each of these accounts.
+
+8) Read over the documentation in "docs/index.html" to familiarize yourself with
+   the API of the client library.
+
+
+How to make a release?
+----------------------
+
+1) Create new directory with a name "awapi_python_lib_v.v.v", where v.v.v is a
+   version number (i.e. 1.0.0), and copy new release into it.
+
+2) Run unit tests in "tests/" and code examples in "examples/" to make sure that
+   no new bugs were introduced. The "tests/all_tests.py" script will run all
+   available unit tests.
+
+3) Update LIB_VERSION in "aw_api/__init__.py".
+
+4) Update "ChangeLog" file with new changes.
+
+5) If adding/removing support for API version, update API_VERSIONS and
+   MIN_API_VERSION in "aw_api/__init__.py".
+
+   a) If also will be using ZSI toolkit, run "scripts/gen_wsdl_services.py"
+      script to generate client interface code.
+
+   b) If upgrading to newer version of SOAPpy or ZSI, make sure to update
+      MIN_SOAPPY_VERSION in "aw_api/soappy_toolkit/__init__.py" and/or
+      MIN_ZSI_VERSION in "aw_api/zsi_toolkit/__init__.py".
+
+6) Delete old documentation from "docs/", regenerate new documenation, and
+   modify footer to remove timestamp by executing the following commands from
+   release's home directory,
+
+   $ find docs \( -not -name 'docs' -and -not -name 'README' \) | xargs rm
+   $ epydoc --name "AdWords API Python Client Library" --url "http://code.google.com/p/google-api-adwords-python-lib/" --html aw_api --exclude=_services -o docs
+   $ perl -pi -e 's/Generated by Epydoc (\d+\.\d+\.\d+) .*/Generated by Epydoc $1/' docs/*
+
+7) Delete user specific data files: "*.pkl" and "logs/*.log". Delete all
+   instances of "*.pyc" files from client library.
+
+   $ find . \( -name '*.pkl' -or -name '*.log' -or -name '*.pyc' \) | xargs rm
+
+8) Pack new release into a tarball and then gzip it,
+
+   $ tar -cvf awapi_python_lib_v.v.v.tar awapi_python_lib_v.v.v/
+   $ gzip awapi_python_lib_v.v.v.tar
+
+
+Where do I submit bug reports and/or feature requests?
+---------------------------------------------------
+
+Use issue tracker at http://code.google.com/p/google-api-adwords-python-lib/issues/list.
+
+
+External Dependencies:
+----------------------
+
+    - Python v2.4+        -- http://www.python.org/
+    - PyXML v0.8.3+       -- http://sourceforge.net/projects/pyxml/
+                          or
+      ElementTree v1.2.6+ -- http://effbot.org/zone/element-index.htm
+                          or
+      lxml v2.2+          -- http://codespeak.net/lxml/index.html
+    - SOAPpy v0.12.0      -- http://pywebsvcs.sourceforge.net/
+                          or
+      ZSI v2.0            -- http://pywebsvcs.sourceforge.net/
+    - Epydoc              -- http://epydoc.sourceforge.net/
+                          (only if you will be generating docs)
+    - Google Account      -- https://www.google.com/accounts/NewAccount
+
+
+Author:
+    api.sgrinberg@gmail.com (Stan Grinberg)

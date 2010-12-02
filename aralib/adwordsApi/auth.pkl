@@ -1,0 +1,25 @@
+(dp0
+S'clientCustomerId'
+p1
+S''
+p2
+sS'developerToken'
+p3
+S'h7Dla5_XkRhLmSmAg91eNA'
+p4
+sS'clientEmail'
+p5
+g2
+sS'userAgent'
+p6
+S'AWAPI PyLib v11.1.1: '
+p7
+sS'password'
+p8
+S'z3KH0R6ifs'
+p9
+sS'email'
+p10
+S'info@saperlo.it'
+p11
+s.

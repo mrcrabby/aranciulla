@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>aw_api.zsi_toolkit.HttpConnectionHandler</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="aw_api-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://code.google.com/p/google-api-adwords-python-lib/">AdWords API Python Client Library</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="aw_api-module.html">Package&nbsp;aw_api</a> ::
+        <a href="aw_api.zsi_toolkit-module.html">Package&nbsp;zsi_toolkit</a> ::
+        Module&nbsp;HttpConnectionHandler
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="aw_api.zsi_toolkit.HttpConnectionHandler-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="aw_api.zsi_toolkit.HttpConnectionHandler-module.html">Module aw_api.zsi_toolkit.HttpConnectionHandler</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Copyright 2010 Google Inc. All Rights Reserved.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Licensed under the Apache License, Version 2.0 (the "License");</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># you may not use this file except in compliance with the License.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># You may obtain a copy of the License at</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#      http://www.apache.org/licenses/LICENSE-2.0</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Unless required by applicable law or agreed to in writing, software</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># distributed under the License is distributed on an "AS IS" BASIS,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># See the License for the specific language governing permissions and</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># limitations under the License.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">"""Creates custom HTTPConnection to support HTTP proxy."""</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-name">__author__</tt> <tt class="py-op">=</tt> <tt class="py-string">'api.sgrinberg@gmail.com (Stan Grinberg)'</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">httplib</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package aw_api=aw_api-module.html"><a title="aw_api" class="py-name" href="#" onclick="return doclink('link-0', 'aw_api', 'link-0');">aw_api</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Module aw_api.Utils=aw_api.Utils-module.html"><a title="aw_api.Utils" class="py-name" href="#" onclick="return doclink('link-1', 'Utils', 'link-1');">Utils</a></tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="HttpConnectionHandler"></a><div id="HttpConnectionHandler-def"><a name="L27"></a><tt class="py-lineno">27</tt> <a class="py-toggle" href="#" id="HttpConnectionHandler-toggle" onclick="return toggle('HttpConnectionHandler');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler-class.html">HttpConnectionHandler</a><tt class="py-op">(</tt><tt class="py-base-class">httplib</tt><tt class="py-op">.</tt><tt class="py-base-class">HTTPConnection</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpConnectionHandler-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="HttpConnectionHandler-expanded"><a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">  <tt class="py-docstring">"""Implements HttpConnectionHandler.</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-docstring">  Responsible for creating custom HTTP connection object to support HTTP proxy</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-docstring">  connection. Overwrites HTTPConnection, must putrequest.</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-docstring">  """</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">  <tt id="link-2" class="py-name" targets="Variable aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler.http_proxy=aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler-class.html#http_proxy"><a title="aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler.http_proxy" class="py-name" href="#" onclick="return doclink('link-2', 'http_proxy', 'link-2');">http_proxy</a></tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"> </tt>
+<a name="HttpConnectionHandler.__init__"></a><div id="HttpConnectionHandler.__init__-def"><a name="L37"></a><tt class="py-lineno">37</tt> <a class="py-toggle" href="#" id="HttpConnectionHandler.__init__-toggle" onclick="return toggle('HttpConnectionHandler.__init__');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">host</tt><tt class="py-op">,</tt> <tt class="py-param">port</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">strict</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">timeout</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpConnectionHandler.__init__-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="HttpConnectionHandler.__init__-expanded"><a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">    <tt class="py-docstring">"""Inits HttpConnectionHandler with host and port.</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt class="py-docstring">    Args:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"><tt class="py-docstring">      host: str proxy's HTTP host or combined form of host:port.</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"><tt class="py-docstring">      [optional]</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"><tt class="py-docstring">      port: int proxy's HTTP port number.</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line"><tt class="py-docstring">      strict: bool if True, causes BadStatusLine to be raised if the status</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"><tt class="py-docstring">              line can't be parsed as a valid HTTP/1.0 or 1.1 status line. This</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"><tt class="py-docstring">              argument is ignored.</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"><tt class="py-docstring">      timeout: int blocking operations will timeout after that many seconds.</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"><tt class="py-docstring">               This argument is ignored.</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__host</tt> <tt class="py-op">=</tt> <tt class="py-name">host</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__port</tt> <tt class="py-op">=</tt> <tt class="py-name">port</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__http_proxy</tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name" targets="Module aw_api.zsi_toolkit.HttpConnectionHandler=aw_api.zsi_toolkit.HttpConnectionHandler-module.html,Class aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler=aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler-class.html"><a title="aw_api.zsi_toolkit.HttpConnectionHandler
+aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler" class="py-name" href="#" onclick="return doclink('link-3', 'HttpConnectionHandler', 'link-3');">HttpConnectionHandler</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name"><a title="aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler.http_proxy" class="py-name" href="#" onclick="return doclink('link-4', 'http_proxy', 'link-2');">http_proxy</a></tt> <tt class="py-keyword">or</tt> <tt class="py-name">host</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt class="py-name">httplib</tt><tt class="py-op">.</tt><tt class="py-name">HTTPConnection</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method aw_api.AccountService.AccountService.__init__()=aw_api.AccountService.AccountService-class.html#__init__,Method aw_api.AdExtensionOverrideService.AdExtensionOverrideService.__init__()=aw_api.AdExtensionOverrideService.AdExtensionOverrideService-class.html#__init__,Method aw_api.AdGroupAdService.AdGroupAdService.__init__()=aw_api.AdGroupAdService.AdGroupAdService-class.html#__init__,Method aw_api.AdGroupCriterionService.AdGroupCriterionService.__init__()=aw_api.AdGroupCriterionService.AdGroupCriterionService-class.html#__init__,Method aw_api.AdGroupService.AdGroupService.__init__()=aw_api.AdGroupService.AdGroupService-class.html#__init__,Method aw_api.AdParamService.AdParamService.__init__()=aw_api.AdParamService.AdParamService-class.html#__init__,Method aw_api.AuthToken.AuthToken.__init__()=aw_api.AuthToken.AuthToken-class.html#__init__,Method aw_api.BidLandscapeService.BidLandscapeService.__init__()=aw_api.BidLandscapeService.BidLandscapeService-class.html#__init__,Method aw_api.Buffer.Buffer.__init__()=aw_api.Buffer.Buffer-class.html#__init__,Method aw_api.BulkMutateJobService.BulkMutateJobService.__init__()=aw_api.BulkMutateJobService.BulkMutateJobService-class.html#__init__,Method aw_api.CampaignAdExtensionService.CampaignAdExtensionService.__init__()=aw_api.CampaignAdExtensionService.CampaignAdExtensionService-class.html#__init__,Method aw_api.CampaignCriterionService.CampaignCriterionService.__init__()=aw_api.CampaignCriterionService.CampaignCriterionService-class.html#__init__,Method aw_api.CampaignService.CampaignService.__init__()=aw_api.CampaignService.CampaignService-class.html#__init__,Method aw_api.CampaignTargetService.CampaignTargetService.__init__()=aw_api.CampaignTargetService.CampaignTargetService-class.html#__init__,Method aw_api.Client.Client.__init__()=aw_api.Client.Client-class.html#__init__,Method aw_api.Errors.ApiAsStrError.__init__()=aw_api.Errors.ApiAsStrError-class.html#__init__,Method aw_api.Errors.ApiError.__init__()=aw_api.Errors.ApiError-class.html#__init__,Method aw_api.Errors.DetailError.__init__()=aw_api.Errors.DetailError-class.html#__init__,Method aw_api.Errors.Error.__init__()=aw_api.Errors.Error-class.html#__init__,Method aw_api.GeoLocationService.GeoLocationService.__init__()=aw_api.GeoLocationService.GeoLocationService-class.html#__init__,Method aw_api.InfoService.InfoService.__init__()=aw_api.InfoService.InfoService-class.html#__init__,Method aw_api.Logger.Logger.__init__()=aw_api.Logger.Logger-class.html#__init__,Method aw_api.MediaService.MediaService.__init__()=aw_api.MediaService.MediaService-class.html#__init__,Method aw_api.ReportDefinitionService.ReportDefinitionService.__init__()=aw_api.ReportDefinitionService.ReportDefinitionService-class.html#__init__,Method aw_api.ReportService.ReportService.__init__()=aw_api.ReportService.ReportService-class.html#__init__,Method aw_api.SoapBuffer.SoapBuffer.__init__()=aw_api.SoapBuffer.SoapBuffer-class.html#__init__,Method aw_api.TargetingIdeaService.TargetingIdeaService.__init__()=aw_api.TargetingIdeaService.TargetingIdeaService-class.html#__init__,Method aw_api.TrafficEstimatorService.TrafficEstimatorService.__init__()=aw_api.TrafficEstimatorService.TrafficEstimatorService-class.html#__init__,Method aw_api.WebService.WebService.__init__()=aw_api.WebService.WebService-class.html#__init__,Method aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler.__init__()=aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler-class.html#__init__,Method aw_api.zsi_toolkit.SigHandler.SigHandler.__init__()=aw_api.zsi_toolkit.SigHandler.SigHandler-class.html#__init__"><a title="aw_api.AccountService.AccountService.__init__
+aw_api.AdExtensionOverrideService.AdExtensionOverrideService.__init__
+aw_api.AdGroupAdService.AdGroupAdService.__init__
+aw_api.AdGroupCriterionService.AdGroupCriterionService.__init__
+aw_api.AdGroupService.AdGroupService.__init__
+aw_api.AdParamService.AdParamService.__init__
+aw_api.AuthToken.AuthToken.__init__
+aw_api.BidLandscapeService.BidLandscapeService.__init__
+aw_api.Buffer.Buffer.__init__
+aw_api.BulkMutateJobService.BulkMutateJobService.__init__
+aw_api.CampaignAdExtensionService.CampaignAdExtensionService.__init__
+aw_api.CampaignCriterionService.CampaignCriterionService.__init__
+aw_api.CampaignService.CampaignService.__init__
+aw_api.CampaignTargetService.CampaignTargetService.__init__
+aw_api.Client.Client.__init__
+aw_api.Errors.ApiAsStrError.__init__
+aw_api.Errors.ApiError.__init__
+aw_api.Errors.DetailError.__init__
+aw_api.Errors.Error.__init__
+aw_api.GeoLocationService.GeoLocationService.__init__
+aw_api.InfoService.InfoService.__init__
+aw_api.Logger.Logger.__init__
+aw_api.MediaService.MediaService.__init__
+aw_api.ReportDefinitionService.ReportDefinitionService.__init__
+aw_api.ReportService.ReportService.__init__
+aw_api.SoapBuffer.SoapBuffer.__init__
+aw_api.TargetingIdeaService.TargetingIdeaService.__init__
+aw_api.TrafficEstimatorService.TrafficEstimatorService.__init__
+aw_api.WebService.WebService.__init__
+aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler.__init__
+aw_api.zsi_toolkit.SigHandler.SigHandler.__init__" class="py-name" href="#" onclick="return doclink('link-5', '__init__', 'link-5');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">host</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__http_proxy</tt><tt class="py-op">,</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">                                    <tt class="py-name">port</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__port</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line"> </tt>
+<a name="HttpConnectionHandler.putrequest"></a><div id="HttpConnectionHandler.putrequest-def"><a name="L56"></a><tt class="py-lineno">56</tt> <a class="py-toggle" href="#" id="HttpConnectionHandler.putrequest-toggle" onclick="return toggle('HttpConnectionHandler.putrequest');">-</a><tt class="py-line">  <tt class="py-keyword">def</tt> <a class="py-def-name" href="aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler-class.html#putrequest">putrequest</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">method</tt><tt class="py-op">,</tt> <tt class="py-param">url</tt><tt class="py-op">,</tt> <tt class="py-param">skip_host</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">                 <tt class="py-param">skip_accept_encoding</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="HttpConnectionHandler.putrequest-collapsed" style="display:none;" pad="++" indent="++++++"></div><div id="HttpConnectionHandler.putrequest-expanded"><a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">    <tt class="py-docstring">"""Send a line to the server consisting of the request string, the selector</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"><tt class="py-docstring">    string, and the HTTP version.</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"><tt class="py-docstring">    Args:</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"><tt class="py-docstring">      method: str HTTP request method.</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line"><tt class="py-docstring">      url: str selector URL.</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line"><tt class="py-docstring">      [optional]</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"><tt class="py-docstring">      skip_host: bool if True, disable automatic sending of Host header.</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line"><tt class="py-docstring">      skip_accept_encoding: bool if True, disable automatic sending of</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"><tt class="py-docstring">                            Accept-Encoding header.</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__http_proxy</tt> <tt class="py-op">!=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__host</tt><tt class="py-op">:</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">      <tt class="py-name">scheme</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name"><a title="aw_api.Utils" class="py-name" href="#" onclick="return doclink('link-6', 'Utils', 'link-1');">Utils</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Function aw_api.Utils.GetSchemeFromUrl()=aw_api.Utils-module.html#GetSchemeFromUrl"><a title="aw_api.Utils.GetSchemeFromUrl" class="py-name" href="#" onclick="return doclink('link-7', 'GetSchemeFromUrl', 'link-7');">GetSchemeFromUrl</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-string">'http'</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">      <tt class="py-name">netloc</tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="aw_api.Utils" class="py-name" href="#" onclick="return doclink('link-8', 'Utils', 'link-1');">Utils</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Function aw_api.Utils.GetNetLocFromUrl()=aw_api.Utils-module.html#GetNetLocFromUrl"><a title="aw_api.Utils.GetNetLocFromUrl" class="py-name" href="#" onclick="return doclink('link-9', 'GetNetLocFromUrl', 'link-9');">GetNetLocFromUrl</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__host</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">      <tt class="py-name">path</tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="aw_api.Utils" class="py-name" href="#" onclick="return doclink('link-10', 'Utils', 'link-1');">Utils</a></tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Function aw_api.Utils.GetPathFromUrl()=aw_api.Utils-module.html#GetPathFromUrl"><a title="aw_api.Utils.GetPathFromUrl" class="py-name" href="#" onclick="return doclink('link-11', 'GetPathFromUrl', 'link-11');">GetPathFromUrl</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">      <tt class="py-name">uri</tt> <tt class="py-op">=</tt> <tt class="py-string">'%s://%s%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">scheme</tt><tt class="py-op">,</tt> <tt class="py-name">netloc</tt><tt class="py-op">,</tt> <tt class="py-name">path</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">      <tt class="py-name">uri</tt> <tt class="py-op">=</tt> <tt class="py-name">url</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">    <tt class="py-name">httplib</tt><tt class="py-op">.</tt><tt class="py-name">HTTPConnection</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler.putrequest()=aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler-class.html#putrequest"><a title="aw_api.zsi_toolkit.HttpConnectionHandler.HttpConnectionHandler.putrequest" class="py-name" href="#" onclick="return doclink('link-12', 'putrequest', 'link-12');">putrequest</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">method</tt><tt class="py-op">=</tt><tt class="py-name">method</tt><tt class="py-op">,</tt> <tt class="py-name">url</tt><tt class="py-op">=</tt><tt class="py-name">uri</tt><tt class="py-op">,</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">                                      <tt class="py-name">skip_host</tt><tt class="py-op">=</tt><tt class="py-name">skip_host</tt><tt class="py-op">,</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">                                      <tt class="py-name">skip_accept_encoding</tt><tt class="py-op">=</tt><tt class="py-name">skip_accept_encoding</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="aw_api-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://code.google.com/p/google-api-adwords-python-lib/">AdWords API Python Client Library</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

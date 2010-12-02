@@ -9,14 +9,17 @@ import urllib2
 import sys
 
 class KeywordEntry():
-    def __init__(self, keyword, key):
+    def __init__(self, keyword, key, match_type=None, global_score=None, regional_score=None):
         self.keyword = unicode(keyword)
         self.key = unicode(key)
         self.children = list()
         self.selected = False
+        self.match_type = match_type
+        self.global_score = global_score
+        self.regional_score = regional_score
             
     def __str__(self):
-        return 'keyword:%s key:%s' % (self.keyword, self.key)
+        return 'keyword:%s    key:%s    match_type:%s    global:%s    regional:%s\n' % (self.keyword, self.key, self.match_type, self.global_score, self.regional_score)
     
     def __repr__(self):
         return self.__str__()
@@ -37,6 +40,9 @@ class KeywordManager():
     
     def importKeywords(self,keyword, keywords):
         self.keywords = [unicode(k) for k in keywords]
+        self.__gen_key_entries()
+        
+    def __gen_key_entries(self):
         for key in self.keywords:
             norm_key = self.__genKey(key)
             duplicate = False
@@ -45,6 +51,17 @@ class KeywordManager():
                     duplicate = True
             if(not duplicate):
                 self.keyword_entries.append(KeywordEntry(key, norm_key))
+    
+    def importStructuredKeywords(self,keyword, keywords_dict):
+        self.keywords = [unicode(k.get('keyword')) for k in keywords_dict[4:]]
+        self.__gen_key_entries()
+        for entry in self.keyword_entries:
+            for d in keywords_dict:
+                if d.get('keyword') == entry.keyword:
+                    entry.match_type = d.get('match_type')
+                    entry.global_score = d.get('global_score')
+                    entry.regional_score = d.get('regional_score')
+                    break
         
     def getKeywords(self):
         return list(self.keywords)
@@ -121,10 +138,12 @@ class KeywordManager():
         
         list = generated_keyword.split()
         
+        popped = False
         #put keyword at top
         while True: 
             if self.keyword in list:
                 list.pop(list.index(self.keyword))
+                popped = True
             else:
                 break
         
@@ -135,7 +154,10 @@ class KeywordManager():
         
         list.sort()
         
-        return ' '.join([self.keyword]+list)
+        if popped:
+            return ' '.join([self.keyword]+list)
+        else:
+            return ' '.join(list)
     
     def __relation(self, key1, key2):
         if key1 != key2:
@@ -162,4 +184,12 @@ class KeywordManager():
                 filter_done.add(word)
         
         return res
-
+    
+    def sort(self):
+        self.keyword_entries.sort(key=lambda x: x.global_score, reverse=True)
+    
+    def get(self, l, m):
+        return self.keyword_entries[l:m]
+    
+    def removeUncleanKeywords(self):
+        self.keyword_entries = [k for k in self.keyword_entries if self.keyword in k.key]
