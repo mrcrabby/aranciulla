@@ -66,14 +66,14 @@ class Google():
                 'type': 'RelatedToKeywordSearchParameter',
                 'keywords': [{
                     'text': keyword,
-                    'matchType': 'EXACT'
+                    'matchType': 'BROAD'
                 }]
             },{
                'type': 'IdeaTextMatchesSearchParameter',
                'included': [keyword]
             },{
                'type': 'KeywordMatchTypeSearchParameter',
-               'keywordMatchTypes': ['EXACT']
+               'keywordMatchTypes': ['BROAD']
             },{
                'type': 'LanguageTargetSearchParameter',
                'languageTargets': [{'languageCode':'it'}]

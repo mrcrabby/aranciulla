@@ -19,7 +19,7 @@ class KeywordEntry():
         self.regional_score = regional_score
             
     def __str__(self):
-        return 'keyword:%s    key:%s    match_type:%s    global:%s    regional:%s\n' % (self.keyword, self.key, self.match_type, self.global_score, self.regional_score)
+        return 'keyword:%s    key:%s    match_type:%s    global:%s    regional:%s' % (self.keyword, self.key, self.match_type, self.global_score, self.regional_score)
     
     def __repr__(self):
         return self.__str__()
@@ -193,3 +193,7 @@ class KeywordManager():
     
     def removeUncleanKeywords(self):
         self.keyword_entries = [k for k in self.keyword_entries if self.keyword in k.key]
+    
+    def removeEqualGlobalsAndRegionals(self):
+        self.sort()
+        self.keyword_entries = [v for k,v in dict(((x.global_score, x.regional_score), x) for x in self.keyword_entries[::-1]).iteritems() ]        

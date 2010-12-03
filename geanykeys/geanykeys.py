@@ -4,6 +4,7 @@
 Options:
 
 -f filter keywords if present in the page
+-m gimme more info
  
 @author: Vincenzo Ampolo <vincenzo.ampolo@gmail.com>
 '''
@@ -27,7 +28,7 @@ def main(argv=None):
     if argv is None:
        argv = sys.argv
     
-    opts, extraparams = getopt.gnu_getopt(argv[1:], "hvf", ["help", "--filter"])
+    opts, extraparams = getopt.gnu_getopt(argv[1:], "hvfm", ["help", "--filter", "--more"])
     
     verbose = False
     more_info = False
@@ -35,7 +36,6 @@ def main(argv=None):
     filter_url =  u'http://aranzulla.tecnologia.virgilio.it/s/'
     upper_bound = 1000
     lower_bound = -1
-    num_words = 3
     
     google = Google()
     
@@ -53,6 +53,8 @@ def main(argv=None):
         elif o in ("-h", "--help"):
             print __doc__
             sys.exit(0)
+        elif o in ("-m", "--more"):
+            more_info = True
         else:
             assert False, "UnhandledOption"
                      
@@ -61,6 +63,7 @@ def main(argv=None):
         keywords = google.getAdwordsKeywords(keyword)
         km.importStructuredKeywords(keyword, keywords)
         km.removeUncleanKeywords()
+        km.removeEqualGlobalsAndRegionals()
         km.sort()
             
         print 'Computing results...'
@@ -81,7 +84,7 @@ def main(argv=None):
         #save everything
         f = codecs.open(os.path.join('output', keyword+'.txt'), 'w', 'utf-8')
         if more_info:
-            f.writelines([unicode(obj)+'\n' for obj in km.getKeywords()])
+            f.writelines([unicode(obj)+'\n' for obj in km.getKeywordEntries()])
         else:
             f.writelines([unicode(obj.keyword)+'\n' for obj in km.getKeywordEntries()])
         f.close()            
