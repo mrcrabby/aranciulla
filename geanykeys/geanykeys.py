@@ -5,6 +5,7 @@ Options:
 
 -f filter keywords if present in the page
 -m gimme more info
+-e do an EXACT research instead of BROAD
  
 @author: Vincenzo Ampolo <vincenzo.ampolo@gmail.com>
 '''
@@ -68,7 +69,7 @@ def main(argv=None):
         km.removeUncleanKeywords()
         if mode == 'BROAD':
             km.removeEqualGlobalsAndRegionals()
-        km.sort()
+        km.sort('regional_score')
             
         print 'Computing results...'
         doc = km.genXml(lower_bound, upper_bound)

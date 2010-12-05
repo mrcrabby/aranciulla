@@ -185,8 +185,8 @@ class KeywordManager():
         
         return res
     
-    def sort(self):
-        self.keyword_entries.sort(key=lambda x: x.global_score, reverse=True)
+    def sort(self, field='global_score'):
+        self.keyword_entries.sort(key=lambda x: getattr(x, field), reverse=True)
     
     def get(self, l, m):
         return self.keyword_entries[l:m]
