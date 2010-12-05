@@ -71,12 +71,6 @@ def main(argv=None):
         if mode == 'BROAD':
             km.removeEqualGlobalsAndRegionals()
         km.sort('regional_score')
-            
-        print 'Computing results...'
-        doc = km.genXml(lower_bound, upper_bound)
-        f = codecs.open(os.path.join('output', keyword+'.xml'), 'w', 'utf-8')
-        f.write(doc.toprettyxml(indent='  '))
-        f.close()
         
         if filter:
             print 'Computing filtered results...'
@@ -84,16 +78,21 @@ def main(argv=None):
             f = codecs.open(os.path.join('output', keyword+'-filtered.xml'), 'w','utf-8')
             f.write(doc.toprettyxml(indent='  '))
             f.close()
-            #make diff
-            subprocess.Popen(['diff -Naru ' +os.path.join('output', keyword+'.xml')+ ' ' + os.path.join('output', keyword+'-filtered.xml') + ' > ' + os.path.join('output', keyword+'-filtered.diff') ], shell=True)
         
-        #save everything
-        f = codecs.open(os.path.join('output', keyword+'.txt'), 'w', 'utf-8')
+        if not filter or (filter and more_info):
+            print 'Computing results...'
+            doc = km.genXml(lower_bound, upper_bound)
+            f = codecs.open(os.path.join('output', keyword+'.xml'), 'w', 'utf-8')
+            f.write(doc.toprettyxml(indent='  '))
+            f.close()
+        
         if more_info:
+            #save everything
+            f = codecs.open(os.path.join('output', keyword+'.txt'), 'w', 'utf-8')
             f.writelines([unicode(obj)+'\n' for obj in km.getKeywordEntries()])
-        else:
-            f.writelines([unicode(obj.keyword)+'\n' for obj in km.getKeywordEntries()])
-        f.close()            
+            if filter:
+                subprocess.Popen(['diff -Naru ' +os.path.join('output', keyword+'.xml')+ ' ' + os.path.join('output', keyword+'-filtered.xml') + ' > ' + os.path.join('output', keyword+'-filtered.diff') ], shell=True)
+            f.close()            
         
     print 'Program terminates correctly'
     return 0
