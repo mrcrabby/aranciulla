@@ -6,6 +6,7 @@ Options:
 -f filter keywords if present in the page
 -m gimme more info
 -e do an EXACT research instead of BROAD
+-u num : print at maximum num entries
  
 @author: Vincenzo Ampolo <vincenzo.ampolo@gmail.com>
 '''
@@ -29,7 +30,7 @@ def main(argv=None):
     if argv is None:
        argv = sys.argv
     
-    opts, extraparams = getopt.gnu_getopt(argv[1:], "hvfme", ["help", "--filter", "--more", '--exact'])
+    opts, extraparams = getopt.gnu_getopt(argv[1:], "hvfmeu:", ["help", "--filter", "--more", '--exact', '--upper-bound='])
     
     verbose = False
     more_info = False
