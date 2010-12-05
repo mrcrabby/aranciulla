@@ -28,7 +28,7 @@ def main(argv=None):
     if argv is None:
        argv = sys.argv
     
-    opts, extraparams = getopt.gnu_getopt(argv[1:], "hvfm", ["help", "--filter", "--more"])
+    opts, extraparams = getopt.gnu_getopt(argv[1:], "hvfme", ["help", "--filter", "--more", '--exact'])
     
     verbose = False
     more_info = False
@@ -36,6 +36,7 @@ def main(argv=None):
     filter_url =  u'http://aranzulla.tecnologia.virgilio.it/s/'
     upper_bound = 1000
     lower_bound = -1
+    mode = 'BROAD'
     
     google = Google()
     
@@ -55,15 +56,18 @@ def main(argv=None):
             sys.exit(0)
         elif o in ("-m", "--more"):
             more_info = True
+        elif o in ("-e", "--exact"):
+            mode = 'EXACT'
         else:
             assert False, "UnhandledOption"
                      
     for keyword in extraparams:
         km = KeywordManager(keyword)
-        keywords = google.getAdwordsKeywords(keyword)
+        keywords = google.getAdwordsKeywords(keyword, mode)
         km.importStructuredKeywords(keyword, keywords)
         km.removeUncleanKeywords()
-        km.removeEqualGlobalsAndRegionals()
+        if mode == 'BROAD':
+            km.removeEqualGlobalsAndRegionals()
         km.sort()
             
         print 'Computing results...'

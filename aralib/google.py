@@ -59,21 +59,21 @@ class Google():
                                     keywords.append(dict(keyword=keyword, match_type=match_type, global_score=global_score, regional_score=regional_score))
         return keywords
     
-    def getAdwordsKeywords(self, keyword):
+    def getAdwordsKeywords(self, keyword, mode='BROAD'):
         keyword_entries = list()
         selector = {
             'searchParameters': [{
                 'type': 'RelatedToKeywordSearchParameter',
                 'keywords': [{
                     'text': keyword,
-                    'matchType': 'BROAD'
+                    'matchType': mode
                 }]
             },{
                'type': 'IdeaTextMatchesSearchParameter',
                'included': [keyword]
             },{
                'type': 'KeywordMatchTypeSearchParameter',
-               'keywordMatchTypes': ['BROAD']
+               'keywordMatchTypes': [mode]
             },{
                'type': 'LanguageTargetSearchParameter',
                'languageTargets': [{'languageCode':'it'}]
