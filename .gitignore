@@ -3,3 +3,4 @@
 .pydev*
 *.pyc
 genkeyword/*
+*/output/*

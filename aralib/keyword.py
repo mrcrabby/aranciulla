@@ -90,44 +90,27 @@ class KeywordManager():
         doc.appendChild(cat)
         
         pbar = ProgressBar(maxval=len(self.keyword_entries)).start()
-        trees = list()        
+        entries = list()  
         for i,obj in enumerate(self.keyword_entries):
             pbar.update(i)
-            if len(obj.children) > lower_bound:
-                tree = None
-                if filter:
-                    if self.__retrieve_keyword_presence_in_page(url, obj.key, filter_done, filter_missed):
-                        valid = True
-                    else:
-                        valid = False
-                 
-                if valid:
-                    tree = Tree(obj.keyword)
-                
-                j = 0
-                for entry in obj.children:
-                    if filter:
-                        if self.__retrieve_keyword_presence_in_page(url, entry.key, filter_done, filter_missed):
-                            valid = True
-                            j += 1
-                        else:
-                            valid = False
-                    
-                    if valid:
-                        tree.next.append(unicode(entry.keyword))
-                    
-                    if j >= upper_bound:
-                        break
-                if tree:
-                    trees.append(tree)
-        
+            if filter:
+                if self.__retrieve_keyword_presence_in_page(url, obj.key, filter_done, filter_missed):
+                    valid = True
+                else:
+                    valid = False
+             
+            if valid:
+                entries.append(obj.keyword)
+            
+            if len(entries) >= upper_bound:
+                break
+            
         #Create the xml now
-        for tree in trees:
-            if len(tree.next) > lower_bound:
-                child = doc.createElement("entry")
-                child.setAttribute("key", tree.el)
-                cat.appendChild(child)
-                
+        for entry in entries:
+            child = doc.createElement("entry")
+            child.setAttribute("key", entry)
+            cat.appendChild(child)
+            
         pbar.finish()
         sys.stdout.write('\n')
         return doc
