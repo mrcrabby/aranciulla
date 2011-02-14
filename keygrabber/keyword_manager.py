@@ -7,6 +7,7 @@
 
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -66,9 +67,12 @@ class KeywordManager():
             r_search = self.s_eng.search(key)
             print r_search
             for keyword in r_search:
-                key_entry= InstantKeyword(keyword, i, r_search.index(keyword))
-                session.add(key_entry)
-                self.keywords.append(key_entry)
+                try:
+                    session.query(InstantKeyword).filter(InstantKeyword.keyword == keyword).one()
+                except NoResultFound, e:
+                    key_entry= InstantKeyword(keyword, i, r_search.index(keyword))
+                    session.add(key_entry)
+                    self.keywords.append(key_entry)
             session.commit()
                 
             
