@@ -34,7 +34,7 @@ def main(argv=None):
     google = Google()
     di = Dictionary('a')
     km = KeywordManager(di, google, RangeError)
-    
+    google.setProxy()
     km.simpleSearch()
     
     return 0

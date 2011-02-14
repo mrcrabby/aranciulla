@@ -62,10 +62,12 @@ class KeywordManager():
                 '''
                 break
             
+            print 'computing results for ' + key
             r_search = self.s_eng.search(key)
+            print r_search
             for keyword in r_search:
                 key_entry= InstantKeyword(keyword, i, r_search.index(keyword))
-                #session.add(key_entry)
+                session.add(key_entry)
                 self.keywords.append(key_entry)
             session.commit()
                 

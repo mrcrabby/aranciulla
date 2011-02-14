@@ -8,7 +8,8 @@ from xml.dom.minidom import Document
 import urllib2
 import sys
 
-class KeywordEntry():
+
+class KeywordEntry(Keyword):
     def __init__(self, keyword, key, match_type=None, global_score=None, regional_score=None):
         self.keyword = unicode(keyword)
         self.key = unicode(key)
