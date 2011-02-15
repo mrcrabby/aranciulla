@@ -11,6 +11,7 @@ import getopt
 from google import Google
 from keyword_manager import KeywordManager
 from dictionary_generator import Dictionary, RangeError
+import settings
 
     
 def main(argv=None):
@@ -31,10 +32,10 @@ def main(argv=None):
             assert False, "UnhandledOption"
 
     #begin
-    google = Google()
+    google = Google(settings.proxy)
     di = Dictionary('a')
-    km = KeywordManager(di, google, RangeError)
-    google.setProxy()
+    km = KeywordManager(di, google, RangeError, settings.engine_config)
+    
     km.simpleSearch()
     
     return 0
