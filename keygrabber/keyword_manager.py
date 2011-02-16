@@ -48,7 +48,7 @@ class KeywordManager():
         self.session = self.Session()
         
     def __add_keywords_to_database(self, keywords, depth=0, *args, **kwargs):
-        keys = list
+        keys = list()
         for keyword in keywords:
             try:
                 self.session.query(InstantKeyword).filter(InstantKeyword.keyword == keyword).one()
