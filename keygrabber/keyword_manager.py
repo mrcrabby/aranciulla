@@ -63,7 +63,7 @@ class KeywordManager():
         r_search = self.s_eng.search(key)
         return self.__add_keywords_to_database(r_search, depth)
     
-    def __search_expand_and_add_keywords_to_database(self, keyword, depth=0 *args, **kwargs):
+    def __search_expand_and_add_keywords_to_database(self, keyword, depth=0, *args, **kwargs):
         '''
         Expand and add all the keywords found based on a keyword
         '''
