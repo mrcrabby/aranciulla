@@ -53,7 +53,7 @@ class KeywordManager():
             try:
                 self.session.query(InstantKeyword).filter(InstantKeyword.keyword == keyword).one()
             except NoResultFound, e:
-                key_entry= InstantKeyword(keyword, depth, r_search.index(keyword))
+                key_entry= InstantKeyword(keyword, depth, keywords.index(keyword))
                 keys.append(key_entry)
         self.session.add_all(keys)
         self.session.commit()
