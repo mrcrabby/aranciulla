@@ -7,6 +7,8 @@
 import sys
 import os
 import getopt
+import codecs
+
 
 from google import Google
 from keyword_manager import KeywordManager
@@ -18,9 +20,10 @@ def main(argv=None):
     if argv is None:
        argv = sys.argv
     
-    opts, extraparams = getopt.gnu_getopt(argv[1:], "hv", ["help"])
+    opts, extraparams = getopt.gnu_getopt(argv[1:], "hve", ["help", 'export'])
     
-    verbose = False    
+    verbose = False
+    export = False    
     
     for o, a in opts:
         if o == "-v":
@@ -28,6 +31,8 @@ def main(argv=None):
         elif o in ("-h", "--help"):
             print(__doc__)
             sys.exit(0)
+        elif o in ("-e", "--export"):
+            export = True
         else:
             assert False, "UnhandledOption"
 
@@ -35,6 +40,10 @@ def main(argv=None):
     google = Google(settings.proxy)
     di = Dictionary('a')
     km = KeywordManager(di, google, RangeError, settings.engine_config)
+    
+    if export:
+        km.export_keywords()
+        return 0
     
     km.simpleSearch()
     

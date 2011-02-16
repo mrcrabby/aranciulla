@@ -43,7 +43,7 @@ class KeywordManager():
         self.dictionary = dictionary
         self.s_eng = s_eng
         self.Error = until
-        engine = create_engine(engine_config, echo=True)
+        engine = create_engine(engine_config)
         self.Session = sessionmaker(bind=engine)
         self.session = self.Session()
         
@@ -58,6 +58,12 @@ class KeywordManager():
                 self.session.add(key_entry)
                 self.keywords.append(key_entry)
         self.session.commit()
+        
+    def export_keywords(self, *args, **kwargs):
+        keywords = self.session.query(InstantKeyword).all()
+        print 'keyword, depth, place'
+        for key in keywords:
+            print '%s, %s, %s' % (key.keyword.encode('utf-8'), key.depth, key.place)
         
     def simpleSearch(self):
         i = 0
@@ -75,10 +81,6 @@ class KeywordManager():
                 break
             self.__search_and_add_keywords_to_database(key, i)
             
-                
-            
-#to create the schema            
-#Base.metadata.create_all(engine)
 
 
 #a = InstantKeyword('test', 1, 2)
@@ -86,7 +88,15 @@ class KeywordManager():
 #session.commit()
 #print session.query(InstantKeyword).all()
 
-#class KeywordManagerTest(unittest.TestCase, KeywordManager):
+class KeywordManagerTest(unittest.TestCase):
+    def test_database(self):
+        import settings
+        engine = create_engine(settings.engine_config, echo=True)
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        #to create the schema
+        Base.metadata.create_all(engine)
+        
     
 
 if __name__ == '__main__':
