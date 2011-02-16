@@ -45,7 +45,7 @@ def main(argv=None):
         km.export_keywords()
         return 0
     
-    km.simpleSearch()
+    km.simpleSearch(base='come ')
     
     return 0
             

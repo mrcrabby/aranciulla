@@ -76,17 +76,19 @@ class KeywordManager():
         for key in keywords:
             print '%s, %s, %s' % (key.keyword.encode('utf-8'), key.depth, key.place)
         
-    def simpleSearch(self):
+    def simpleSearch(self, base='', *args, **kwargs):
         i = 0
         to_expand = list()
         while(True):
             try:
-                key = self.dictionary.next()
+                key = base+self.dictionary.next()
             except self.Error:
+                print 'finished dictionary - starting expand'
                 i = 1
                 for keyw in to_expand:
                     self.__search_expand_and_add_keywords_to_database(keyw, i)
                 break
+            print 'looking for: '+key
             to_expand.extend(self.__search_and_add_keywords_to_database(key, i))
         print 'algorithm finished'
             
