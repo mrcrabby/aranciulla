@@ -32,7 +32,7 @@ class Google():
     def __init__(self, proxy=None):
         self.html_parser = HTMLParser.HTMLParser()
         self.open_function = urllib2.urlopen
-        if not proxy:
+        if proxy:
             proxy_handler = urllib2.ProxyHandler(proxy)
             self.opener = urllib2.build_opener(proxy_handler)
             self.open_function = self.opener.open
@@ -44,7 +44,8 @@ class Google():
                 try: 
                     data = self.open_function('http://clients1.google.it/complete/search?'+urlencode({'q':term.encode('utf-8'), 'hl':'it', 'client':'hp'})).read()
                     break
-                except:
+                except urllib2.HTTPError, e:
+                    print e
                     time.sleep(10)
                     continue
             HTMLtag = re.compile('<\/*b>')      # Matches HTML tags
@@ -73,18 +74,34 @@ class Google():
         return res + results
     
 class GoogleTest(unittest.TestCase):
+    
+    def test_tor(self):
+       
+        def get_ip(page):
+            return page[page.find('<span class="ip blue">')+22:page.find('<!-- contact us before using')]
+        
+        import settings
+        google=Google(settings.proxy)
+        tor_page = google.open_function('http://whatismyipaddress.com/').read()
+        page = urllib2.urlopen('http://whatismyipaddress.com/').read()
+        tor_res = get_ip(tor_page)
+        res = get_ip(page)
+        self.assertNotEqual(tor_res, res)
+        
     def test_search(self):
         google = Google()
         keys = ['jzs','comeee']
         for key in keys:
             search = google.search(key)
             self.assertEqual(search, [])
-    
+            
+    @unittest.skip("Expensive")
     def test_expand(self):
         google = Google()
         r_search = ['come']
         for key in r_search:
-           print google.expand(key)
+           google.expand(key)
+           
             
             
 if __name__ == '__main__':
