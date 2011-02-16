@@ -47,17 +47,28 @@ class KeywordManager():
         self.Session = sessionmaker(bind=engine)
         self.session = self.Session()
         
-    def __search_and_add_keywords_to_database(self, key, depth=0):
-        print 'computing results for ' + key
-        r_search = self.s_eng.search(key)
-        for keyword in r_search:
+    def __add_keywords_to_database(self, keywords, depth=0, *args, **kwargs):
+        keys = list
+        for keyword in keywords:
             try:
                 self.session.query(InstantKeyword).filter(InstantKeyword.keyword == keyword).one()
             except NoResultFound, e:
                 key_entry= InstantKeyword(keyword, depth, r_search.index(keyword))
-                self.session.add(key_entry)
-                self.keywords.append(key_entry)
+                keys.append(key_entry)
+        self.session.add_all(keys)
         self.session.commit()
+        return keys
+        
+    def __search_and_add_keywords_to_database(self, key, depth=0, *args, **kwargs):
+        r_search = self.s_eng.search(key)
+        return self.__add_keywords_to_database(r_search, depth)
+    
+    def __search_expand_and_add_keywords_to_database(self, keyword, depth=0 *args, **kwargs):
+        '''
+        Expand and add all the keywords found based on a keyword
+        '''
+        r_search = self.s_eng.expand(keyword)
+        return self.__add_keywords_to_database(r_search, depth)
         
     def export_keywords(self, *args, **kwargs):
         keywords = self.session.query(InstantKeyword).all()
@@ -67,19 +78,17 @@ class KeywordManager():
         
     def simpleSearch(self):
         i = 0
+        to_expand = list()
         while(True):
             try:
                 key = self.dictionary.next()
             except self.Error:
-                print 'finished'
-                '''
                 i = 1
-                keywords2 = keywords.copy()
-                for key in keywords2:
-                    r_search = self.s_eng.search(key)
-                '''
+                for keyw in to_expand:
+                    self.__search_expand_and_add_keywords_to_database(keyw, i)
                 break
-            self.__search_and_add_keywords_to_database(key, i)
+            to_expand.extend(self.__search_and_add_keywords_to_database(key, i))
+        print 'algorithm finished'
             
 
 

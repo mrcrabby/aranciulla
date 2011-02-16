@@ -65,6 +65,13 @@ class Google():
     def search(self, keyword, *args, **kwargs):
         return self.getInstantKeys(keyword)
     
+    def expand(self, keyword, *args, **kwargs):
+        results = list()
+        res = self.getInstantKeys(keyword+' ')
+        for r in res:
+            results.extend(self.expand(r))
+        return res + results
+    
 class GoogleTest(unittest.TestCase):
     def test_search(self):
         google = Google()
@@ -72,6 +79,13 @@ class GoogleTest(unittest.TestCase):
         for key in keys:
             search = google.search(key)
             self.assertEqual(search, [])
+    
+    def test_expand(self):
+        google = Google()
+        r_search = ['come']
+        for key in r_search:
+           print google.expand(key)
+            
             
 if __name__ == '__main__':
     unittest.main()
