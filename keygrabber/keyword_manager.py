@@ -86,7 +86,7 @@ class KeywordManager():
                 print 'finished dictionary - starting expand'
                 i = 1
                 for keyw in to_expand:
-                    self.__search_expand_and_add_keywords_to_database(keyw, i)
+                    self.__search_expand_and_add_keywords_to_database(keyw.keyword, i)
                 break
             print 'looking for: '+key
             to_expand.extend(self.__search_and_add_keywords_to_database(key, i))
