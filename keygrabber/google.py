@@ -95,7 +95,6 @@ class GoogleTest(unittest.TestCase):
             search = google.search(key)
             self.assertEqual(search, [])
             
-    @unittest.skip("Expensive")
     def test_expand(self):
         google = Google()
         r_search = ['come']

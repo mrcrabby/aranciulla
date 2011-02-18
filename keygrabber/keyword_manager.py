@@ -54,8 +54,8 @@ class KeywordManager():
                 self.session.query(InstantKeyword).filter(InstantKeyword.keyword == keyword).one()
             except NoResultFound, e:
                 key_entry= InstantKeyword(keyword, depth, keywords.index(keyword))
+                self.session.add(key_entry)
                 keys.append(key_entry)
-        self.session.add_all(keys)
         self.session.commit()
         return keys
         
@@ -69,6 +69,9 @@ class KeywordManager():
         '''
         r_search = self.s_eng.expand(keyword)
         return self.__add_keywords_to_database(r_search, depth)
+    
+    def __get_all_keywords(self, depth=0, *args, **kwargs):
+        return self.session.query(InstantKeyword).filter(InstantKeyword.depth == depth).all()
         
     def export_keywords(self, *args, **kwargs):
         keywords = self.session.query(InstantKeyword).all()
@@ -79,17 +82,20 @@ class KeywordManager():
     def simpleSearch(self, base='', *args, **kwargs):
         i = 0
         to_expand = list()
+        
         while(True):
             try:
                 key = base+self.dictionary.next()
             except self.Error:
                 print 'finished dictionary - starting expand'
-                i = 1
-                for keyw in to_expand:
-                    self.__search_expand_and_add_keywords_to_database(keyw.keyword, i)
                 break
             print 'looking for: '+key
             to_expand.extend(self.__search_and_add_keywords_to_database(key, i))
+        
+        ist_keys = self.__get_all_keywords(i)
+        i = 1
+        for keyw in ist_keys:
+            self.__search_expand_and_add_keywords_to_database(keyw.keyword, i)
         print 'algorithm finished'
             
 
