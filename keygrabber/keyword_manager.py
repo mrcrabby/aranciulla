@@ -83,6 +83,8 @@ class KeywordManager():
         i = 0
         to_expand = list()
         
+        to_expand.extend(self.__search_and_add_keywords_to_database(base, i))
+        
         while(True):
             try:
                 key = base+self.dictionary.next()

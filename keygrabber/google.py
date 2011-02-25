@@ -45,6 +45,10 @@ class Google():
                     data = self.open_function('http://clients1.google.it/complete/search?'+urlencode({'q':term.encode('utf-8'), 'hl':'it', 'client':'hp'})).read()
                     break
                 except urllib2.HTTPError, e:
+                    if e.code == 400:
+                        print term
+                        #we reached the end of the expansion
+                        return []
                     print e
                     print term
                     time.sleep(10)
@@ -75,6 +79,11 @@ class Google():
         return res + results
     
 class GoogleTest(unittest.TestCase):
+    
+    def test_400_error(self):
+        google = Google()
+        res = google.expand('come due numeri primi separati da un solo numero pari. vicini ma mai abbastanza per toccarsi')
+        self.assertEqual(len(res), 1)
     
     def test_tor(self):
        
