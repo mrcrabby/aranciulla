@@ -46,6 +46,7 @@ class Google():
                     break
                 except urllib2.HTTPError, e:
                     print e
+                    print term
                     time.sleep(10)
                     continue
             HTMLtag = re.compile('<\/*b>')      # Matches HTML tags
