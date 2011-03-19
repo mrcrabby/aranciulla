@@ -1,0 +1,11 @@
+/*						STYLES FOR IE6							*/
+
+#sidebar li	{
+	behavior: url("css/inc.csshover.htc");
+}
+table ul a, table ul a:visited, .alert span.icon, #content span.positive, #content span.negative	{
+	behavior: url(css/iepngfix.htc);
+}
+.alert span.icon	{
+	display: inline-block;
+}

@@ -1,0 +1,17 @@
+/*						STYLES FOR IE							*/
+
+#content input, #content textarea	{
+	background: none !important;
+}
+#content .textarea	{
+	padding: 5px;
+	width: 683px;
+	height: 140px;
+	overflow: hidden;
+}
+#content textarea	{
+	padding: 0;
+	width: 683px;
+	height: 140px;
+	display: block;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<div metal:define-macro="base">
+<head>
+	<title>eManager 1.0</title>
+	<meta http-equiv="content-language" content="en" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="${request.static_url('webkeywords:static/images/favicon.ico')}" type="image/x-icon"/>
+    <link href="${request.static_url('webkeywords:static/css/styles.css')}" rel="stylesheet" type="text/css" media="screen" />
+    <link href="${request.static_url('webkeywords:static/js/jstree/themes/default/style.css')}" rel="stylesheet" type="text/css" media="screen" />
+	<!--[if lte IE 7]>
+	<link href="${request.static_url('webkeywords:static/css/styles_ie.css')}" rel="stylesheet" type="text/css" media="screen" />
+	<![endif]-->
+	<!--[if lte IE 6]>
+	<link href="${request.static_url('webkeywords:static/css/styles_ie6.css')}" rel="stylesheet" type="text/css" media="screen" />
+	<![endif]-->
+    <script type="text/javascript" src="${request.static_url('webkeywords:static/js/jquery.js')}"></script>
+    <script type="text/javascript" src="${request.static_url('webkeywords:static/js/ui.js')}"></script>
+    <script type="text/javascript" src="${request.static_url('webkeywords:static/js/jstree/jquery.jstree.js')}"></script>
+</head>
+
+<body>
+
+<div id="wrap">
+	<div id="header">
+		<h1><a class="bg" href="#" title="Home"></a>Manager 1.0</h1>
+		<p id="status">Logged is as Username, <a href="#" title="Sign Out?">Sign Out?</a></p>
+		<h2 metal:define-slot="name"></h2>
+		<p id="description" metal:define-slot="description"></p>
+	</div>
+    <div id="sidebar">
+		<ul class="items">
+            <li class="active">
+            	<a href="#" title="Dashboard">Dashboard</a>
+            </li>
+			<li class="subitems">
+				<a href="#" title="Funzioni">Funzioni</a>
+				<ul>
+					<li><a href="search" title="Search">Search</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div id="content">
+		<div metal:define-slot="content"></div>
+	</div>
+	<div id="footer">
+	</div>
+</div>
+</body>
+</div>
+</html>

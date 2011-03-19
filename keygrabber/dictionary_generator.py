@@ -49,7 +49,7 @@ class Dictionary:
         
 
 def test():
-    di = Dictionary('a',3)
+    di = Dictionary('a',4)
     for i in range(15000000):
         print(di.next())
 

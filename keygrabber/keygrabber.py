@@ -39,7 +39,7 @@ def main(argv=None):
     #begin
     google = Google(settings.proxy)
     di = Dictionary('a')
-    km = KeywordManager(di, google, RangeError, settings.engine_config)
+    km = KeywordManager(di, google, RangeError)
     
     if export:
         km.export_keywords()

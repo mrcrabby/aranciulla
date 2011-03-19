@@ -14,9 +14,45 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+import pymongo
+from pymongo.son_manipulator import SONManipulator
+
+
 Base = declarative_base()
 
-      
+class InstantKeywordMongo(object):
+    def __init__(self, keyword, depth):
+        self.__dict__.update(dict([(k, v) for k, v in locals().iteritems() if k != 'self']))
+    
+    def __str__(self):
+        return '%s' % (self.keyword)
+
+    class Manipulator(SONManipulator):
+
+        def encode(self, c):
+            return {"_type": "InstantKeywordMongo", "keyword": c.keyword, "depth": c.depth}
+        
+        def decode(self, d):
+            assert d["_type"] == "InstantKeywordMongo"
+            return InstantKeywordMongo(d["keyword"], d["depth"])
+        
+        def transform_incoming(self, son, collection):
+            for (key, value) in son.items():
+              if isinstance(value, InstantKeywordMongo):
+                son[key] = self.encode(value)
+              elif isinstance(value, dict): # Make sure we recurse into sub-docs
+                son[key] = self.transform_incoming(value, collection)
+            return son
+    
+        def transform_outgoing(self, son, collection):
+            for (key, value) in son.items():
+              if isinstance(value, dict):
+                if "_type" in value and value["_type"] == "InstantKeywordMongo":
+                  son[key] = self.decode(value)
+                else: # Again, make sure to recurse into sub-docs
+                  son[key] = self.transform_outgoing(value, collection)
+            return son
+        
 class InstantKeyword(Base):
     __tablename__='instantkeyword'
     keyword = Column(String, primary_key=True)
@@ -38,6 +74,7 @@ class InstantKeyword(Base):
         return 'key:%s, depth:%s, place:%s' % (self.keyword, self.depth, self.place)
         
 class KeywordManager():
+    '''
     def __init__(self, dictionary, s_eng, until, engine_config):
         self.keywords = list()
         self.dictionary = dictionary
@@ -46,8 +83,22 @@ class KeywordManager():
         engine = create_engine(engine_config)
         self.Session = sessionmaker(bind=engine)
         self.session = self.Session()
+    '''    
+    def __init__(self, dictionary, s_eng, until):
+        self.keywords = list()
+        self.dictionary = dictionary
+        self.s_eng = s_eng
+        self.Error = until
+        self.connection = pymongo.Connection()
+        self.db = self.connection.webkeywords
+        self.db.add_son_manipulator(InstantKeywordMongo.Manipulator())
+        self.collection = self.db.keywords
+
         
     def __add_keywords_to_database(self, keywords, depth=0, *args, **kwargs):
+        return self.__add_keywords_to_mongo(keywords, depth, *args, **kwargs)
+    
+    def __add_keywords_to_postgresql(self, keywords, depth=0, *args, **kwargs):
         keys = list()
         for keyword in keywords:
             try:
@@ -58,7 +109,16 @@ class KeywordManager():
                 keys.append(key_entry)
         self.session.commit()
         return keys
-        
+    
+    def __add_keywords_to_mongo(self, keywords, depth, *args, **kwargs):
+        key = InstantKeywordMongo(keywords, depth) 
+        keys = list()
+        for keyword in keywords:
+            key_entry= InstantKeywordMongo(keyword, depth)
+            self.collection.insert({key_entry.keyword.replace('.', ''):key_entry})
+            keys.append(key_entry)
+        return keys       
+    
     def __search_and_add_keywords_to_database(self, key, depth=0, *args, **kwargs):
         r_search = self.s_eng.search(key)
         return self.__add_keywords_to_database(r_search, depth)
