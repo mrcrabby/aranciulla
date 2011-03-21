@@ -62,7 +62,7 @@ class KeywordManager():
         return self.__add_keywords_to_database(r_search, depth)
     
     def __get_all_keywords(self, depth=0, *args, **kwargs):
-        return self.session.query(InstantKeyword).filter(InstantKeyword.depth == depth).all()
+        return self.collection.find({'depth': depth})
         
     def export_keywords(self, *args, **kwargs):
         keywords = self.collection.find()
@@ -73,7 +73,7 @@ class KeywordManager():
     def simpleSearch(self, base='', *args, **kwargs):
         i = 0
         to_expand = list()
-        
+        '''
         to_expand.extend(self.__search_and_add_keywords_to_database(base, i))
         
         while(True):
@@ -84,8 +84,8 @@ class KeywordManager():
                 break
             print 'looking for: '+key
             to_expand.extend(self.__search_and_add_keywords_to_database(key, i))
-        
-        ist_keys = self.__get_all_keywords(i)
+        '''
+        ist_keys = [InstantKeywordMongo(x.get('keyword'), x.get('depth')) for x in self.__get_all_keywords(i)]
         i = 1
         for keyw in ist_keys:
             self.__search_expand_and_add_keywords_to_database(keyw.keyword, i)
