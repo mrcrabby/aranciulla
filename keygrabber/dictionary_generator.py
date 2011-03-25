@@ -6,52 +6,46 @@ Created on 10/02/2011
 '''
 
 import sys
-import pdb
+import unittest
+import itertools
+import string
 
-class Error(Exception):
-    """Base class for exceptions in this module."""
-    pass
-
-class RangeError(Error):
-    """Exception raised for errors in the input.
-
-    Attributes:
-        msg  -- explanation of the error
-    """
-
-    def __init__(self, msg):
-        self.msg = msg
-
-
-class Dictionary:
-    '''
-    Handles a dictionary which is depth characters long
-    '''
-    def __init__(self, startvalue, depth=3):
-        self.depth = depth - 1
-        self.value = [ord(startvalue)-1]
+class SmartDict(object):
+    def __init__(self, **kwargs):
+        self.seq = kwargs['seq']
+        self.size = kwargs['size']
+        self.blacklist = kwargs.get('blacklist', [])
+        self.actual = None
     
-    def next(self):
-        self.value[-1] = self.value[-1]+1
-        for i,v in enumerate(self.value[::-1]):
-            i = len(self.value) - i - 1
-            if self.value[i] > 122:
-                self.value[i] = 97
-                if i==0:
-                    self.value.insert(0,97)
-                else:
-                    self.value[i-1] = self.value[i-1]+1
-                if len(self.value) > self.depth and self.value[0] > 122:
-                    raise RangeError('Range limit reached')
-                
-                    
-        return unicode(''.join([chr(x) for x in self.value]))
+    def __iter__(self):
+        return self
+
+    def get(self, **kwargs):
+        seq = kwargs.get('seq', self.seq)
+        size = kwargs.get('size', self.size)
+        blacklist = kwargs.get('blacklist', self.blacklist)
         
+        for p in itertools.chain.from_iterable(map(lambda x: itertools.product(seq, repeat=x), range(1,size+1))):
+            joined = ''.join(p)
+            if not any(joined.startswith(prefix) for prefix in blacklist):
+                self.actual = joined
+                yield joined
 
-def test():
-    di = Dictionary('a',4)
-    for i in range(15000000):
-        print(di.next())
-
+    def jump(self):
+        self.blacklist.append(self.actual)
+        
+class DictionaryTest(unittest.TestCase):
+    
+    def test_newdictionary(self):
+        c = SmartDict(seq=string.ascii_lowercase, size=3)
+        banned = ['c', 'd', 'zz']
+        result = []
+        for p in c.get():
+            if p in banned:
+                c.jump()
+            result.append(p)
+        #maybe fake, do not trust:
+        self.assertTrue(any(x.startswith(y) for x in result for y in banned), False)
+       
 if __name__ == '__main__':
-    sys.exit(test())
+    sys.exit(unittest.main())
