@@ -12,8 +12,8 @@ import string
 
 class SmartDict(object):
     def __init__(self, **kwargs):
-        self.seq = kwargs['seq']
-        self.size = kwargs['size']
+        self.seq = kwargs.get('seq', string.ascii_lowercase)
+        self.size = kwargs.get('size', 3)
         self.blacklist = kwargs.get('blacklist', [])
         self.actual = None
     
@@ -34,7 +34,7 @@ class SmartDict(object):
     def jump(self):
         self.blacklist.append(self.actual)
         
-class DictionaryTest(unittest.TestCase):
+class SmartDictTest(unittest.TestCase):
     
     def test_newdictionary(self):
         c = SmartDict(seq=string.ascii_lowercase, size=3)

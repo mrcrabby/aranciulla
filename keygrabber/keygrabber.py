@@ -12,18 +12,20 @@ import codecs
 
 from google import Google
 from keyword_manager import KeywordManager
-from dictionary_generator import Dictionary, RangeError
+from dictionary_generator import SmartDict
 import settings
+import string
 
     
 def main(argv=None):
     if argv is None:
        argv = sys.argv
     
-    opts, extraparams = getopt.gnu_getopt(argv[1:], "hve", ["help", 'export'])
+    opts, extraparams = getopt.gnu_getopt(argv[1:], "hved", ["help", 'export', 'drop'])
     
     verbose = False
-    export = False    
+    export = False
+    drop = False    
     
     for o, a in opts:
         if o == "-v":
@@ -33,19 +35,25 @@ def main(argv=None):
             sys.exit(0)
         elif o in ("-e", "--export"):
             export = True
+        elif o in ("-d", "--drop"):
+            drop = True
         else:
             assert False, "UnhandledOption"
 
     #begin
     google = Google(settings.proxy)
-    di = Dictionary('a')
-    km = KeywordManager(di, google, RangeError)
+    di = SmartDict(size=4)
+    km = KeywordManager(di, google)
     
     if export:
         km.export_keywords()
         return 0
     
-    km.simpleSearch(base='come ')
+    if drop:
+        km.drop_database()
+        return 0
+    
+    km.not_so_simple_search(base='come ')
     
     return 0
             
