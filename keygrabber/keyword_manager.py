@@ -66,7 +66,11 @@ class KeywordManager():
         Expand and add all the keywords found based on a keyword
         '''
         r_search = self.s_eng.expand(mkey.keyword, mkey.level)
-        return self.__add_keywords_to_database(r_search, mkey)
+        keys = list()
+        for k, lev in r_search:
+            mkey.level = lev
+            keys.extend(self.__add_keywords_to_database(k, mkey))       
+        return keys
         
     def export_keywords(self, *args, **kwargs):
         keywords = self.collection.find()
