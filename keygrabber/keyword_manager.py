@@ -48,7 +48,7 @@ class KeywordManager():
         return self.__add_keywords_to_mongo(keywords, parent_k, **kwargs)
     
     def __add_keywords_to_mongo(self, keywords, parent_k, **kwargs):
-        keys = list()self.collection.find_one({'keyword':keyword})
+        keys = list()
         for keyword in keywords:
             result = self.collection.find_one({'keyword':keyword})
             if result is None:
