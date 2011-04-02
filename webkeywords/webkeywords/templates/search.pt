@@ -1,6 +1,0 @@
-<div metal:use-macro="base.macros['base']">
-<div metal:fill-slot="content" id="keyword-tree">
-</div>
-<h2 metal:fill-slot="name">Ricerca</h2>
-<p id="description" metal:fill-slot="description">Effettua una ricerca nel database</p> 
-</div>

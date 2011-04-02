@@ -15,7 +15,7 @@ def main(global_config, **settings):
 
     config.add_view('webkeywords.views.my_view',
                     context='webkeywords:resources.Root',
-                    renderer='webkeywords:templates/base.pt')
+                    renderer='webkeywords:templates/index.pt')
     config.add_static_view('static', 'webkeywords:static')
     config.scan()
     return config.make_wsgi_app()
