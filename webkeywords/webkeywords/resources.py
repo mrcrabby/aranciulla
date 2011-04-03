@@ -1,13 +1,25 @@
 class Root(object):
 	__parent__ = None
-	__name__ = None
+	__name__ = ''
 	
 	def __init__(self, request):
 		self.request = request
         
 	def __getitem__(self,key):
 		if key == 'category':
-			return Category()        	
+			return Category()
+		if key == 'parent':
+			return ByParent()        	
+
+class ByParent(object):
+	__parent__= Root
+	__name__ = 'parent'
+	
+	def __getitem__(self, key):
+		i = InstantKeywordMongo(parent=key)
+		i.__parent__= ByParent
+		i.__name__= key
+		return i
         
 class Category(object):
 	__parent__= Root

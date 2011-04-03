@@ -39,7 +39,9 @@ def search_keyword(context, request):
 	for i in range(cur_page, end_page+1):
 		d = get_args.copy()
 		d['page'] = i
-		list_page_args.append(d)		
-	return {'total': count, 'more_pages':more_pages, 'category':context.category, 'keywords':insts, 'get_args':get_args,
+		list_page_args.append(d)
+	category_name = context.category.replace('_', ' ')	if context.category else None
+	print(request.resource_url(context, query=get_args))	
+	return {'total': count, 'more_pages':more_pages, 'category':context.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
 	'end_args':end_args}

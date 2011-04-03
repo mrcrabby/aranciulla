@@ -9,30 +9,24 @@
 </head>
 <body>
 	<div class="page">
-		<div id="wrapper">			<div class="headline">				<h1><a href="mailto:&#115;&#097;&#108;&#118;&#097;&#116;&#111;&#114;&#101;&#046;&#097;&#114;&#097;&#110;&#122;&#117;&#108;&#108;&#097;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">&#115;&#097;&#108;&#118;&#097;&#116;&#111;&#114;&#101;&#046;&#097;&#114;&#097;&#110;&#122;&#117;&#108;&#108;&#097;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;</a></h1>				<a href="#">Diseonnetti</a>			</div>			<div id="main">				<div id="content">					<ul class="breadcrumbs">						<li><a href="/">HOME</a></li>						<li><a href="" tal:content="category"></a></li>						<li tal:content="request.GET.get('keyword')">custom search</li>					</ul>					<div class="table-container">						<div class="holder">							<div class="frame">								<table>									<tr>										<th class="col1">ARGOMENTI TROVATI</th>										<th class="col2">
+		<div id="wrapper">			<div class="headline">				<h1><a href="mailto:&#115;&#097;&#108;&#118;&#097;&#116;&#111;&#114;&#101;&#046;&#097;&#114;&#097;&#110;&#122;&#117;&#108;&#108;&#097;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;">&#115;&#097;&#108;&#118;&#097;&#116;&#111;&#114;&#101;&#046;&#097;&#114;&#097;&#110;&#122;&#117;&#108;&#108;&#097;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;</a></h1>				<a href="#">Diseonnetti</a>			</div>			<div id="main">				<div id="content">					<ul class="breadcrumbs">						<li><a href="/">HOME</a></li>						<li><a href="" tal:content="category_name"></a></li>						<li tal:content="request.GET.get('keyword')">custom search</li>					</ul>					<div class="table-container">						<div class="holder">							<div class="frame">								<table>									<tr>										<th class="col1">ARGOMENTI TROVATI</th>										<th class="col2">
 											<ul>												<li class="active"><a href="#">DA SCRIVERE</a></li>
 												<li><a href="#">SCRITTI</a></li>
 												<li><a href="#">BLOCCATI</a></li>											</ul>
 										</th>									</tr>
-									<tal:r repeat="item keywords">
-									<tr tal:condition="repeat.item.odd">
+									<tal:r repeat="item keywords"> 
+									<tr tal:attributes="class repeat.item.even + repeat.item.odd">
 										<td class="col1">
-											<img src="${request.static_url('webkeywords:static/images/ico05.png')}" alt="" width="12" height="12" />
-											<a href="#" tal:content="item.keyword"></a>
+											<tal:i tal:condition='item.has_child'>
+												<img src="${request.static_url('webkeywords:static/images/ico05.png')}" alt="" width="12" height="12" />
+												<a href="${request.resource_url(context, 'parent', item.keyword, query=get_args)}" tal:content="item.keyword"></a>
+											</tal:i>
+											<tal:e tal:condition='not item.has_child'>
+												<span tal:content="item.keyword"></span>
+											</tal:e>
 										</td>
 										<td class="col2">
 											<a href="" ><img src="${request.static_url('webkeywords:static/images/ico01.png')}" alt="" width="22" height="22" /></a>
-											<img src="${request.static_url('webkeywords:static/images/ico02.png')}" alt="" width="23" height="22" />
-											<img src="${request.static_url('webkeywords:static/images/ico03.png')}" alt="" width="24" height="24" />
-										</td>
-									</tr>
-									<tr tal:condition="repeat.item.even" class="even">
-										<td class="col1">
-											<img src="${request.static_url('webkeywords:static/images/ico05.png')}" alt="" width="12" height="12" />
-											<a href="#" tal:content="item.keyword"></a>
-										</td>
-										<td class="col2">
-											<img src="${request.static_url('webkeywords:static/images/ico01.png')}" alt="" width="22" height="22" />
 											<img src="${request.static_url('webkeywords:static/images/ico02.png')}" alt="" width="23" height="22" />
 											<img src="${request.static_url('webkeywords:static/images/ico03.png')}" alt="" width="24" height="24" />
 										</td>
