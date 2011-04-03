@@ -34,7 +34,7 @@ def search_keyword(context, request):
 	last_args = get_args.copy()
 	last_args['page'] = pages
 	end_args = get_args.copy()
-	end_args['page'] = end_page
+	end_args['page'] = max(cur_page + 1, 1)
 	list_page_args = list()
 	for i in range(cur_page, end_page+1):
 		d = get_args.copy()
