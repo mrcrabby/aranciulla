@@ -77,6 +77,13 @@ class Google():
                 yield subitem
     
 class GoogleTest(unittest.TestCase):
+	
+    def test_a_single_request(self):
+        google = Google()
+        search = ['test', 'testa', 'com', 'come']
+        for word in search:
+            res = google.search(word)
+            self.assertEqual(word in res, False)
     
     def test_400_error(self):
         google = Google()

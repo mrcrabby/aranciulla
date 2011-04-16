@@ -52,19 +52,18 @@ class KeywordManager():
         for keyword in keywords:
             result = self.collection.find_one({'keyword':keyword})
             if result is None:
-                key_entry= InstantKeywordMongo(keyword, parent_k.keyword, parent_k.category, parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1)
+                if kwargs.get('no_parent') is True:
+                    parent_keyword = None
+                else:
+                    parent_keyword = parent_k.keyword
+                    
+                key_entry= InstantKeywordMongo(keyword, parent_keyword, parent_k.category, parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1)
                 key_entry._id = self.collection.insert(key_entry.to_dict())
                 if parent_k.has_child is False:
                 	parent_k.has_child = True
                 	self.collection.save(parent_k.to_dict())
                 keys.append(key_entry)
         return keys       
-    
-    def __search_and_add_keywords_to_database(self, mkey, dictionary, *args, **kwargs):
-        r_search = self.s_eng.search(mkey.keyword)
-        if len(r_search) < max_answers:
-            dictionary.jump()
-        return self.__add_keywords_to_database(r_search, mkey)
     
     def __search_expand_and_add_keywords_to_database(self, mkey, *args, **kwargs):
         '''
@@ -85,27 +84,6 @@ class KeywordManager():
     
     def drop_database(self):
         self.collection.drop()
-    '''    
-    def simpleSearch(self, base='', *args, **kwargs):
-        i = 0
-        to_expand = list()
-        to_expand.extend(self.__search_and_add_keywords_to_database(base, i))
-        
-        while(True):
-            try:
-                key = base+self.dictionary.next()
-            except self.Error:
-                print('finished dictionary - starting expand')
-                break
-            print('looking for: '+key)
-            to_expand.extend(self.__search_and_add_keywords_to_database(key, i))
-        
-        ist_keys = [InstantKeywordMongo(x.get('keyword'), x.get('depth')) for x in self.__get_all_keywords(i)]
-        i = 1
-        for keyw in ist_keys:
-            self.__search_expand_and_add_keywords_to_database(keyw.keyword, i)
-        print('algorithm finished')
-    '''
     
     def not_so_simple_search(self, base='', **kwargs):
         level = 0
@@ -113,13 +91,17 @@ class KeywordManager():
         to_expand = list()
         #first of all look for keywords with just the BASE
         base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
-        to_expand.extend(self.__search_and_add_keywords_to_database(base_k, self.dictionary))
+        r_search = self.s_eng.search(base_k.keyword)
+        to_expand.extend(self.__add_keywords_to_database(r_search, base_k))
         
         dicts = dicts + 1
         for word in self.dictionary.get():
             print('looking for: '+base_k.keyword+word)
-            key = InstantKeywordMongo(base_k.keyword+word, base_k.keyword, None, level, dicts, len(word))
-            to_expand.extend(self.__search_and_add_keywords_to_database(key, self.dictionary))
+            key = InstantKeywordMongo(base_k.keyword, base_k.parent, None, level, dicts, len(word))
+            r_search = self.s_eng.search(base_k.keyword+word)
+            if len(r_search) < max_answers:
+                self.dictionary.jump()
+            to_expand.extend(self.__add_keywords_to_database(r_search, base_k))
         
         print('expanding')
         ist_keys = [InstantKeywordMongo(x.get('keyword'), x.get('parent'), x.get('category'), x.get('level'), x.get('dicts'), x.get('depth'), x.get('place')) for x in self.collection.find({'level': 0})]
