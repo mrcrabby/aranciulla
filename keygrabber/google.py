@@ -29,52 +29,55 @@ class NotValidAnswerError(Error):
         self.msg = msg
 
 class Google():
-    def __init__(self, proxy=None):
-        self.html_parser = HTMLParser()
-        self.open_function = urllib.request.urlopen
-        if proxy:
-            proxy_handler = urllib.request.ProxyHandler(proxy)
-            self.opener = urllib.request.build_opener(proxy_handler)
-            self.open_function = self.opener.open
+	def __init__(self, proxy=None):
+		self.html_parser = HTMLParser()
+		self.open_function = urllib.request.urlopen
+		if proxy:
+			proxy_handler = urllib.request.ProxyHandler(proxy)
+			self.opener = urllib.request.build_opener(proxy_handler)
+			self.open_function = self.opener.open
             
-    def getInstantKeys(self, keyword, *args, **kwargs):
-        
-        def __get_g_json(term):
-            while True:
-                try: 
-                    data = self.open_function('http://clients1.google.it/complete/search?'+urlencode({'q':term.encode('utf-8'), 'hl':'it', 'client':'hp'})).read()
-                    break
-                except urllib.error.HTTPError as e:
-                    if e.code == 400:
-                        #we reached the end of the expansion
-                        return []
-                    print(e)
-                    print(term)
-                    time.sleep(10)
-                    continue
-            HTMLtag = re.compile('<\/*b>')      # Matches HTML tags
-            data = data.decode('iso-8859-15')
-            if data[0:18] != 'window.google.ac.h':
-                raise NotValidAnswerError('answer is not valid')
-            g_list = json.loads(data[19:-1])
-            return [self.html_parser.unescape(HTMLtag.sub('', entry[0])) for entry in g_list[1]]
-        
-        keywords = list()
-        g_json=__get_g_json(keyword)
-        if keyword in g_json:
-            g_json.remove(keyword)
-        for entry in g_json:
-            keywords.append(entry)
-        return keywords
+	def getInstantKeys(self, keyword, *args, **kwargs):
+		
+		def __get_g_json(term):
+			while True:
+				try: 
+					data = self.open_function('http://clients1.google.it/complete/search?'+urlencode({'q':term.encode('utf-8'), 'hl':'it', 'client':'hp'})).read()
+					break
+				except urllib.error.HTTPError as e:
+					if e.code == 400:
+						#we reached the end of the expansion
+						return []
+					print(e)
+					print(term)
+					time.sleep(10)
+					continue
+			HTMLtag = re.compile('<\/*b>')      # Matches HTML tags
+			data = data.decode('iso-8859-15')
+			if data[0:18] != 'window.google.ac.h':
+				raise NotValidAnswerError('answer is not valid')
+			g_list = json.loads(data[19:-1])
+			return [self.html_parser.unescape(HTMLtag.sub('', entry[0])) for entry in g_list[1]]
+		
+		keywords = list()
+		g_json=__get_g_json(keyword)
+		if keyword in g_json:
+			g_json.remove(keyword)
+		for entry in g_json:
+			keywords.append(entry)
+		return keywords
 
-    def search(self, keyword, *args, **kwargs):
-        return self.getInstantKeys(keyword)
-    
-    def expand(self, keyword, level=0):
-        for item in self.getInstantKeys(keyword+' '):
-            yield (item, level)
-            for subitem in self.expand(item, level + 1):
-                yield subitem
+	def search(self, keyword, *args, **kwargs):
+		return self.getInstantKeys(keyword)
+		
+	def expand(self, keyword, level=0):
+		'''
+		Returns an iterator which returns (expanded key, level) for each subkey found
+		'''
+		for item in self.getInstantKeys(keyword+' '):
+			yield (item, level)
+			for subitem in self.expand(item, level + 1):
+				yield subitem
     
 class GoogleTest(unittest.TestCase):
 	
@@ -113,7 +116,7 @@ class GoogleTest(unittest.TestCase):
             
     def test_expand(self):
         google = Google()
-        r_search = ['come']
+        r_search = ['come', 'come arredare casa']
         for key in r_search:
             for item in google.expand(key):
                 print(item)
