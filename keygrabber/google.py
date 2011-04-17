@@ -48,8 +48,6 @@ class Google():
 					if e.code == 400:
 						#we reached the end of the expansion
 						return []
-					print(e)
-					print(term)
 					time.sleep(10)
 					continue
 			HTMLtag = re.compile('<\/*b>')      # Matches HTML tags

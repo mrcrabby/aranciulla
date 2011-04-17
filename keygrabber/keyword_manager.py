@@ -87,7 +87,7 @@ class KeywordManager():
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
 		to_start_dict.append(base_k)
-		r_search = self.s_eng.search(base_k.keyword)
+		r_search = self.s_eng.search(base_k.keyword+' ')
 		to_start_dict.extend(self.__add_keywords_to_database(r_search, base_k))
 		
 		for key in to_start_dict:
@@ -95,9 +95,9 @@ class KeywordManager():
 			d = SmartDict(size=4)
 			print('Starting dict for ', key.keyword) 
 			for word in d.get():
-				print('looking for: '+key.keyword+word)
+				print('looking for: '+key.keyword+' '+word)
 				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word))
-				r_search = self.s_eng.search(key.keyword+word)
+				r_search = self.s_eng.search(key.keyword+' '+word)
 				if len(r_search) < max_answers:
 					d.jump()
 				to_start_dict.extend(self.__add_keywords_to_database(r_search, key))
