@@ -83,6 +83,7 @@ class KeywordManager():
 		level = 0
 		dicts = 0
 		to_start_dict = list()
+		keywords_done = list()
 		#first of all look for keywords with just the BASE
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
@@ -102,7 +103,15 @@ class KeywordManager():
 					d.jump()
 				keyws = self.__add_keywords_to_database(r_search, key)
 				for keyw in keyws:
-					self.__search_expand_and_add_keywords_to_database(keyw)
+					print('expanding: ', keyw.keyword)
+					if keyw.keyword not in keywords_done:
+						keywords_done.append(keyw.keyword)
+						to_start_dict.append(keyw)
+					exp_ress = self.__search_expand_and_add_keywords_to_database(keyw)
+					for exp_res in exp_ress:
+						if exp_res.keyword not in keywords_done:
+							keywords_done.append(exp_res.keyword)
+							to_start_dict.append(exp_res)
                 
 
 class KeywordManagerTest(unittest.TestCase):
