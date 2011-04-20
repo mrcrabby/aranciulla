@@ -100,13 +100,9 @@ class KeywordManager():
 				r_search = self.s_eng.search(key.keyword+' '+word)
 				if len(r_search) < max_answers:
 					d.jump()
-				to_start_dict.extend(self.__add_keywords_to_database(r_search, key))
-				
-		
-		print('expanding')
-		ist_keys = [InstantKeywordMongo(x.get('keyword'), x.get('parent'), x.get('category'), x.get('level'), x.get('dicts'), x.get('depth'), x.get('place')) for x in self.collection.find()]
-		for keyw in ist_keys:
-			self.__search_expand_and_add_keywords_to_database(keyw)
+				keyws = self.__add_keywords_to_database(r_search, key)
+				for keyw in keyws:
+					self.__search_expand_and_add_keywords_to_database(keyw)
                 
 
 class KeywordManagerTest(unittest.TestCase):
