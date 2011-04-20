@@ -67,7 +67,7 @@ class KeywordManager():
 		keys = list()
 		for k, lev in r_search:
 			mkey.level = lev
-			keys.extend(self.__add_keywords_to_database(k, mkey))       
+			keys.extend(self.__add_keywords_to_database([k], mkey))       
 		return keys
         
 	def export_keywords(self, *args, **kwargs):
@@ -84,6 +84,15 @@ class KeywordManager():
 		dicts = 0
 		to_start_dict = list()
 		keywords_done = list()
+		
+		def evaluate(keys):
+			for key in keys:
+				res = self.s_eng.search(key.keyword+' ')
+				if key.keyword not in keywords_done and len(res) < max_answers:
+					keywords_done.append(key.keyword)
+					to_start_dict.append(key)
+				
+			
 		#first of all look for keywords with just the BASE
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
@@ -102,17 +111,12 @@ class KeywordManager():
 				if len(r_search) < max_answers:
 					d.jump()
 				keyws = self.__add_keywords_to_database(r_search, key)
+				evaluate(keyws)
 				for keyw in keyws:
 					print('expanding: ', keyw.keyword)
-					if keyw.keyword not in keywords_done:
-						keywords_done.append(keyw.keyword)
-						to_start_dict.append(keyw)
 					exp_ress = self.__search_expand_and_add_keywords_to_database(keyw)
-					for exp_res in exp_ress:
-						if exp_res.keyword not in keywords_done:
-							keywords_done.append(exp_res.keyword)
-							to_start_dict.append(exp_res)
-                
+					print('expanded: ', [x.keyword for x in exp_ress])
+					evaluate(exp_ress)
 
 class KeywordManagerTest(unittest.TestCase):
     
