@@ -83,17 +83,14 @@ class KeywordManager():
 		level = 0
 		dicts = 0
 		to_start_dict = list()
-		keywords_done = list()
 		
 		def evaluate(keys):
 			for key in keys:
 				res = self.s_eng.search(key.keyword+' ')
-				if key.keyword not in keywords_done and len(res) < max_answers:
-					keywords_done.append(key.keyword)
+				if self.collection.find_one({'keyword':key.keyword}) is None and len(res) < max_answers:
 					to_start_dict.append(key)
 					for k_word in key.keyword.split():
-						if k_word not in keywords_done:
-							keywords_done.append(k_word)
+						if self.collection.find_one({'keyword':k_word}) is None:
 							to_start_dict.append(InstantKeywordMongo(k_word, None, None, level, dicts, 0))
 				
 			

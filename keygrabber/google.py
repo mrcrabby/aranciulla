@@ -61,6 +61,7 @@ class Google():
 				print(data)
 				print(data[19:-1])
 				input('Press return to continue')
+				return []
 				
 			return [self.html_parser.unescape(HTMLtag.sub('', entry[0])) for entry in g_list[1]]
 		
