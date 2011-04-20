@@ -91,6 +91,10 @@ class KeywordManager():
 				if key.keyword not in keywords_done and len(res) < max_answers:
 					keywords_done.append(key.keyword)
 					to_start_dict.append(key)
+					for k_word in key.keyword.split():
+						if k_word not in keywords_done:
+							keywords_done.append(k_word)
+							to_start_dict.append(InstantKeywordMongo(k_word, None, None, level, dicts, 0))
 				
 			
 		#first of all look for keywords with just the BASE
