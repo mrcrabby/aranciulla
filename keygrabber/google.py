@@ -57,10 +57,6 @@ class Google():
 			try:
 				g_list = json.loads(data[19:-1])
 			except:
-				print('Error in parsing json from google')
-				print(data)
-				print(data[19:-1])
-				input('Press return to continue')
 				return []
 				
 			return [self.html_parser.unescape(HTMLtag.sub('', entry[0])) for entry in g_list[1]]
