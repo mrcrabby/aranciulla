@@ -92,7 +92,7 @@ class KeywordManager():
 				logging.debug('checking if should start a dict for ='+key.keyword)
 				res = self.s_eng.search(key.keyword+' ')
 				logging.debug('found results='+str(len(res)))
-				if len(res) < max_answers:
+				if len(res) > 0:
 					to_start_dict.append(key)
 					logging.debug('added to the list of dictionaries to start ='+key.keyword)
 				
