@@ -10,8 +10,7 @@ class Root(object):
 			return Category()
 		if key == 'parent':
 			return ByParent()
-		else:
-			return self      	
+		raise KeyError      	
 
 class ByParent(object):
 	__parent__= Root

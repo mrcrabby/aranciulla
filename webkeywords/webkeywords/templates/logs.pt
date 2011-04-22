@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset=utf-8 />
-  <title>HTML5 basic skeleton</title>
+  <title>Keygrabber logs</title>
   <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
   <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -14,21 +14,20 @@
 <body>
   <div id="wrapper">
     <header>
-      Header
+      <h1>Keygrabber's Log</h1>
     </header>
     <nav>
-      Nav
     </nav>
     <section id="content">
       <article>
-        Article
+		  <tal:r repeat="item filecontent">
+			<span tal:content="item"></span><br/>
+		  </tal:r> 
       </article>
     </section>
     <aside>
-      Sidebar
     </aside>
     <footer>
-      Footer
     </footer>
   </div>   
 </body>
