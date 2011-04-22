@@ -7,8 +7,11 @@
 #for unittest
 import unittest
 import pymongo
+import logging
 from google import Google, max_answers
 from dictionary_generator import SmartDict
+
+logging.basicConfig(filename='/tmp/keygrabber.log',level=logging.DEBUG)
 
 class InstantKeywordMongo(object):
     def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, **kwargs):
@@ -87,11 +90,13 @@ class KeywordManager():
 		def evaluate(keys):
 			for key in keys:
 				res = self.s_eng.search(key.keyword+' ')
-				if self.collection.find_one({'keyword':key.keyword}) is None and len(res) < max_answers:
+				if len(res) < max_answers:
 					to_start_dict.append(key)
+					logging.debug('adding '+key.keyword+' to the list of dictionaries to start')
 					for k_word in key.keyword.split():
 						if self.collection.find_one({'keyword':k_word}) is None:
 							to_start_dict.append(InstantKeywordMongo(k_word, None, None, level, dicts, 0))
+							logging.debug('adding '+k_word+' to the list of dictionaries to start')
 				
 			
 		#first of all look for keywords with just the BASE
@@ -104,9 +109,10 @@ class KeywordManager():
 		for key in to_start_dict:
 			dicts = dicts + 1
 			d = SmartDict(size=4)
-			print('Starting dict for ', key.keyword) 
+			print('Starting dict for ', key.keyword)
+			logging.debug('Starting dict for '+key.keyword) 
 			for word in d.get():
-				print('looking for: '+key.keyword+' '+word)
+				logging.debug('looking for: '+key.keyword+' '+word)
 				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word))
 				r_search = self.s_eng.search(key.keyword+' '+word)
 				if len(r_search) < max_answers:
@@ -114,9 +120,9 @@ class KeywordManager():
 				keyws = self.__add_keywords_to_database(r_search, key)
 				evaluate(keyws)
 				for keyw in keyws:
-					print('expanding: ', keyw.keyword)
+					logging.debug('expanding: '+keyw.keyword)
 					exp_ress = self.__search_expand_and_add_keywords_to_database(keyw)
-					print('expanded: ', [x.keyword for x in exp_ress])
+					logging.debug('expanded: '+str([x.keyword for x in exp_ress])+' total: '+str(len(exp_ress))+' entries')
 					evaluate(exp_ress)
 
 class KeywordManagerTest(unittest.TestCase):

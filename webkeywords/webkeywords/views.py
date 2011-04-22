@@ -4,7 +4,15 @@ import re
 import resources
 from math import ceil
 
+@view_config(name='logs',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
+def show_logs(request):
+	f = open('/tmp/keygrabber.log')
+	data = f.readlines()
+	return dict(filecontent=data)
+	
+
 def my_view(request):
+	print('passing here')
 	c = resources.InstantKeywordMongo()    
 	return search_keyword(c, request)
 

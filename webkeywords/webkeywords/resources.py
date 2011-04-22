@@ -9,7 +9,9 @@ class Root(object):
 		if key == 'category':
 			return Category()
 		if key == 'parent':
-			return ByParent()        	
+			return ByParent()
+		else:
+			return self      	
 
 class ByParent(object):
 	__parent__= Root
