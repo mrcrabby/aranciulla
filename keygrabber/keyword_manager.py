@@ -101,15 +101,15 @@ class KeywordManager():
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
 		to_start_dict.append(base_k)
-		logging.debug('searching for ='+key.keyword)
+		logging.debug('searching for ='+base_k.keyword)
 		r_search = self.s_eng.search(base_k.keyword+' ')
 		keys = self.__add_keywords_to_database(r_search, base_k)
-		logging.debug('saved into the database ='+str(keys))
-		evalueate(keys)
+		logging.debug('saved into the database ='+str([x.keyword for x in keys]))
+		evaluate(keys)
 		for key in keys:
-			logging.debug('expanding ='+key)
+			logging.debug('expanding ='+key.keyword)
 			exp_keys = self.__search_expand_and_add_keywords_to_database(key)
-			logging.debug('expanded and saved into database ='+str(exp_keys))
+			logging.debug('expanded and saved into database ='+str([x.keyword for x in exp_keys]))
 			evaluate(exp_keys)
 			
 		for key in to_start_dict:
@@ -124,7 +124,7 @@ class KeywordManager():
 				if len(r_search) < max_answers:
 					d.jump()
 				keyws = self.__add_keywords_to_database(r_search, key)
-				logging.debug('saved into the database ='+str(keyws))
+				logging.debug('saved into the database ='+str([x.keyword for x in keyws]))
 				evaluate(keyws)
 				for keyw in keyws:
 					logging.debug('expanding ='+keyw.keyword)
