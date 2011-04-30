@@ -10,8 +10,9 @@ import pymongo
 import logging
 from google import Google, max_answers
 from dictionary_generator import SmartDict
+import re
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 log = logging.getLogger('keywordManager')
 log.addHandler(logging.FileHandler('/tmp/keygrabber.log', 'w'))
@@ -103,14 +104,9 @@ class KeywordManager():
 			#TODO: split the extended in multiple keywords
 			r_search = self.s_eng.expand(mkey.keyword, mkey.level)
 			keys = list()
-			for k, lev, num in r_search:
+			for k, lev in r_search:
 				mkey.level = lev
-				for key in self.__add_keywords_to_database([k], mkey):
-					if num == max_answers:
-						if all(x.keyword != key.keyword for x in to_start_dict):
-							to_start_dict.append(key)
-							log.debug('ADDED to the list of dict ='+key.keyword)
-					keys.append(key)       
+				keys.extend(self.__add_keywords_to_database([k], mkey))       
 			return keys
 				
 			
@@ -143,10 +139,15 @@ class KeywordManager():
 				log.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
 				#evaluate(keyws)
 				for keyw in keyws:
+					#TODO: valuate if i should add keyw into to_start_dict
 					log.debug('expanding ='+keyw.keyword)
 					exp_ress = expand(keyw)
-					log.debug('expanded and saved int odatabase ='+str([x.keyword for x in exp_ress]))
-
+					log.debug('expanded and saved into database ='+str([x.keyword for x in exp_ress]))
+					for x in exp_ress:
+						if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(x.keyword != exp_res.keyword for x in to_start_dict):
+							to_start_dict.append(exp_res)
+							log.debug('ADDED to the list of dict ='+exp_res.keyword)
+						
 class KeywordManagerTest(unittest.TestCase):
     
     def test_mongo_class(self):
