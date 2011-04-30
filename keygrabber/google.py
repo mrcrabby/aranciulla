@@ -76,10 +76,12 @@ class Google():
 		'''
 		Returns an iterator which returns (expanded key, level) for each subkey found
 		'''
-		for item in self.getInstantKeys(keyword+' '):
-			yield (item, level)
-			for subitem in self.expand(item, level + 1):
-				yield subitem
+		items = self.getInstantKeys(keyword+' ')
+		for item in items:
+			yield (item, level, len(items))
+			if len(items) == max_answers:
+				for subitem in self.expand(item, level + 1):
+					yield subitem
     
 class GoogleTest(unittest.TestCase):
 	

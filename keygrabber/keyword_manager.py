@@ -44,6 +44,7 @@ class KeywordManager():
 		self.db = self.connection.webkeywords
 		self.collection = self.db.keywords
 		self.collection.ensure_index('keyword')
+		self.collection.ensure_index([('has_child', pymongo.DESCENDING), ('level',pymongo.ASCENDING), ('dicts', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
 
         
 	def __add_keywords_to_database(self, keywords, parent_k, **kwargs):
@@ -51,6 +52,8 @@ class KeywordManager():
 	
 	def __add_keywords_to_mongo(self, keywords, parent_k, **kwargs):
 		keys = list()
+		if parent_k is None:
+			parent_k = InstantKeywordMongo('parent', None, None, 0, 0, 0, 0)
 		for keyword in keywords:
 			result = self.collection.find_one({'keyword':keyword})
 			if result is None:
@@ -62,17 +65,7 @@ class KeywordManager():
 				keys.append(key_entry)
 		return keys       
     
-	def __search_expand_and_add_keywords_to_database(self, mkey, *args, **kwargs):
-		'''
-		Expand and add all the keywords found based on a keyword
-		'''
-		r_search = self.s_eng.expand(mkey.keyword, mkey.level)
-		keys = list()
-		for k, lev in r_search:
-			mkey.level = lev
-			keys.extend(self.__add_keywords_to_database([k], mkey))       
-		return keys
-        
+	    
 	def export_keywords(self, *args, **kwargs):
 		keywords = self.collection.find()
 		print('keyword, depth')
@@ -89,28 +82,48 @@ class KeywordManager():
 		
 		def evaluate(keys):
 			for key in keys:
-				logging.debug('checking if should start a dict for ='+key.keyword)
-				res = self.s_eng.search(key.keyword+' ')
-				logging.debug('found results='+str(len(res)))
-				if len(res) == max_answers:
-					to_start_dict.append(key)
-					logging.debug('added to the list of dictionaries to start ='+key.keyword)
+				keyword=''
+				for word in key.keyword.split():
+					keyword = keyword+ ' ' + word
+					res = self.s_eng.search(keyword+' ')
+					logging.debug('SEARCHING dict for = '+keyword+'; found results = '+str(len(res)))
+					if len(res) == max_answers:
+						k = self.__add_keywords_to_database([keyword], None)
+						if all(x.keyword != keyword for x in to_start_dict):
+							to_start_dict.extend(k)
+							logging.debug('ADDED to the list of dict ='+str([x.keyword for x in k]))
+						
+		def expand(mkey, *args, **kwargs):
+			'''
+			Expand and add all the keywords found based on a keyword
+			'''
+			#TODO: split the extended in multiple keywords
+			r_search = self.s_eng.expand(mkey.keyword, mkey.level)
+			keys = list()
+			for k, lev, num in r_search:
+				mkey.level = lev
+				for key in self.__add_keywords_to_database([k], mkey):
+					if num == max_answers:
+						if all(x.keyword != key.keyword for x in to_start_dict):
+							to_start_dict.append(key)
+							logging.debug('ADDED to the list of dict ='+key.keyword)
+					keys.append(key)       
+			return keys
 				
 			
 		#first of all look for keywords with just the BASE
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
 		to_start_dict.append(base_k)
-		logging.debug('searching for ='+base_k.keyword)
+		logging.debug('SEARCHING for ='+base_k.keyword)
 		r_search = self.s_eng.search(base_k.keyword+' ')
 		keys = self.__add_keywords_to_database(r_search, base_k)
-		logging.debug('saved into the database ='+str([x.keyword for x in keys]))
+		logging.debug('ADDED into the database ='+str([x.keyword for x in keys]))
 		evaluate(keys)
 		for key in keys:
 			logging.debug('expanding ='+key.keyword)
-			exp_keys = self.__search_expand_and_add_keywords_to_database(key)
+			exp_keys = expand(key)
 			logging.debug('expanded and saved into database ='+str([x.keyword for x in exp_keys]))
-			evaluate(exp_keys)
 			
 		for key in to_start_dict:
 			dicts = dicts + 1
@@ -118,19 +131,18 @@ class KeywordManager():
 			print('Starting dict for ='+key.keyword)
 			logging.debug('starting dict for ='+key.keyword) 
 			for word in d.get():
-				logging.debug('searching for ='+key.keyword+' '+word)
+				logging.debug('SEARCHING for ='+key.keyword+' '+word)
 				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word))
 				r_search = self.s_eng.search(key.keyword+' '+word)
 				if len(r_search) < max_answers:
 					d.jump()
 				keyws = self.__add_keywords_to_database(r_search, key)
-				logging.debug('saved into the database ='+str([x.keyword for x in keyws]))
+				logging.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
 				evaluate(keyws)
 				for keyw in keyws:
 					logging.debug('expanding ='+keyw.keyword)
-					exp_ress = self.__search_expand_and_add_keywords_to_database(keyw)
+					exp_ress = expand(keyw)
 					logging.debug('expanded and saved int odatabase ='+str([x.keyword for x in exp_ress]))
-					evaluate(exp_ress)
 
 class KeywordManagerTest(unittest.TestCase):
     

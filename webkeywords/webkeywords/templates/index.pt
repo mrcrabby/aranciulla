@@ -43,4 +43,4 @@
 										<li><a href="${request.resource_url(request.root, 'category', 'tecnologia', query=get_args)}">Tecnologia</a></li>										<li><a href="${request.resource_url(request.root, 'category', 'viaggi', query=get_args)}">Viaggi</a></li>									</ul>									<span class="mask">&nbsp;</span>								</div>							</div>						</div>					</div>					<div class="text-box">						<p>Argomenti trovati in totale: <strong tal:content="total"></strong></p>						<p>Ultimo aqgiornamento: <strong>27 Marzo 2011</strong></p>					</div>				</div>			</div>		</div>
 	</div>
 </body>
-</html>
+</html>
