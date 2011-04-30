@@ -13,7 +13,8 @@ import re
 import time
 import logging
 
-logging.basicConfig(filename='/tmp/keygrabber-google.log', filemode='w',level=logging.DEBUG)
+log = logging.getLogger('google')
+log.addHandler(logging.FileHandler('/tmp/keygrabber-google.log', 'w'))
 
 max_answers = 10
 
@@ -65,7 +66,7 @@ class Google():
 			return [self.html_parser.unescape(HTMLtag.sub('', entry[0])) for entry in g_list[1]]
 		
 		keywords = list()
-		logging.debug('searching ='+keyword)
+		log.debug(keyword)
 		g_json=__get_g_json(keyword)
 		if keyword in g_json:
 			g_json.remove(keyword)

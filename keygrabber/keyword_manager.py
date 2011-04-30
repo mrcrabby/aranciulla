@@ -11,7 +11,10 @@ import logging
 from google import Google, max_answers
 from dictionary_generator import SmartDict
 
-logging.basicConfig(filename='/tmp/keygrabber.log', filemode='w', level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
+
+log = logging.getLogger('keywordManager')
+log.addHandler(logging.FileHandler('/tmp/keygrabber.log', 'w'))
 
 class InstantKeywordMongo(object):
     def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, **kwargs):
@@ -87,11 +90,11 @@ class KeywordManager():
 					keyword = keyword+ ' ' + word
 					if all(x.keyword != keyword for x in to_start_dict):
 						res = self.s_eng.search(keyword+' ')
-						logging.debug('SEARCHING dict for = '+keyword+'; found results = '+str(len(res)))
+						log.debug('SEARCHING dict for = '+keyword+'; found results = '+str(len(res)))
 						if len(res) == max_answers:
 							k = self.__add_keywords_to_database([keyword], None)
 							to_start_dict.extend(k)
-							logging.debug('ADDED to the list of dict ='+str([x.keyword for x in k]))
+							log.debug('ADDED to the list of dict ='+str([x.keyword for x in k]))
 						
 		def expand(mkey, *args, **kwargs):
 			'''
@@ -106,7 +109,7 @@ class KeywordManager():
 					if num == max_answers:
 						if all(x.keyword != key.keyword for x in to_start_dict):
 							to_start_dict.append(key)
-							logging.debug('ADDED to the list of dict ='+key.keyword)
+							log.debug('ADDED to the list of dict ='+key.keyword)
 					keys.append(key)       
 			return keys
 				
@@ -115,34 +118,34 @@ class KeywordManager():
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
 		to_start_dict.append(base_k)
-		logging.debug('SEARCHING for ='+base_k.keyword)
+		log.debug('SEARCHING for ='+base_k.keyword)
 		r_search = self.s_eng.search(base_k.keyword+' ')
 		keys = self.__add_keywords_to_database(r_search, base_k)
-		logging.debug('ADDED into the database ='+str([x.keyword for x in keys]))
-		evaluate(keys)
+		log.debug('ADDED into the database ='+str([x.keyword for x in keys]))
+		#evaluate(keys)
 		for key in keys:
-			logging.debug('expanding ='+key.keyword)
+			log.debug('expanding ='+key.keyword)
 			exp_keys = expand(key)
-			logging.debug('expanded and saved into database ='+str([x.keyword for x in exp_keys]))
+			log.debug('expanded and saved into database ='+str([x.keyword for x in exp_keys]))
 			
 		for key in to_start_dict:
 			dicts = dicts + 1
 			d = SmartDict(size=4)
 			print('Starting dict for ='+key.keyword)
-			logging.debug('starting dict for ='+key.keyword) 
+			log.debug('starting dict for ='+key.keyword) 
 			for word in d.get():
-				logging.debug('SEARCHING for ='+key.keyword+' '+word)
+				log.debug('SEARCHING for ='+key.keyword+' '+word)
 				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word))
 				r_search = self.s_eng.search(key.keyword+' '+word)
 				if len(r_search) < max_answers:
 					d.jump()
 				keyws = self.__add_keywords_to_database(r_search, key)
-				logging.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
+				log.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
 				#evaluate(keyws)
 				for keyw in keyws:
-					logging.debug('expanding ='+keyw.keyword)
+					log.debug('expanding ='+keyw.keyword)
 					exp_ress = expand(keyw)
-					logging.debug('expanded and saved int odatabase ='+str([x.keyword for x in exp_ress]))
+					log.debug('expanded and saved int odatabase ='+str([x.keyword for x in exp_ress]))
 
 class KeywordManagerTest(unittest.TestCase):
     
