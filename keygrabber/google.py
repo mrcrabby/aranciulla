@@ -13,7 +13,7 @@ import re
 import time
 import logging
 
-logging.basicConfig(filename='/tmp/keygrabber-google.log',level=logging.DEBUG)
+logging.basicConfig(filename='/tmp/keygrabber-google.log', filemode='w',level=logging.DEBUG)
 
 max_answers = 10
 

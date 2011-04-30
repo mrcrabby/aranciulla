@@ -11,7 +11,7 @@ import logging
 from google import Google, max_answers
 from dictionary_generator import SmartDict
 
-logging.basicConfig(filename='/tmp/keygrabber.log',level=logging.DEBUG)
+logging.basicConfig(filename='/tmp/keygrabber.log', filemode='w', level=logging.DEBUG)
 
 class InstantKeywordMongo(object):
     def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, **kwargs):
