@@ -138,7 +138,7 @@ class KeywordManager():
 					d.jump()
 				keyws = self.__add_keywords_to_database(r_search, key)
 				logging.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
-				evaluate(keyws)
+				#evaluate(keyws)
 				for keyw in keyws:
 					logging.debug('expanding ='+keyw.keyword)
 					exp_ress = expand(keyw)

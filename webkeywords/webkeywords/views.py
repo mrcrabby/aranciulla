@@ -5,17 +5,20 @@ import resources
 from math import ceil
 import pymongo
 
+@view_config(name='logs-google',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
 @view_config(name='logs',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
 def show_logs(request):
-	f = open('/tmp/keygrabber.log')
+	ufile = '/tmp/keygrabber.log'
+	if request.view_name == 'logs-google':
+		ufile = '/tmp/keygrabber-google.log'
+	f = open(ufile)
 	data = list()
 	for line in f.readlines():
 		try:
 			data.append(unicode(line))
 		except:
 			pass
-	return dict(filecontent=data)
-	
+	return dict(filecontent=data)	
 
 def my_view(request):
 	print('passing here')
