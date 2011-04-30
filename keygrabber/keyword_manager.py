@@ -85,11 +85,11 @@ class KeywordManager():
 				keyword=''
 				for word in key.keyword.split():
 					keyword = keyword+ ' ' + word
-					res = self.s_eng.search(keyword+' ')
-					logging.debug('SEARCHING dict for = '+keyword+'; found results = '+str(len(res)))
-					if len(res) == max_answers:
-						k = self.__add_keywords_to_database([keyword], None)
-						if all(x.keyword != keyword for x in to_start_dict):
+					if all(x.keyword != keyword for x in to_start_dict):
+						res = self.s_eng.search(keyword+' ')
+						logging.debug('SEARCHING dict for = '+keyword+'; found results = '+str(len(res)))
+						if len(res) == max_answers:
+							k = self.__add_keywords_to_database([keyword], None)
 							to_start_dict.extend(k)
 							logging.debug('ADDED to the list of dict ='+str([x.keyword for x in k]))
 						
