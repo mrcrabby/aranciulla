@@ -24,7 +24,7 @@ class SmartDict(object):
         seq = kwargs.get('seq', self.seq)
         size = kwargs.get('size', self.size)
         blacklist = kwargs.get('blacklist', self.blacklist)
-        
+        yield ' '
         for p in itertools.chain.from_iterable(map(lambda x: itertools.product(seq, repeat=x), range(1,size+1))):
             joined = ''.join(p)
             if not any(joined.startswith(prefix) for prefix in blacklist):
@@ -36,16 +36,16 @@ class SmartDict(object):
         
 class SmartDictTest(unittest.TestCase):
     
-    def test_newdictionary(self):
-        c = SmartDict(seq=string.ascii_lowercase, size=3)
-        banned = ['c', 'd', 'zz']
-        result = []
-        for p in c.get():
-            if p in banned:
-                c.jump()
-            result.append(p)
+	def test_newdictionary(self):
+		c = SmartDict(seq=string.ascii_lowercase, size=3)
+		banned = ['c', 'd', 'zz']
+		result = []
+		for p in c.get():
+			if p in banned:
+				c.jump()
+				result.append(p)
         #maybe fake, do not trust:
-        self.assertTrue(any(x.startswith(y) for x in result for y in banned), False)
+		self.assertTrue(any(x.startswith(y) for x in result for y in banned), False)
        
 if __name__ == '__main__':
     sys.exit(unittest.main())

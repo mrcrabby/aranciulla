@@ -113,27 +113,11 @@ class KeywordManager():
 		#first of all look for keywords with just the BASE
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
-		to_start_dict.append(base_k)
-		log.debug('SEARCHING for ='+base_k.keyword)
-		r_search = self.s_eng.search(base_k.keyword+' ')
-		keys = self.__add_keywords_to_database(r_search, base_k)
-		log.debug('ADDED into the database ='+str([x.keyword for x in keys]))
-		#evaluate(keys)
-		for key in keys:
-			log.debug('expanding ='+key.keyword)
-			exp_ress = expand(key)
-			log.debug('expanded and saved into database ='+str([x.keyword for x in exp_keys]))
-			ilist.extend(exp_ress)
-			for x in ilist:
-				if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
-					to_start_dict.append(x)
-					log.debug('ADDED to the list of dict ='+x.keyword)
-					
+		to_start_dict.append(base_k)			
 			
 		for key in to_start_dict:
 			dicts = dicts + 1
 			d = SmartDict(size=4)
-			print('Starting dict for ='+key.keyword)
 			log.debug('starting dict for ='+key.keyword) 
 			for word in d.get():
 				ilist=list()
