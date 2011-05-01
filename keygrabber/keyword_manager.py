@@ -12,7 +12,7 @@ from google import Google, max_answers
 from dictionary_generator import SmartDict
 import re
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 log = logging.getLogger('keywordManager')
 log.addHandler(logging.FileHandler('/tmp/keygrabber.log', 'w'))
