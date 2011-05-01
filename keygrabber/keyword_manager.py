@@ -123,6 +123,11 @@ class KeywordManager():
 			log.debug('expanding ='+key.keyword)
 			exp_keys = expand(key)
 			log.debug('expanded and saved into database ='+str([x.keyword for x in exp_keys]))
+			for x in exp_ress:
+				if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
+					to_start_dict.append(x)
+					log.debug('ADDED to the list of dict ='+x.keyword)
+					
 			
 		for key in to_start_dict:
 			dicts = dicts + 1
