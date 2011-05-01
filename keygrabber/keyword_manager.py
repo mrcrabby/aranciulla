@@ -139,6 +139,7 @@ class KeywordManager():
 						log.debug('expanded and saved into database ='+str([x.keyword for x in exp_ress]))
 						ilist.extend(exp_ress)
 				for x in ilist:
+					log.debug('Evaluating ='+x.keyword)
 					if self.collection.find(dict(keyword=re.compile(re.escape(x.keyword)))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
 						to_start_dict.append(x)
 						log.debug('ADDED to the list of dict ='+x.keyword)
