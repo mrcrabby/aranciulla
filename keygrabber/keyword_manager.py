@@ -109,7 +109,7 @@ class KeywordManager():
 				keys.extend(self.__add_keywords_to_database([k], mkey))       
 			return keys
 				
-			
+		ilist=list()	
 		#first of all look for keywords with just the BASE
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
@@ -121,9 +121,10 @@ class KeywordManager():
 		#evaluate(keys)
 		for key in keys:
 			log.debug('expanding ='+key.keyword)
-			exp_keys = expand(key)
+			exp_ress = expand(key)
 			log.debug('expanded and saved into database ='+str([x.keyword for x in exp_keys]))
-			for x in exp_ress:
+			ilist.extend(exp_ress)
+			for x in ilist:
 				if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
 					to_start_dict.append(x)
 					log.debug('ADDED to the list of dict ='+x.keyword)
@@ -135,6 +136,7 @@ class KeywordManager():
 			print('Starting dict for ='+key.keyword)
 			log.debug('starting dict for ='+key.keyword) 
 			for word in d.get():
+				ilist=list()
 				log.debug('SEARCHING for ='+key.keyword+' '+word)
 				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word))
 				r_search = self.s_eng.search(key.keyword+' '+word)
@@ -142,16 +144,18 @@ class KeywordManager():
 					d.jump()
 				keyws = self.__add_keywords_to_database(r_search, key)
 				log.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
+				ilist.extend(keyws)
 				#evaluate(keyws)
 				for keyw in keyws:
 					#TODO: valuate if i should add keyw into to_start_dict
 					log.debug('expanding ='+keyw.keyword)
 					exp_ress = expand(keyw)
 					log.debug('expanded and saved into database ='+str([x.keyword for x in exp_ress]))
-					for x in exp_ress:
-						if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
-							to_start_dict.append(x)
-							log.debug('ADDED to the list of dict ='+x.keyword)
+					ilist.extend(exp_ress)
+				for x in ilist:
+					if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
+						to_start_dict.append(x)
+						log.debug('ADDED to the list of dict ='+x.keyword)
 						
 class KeywordManagerTest(unittest.TestCase):
     
