@@ -130,14 +130,16 @@ class KeywordManager():
 				log.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
 				ilist.extend(keyws)
 				#evaluate(keyws)
-				for keyw in keyws:
-					#TODO: valuate if i should add keyw into to_start_dict
-					log.debug('expanding ='+keyw.keyword)
-					exp_ress = expand(keyw)
-					log.debug('expanded and saved into database ='+str([x.keyword for x in exp_ress]))
-					ilist.extend(exp_ress)
+				if len(r_search) == max_answers:
+					log.debug('starting expansion results == 10')
+					for keyw in keyws:
+						#TODO: valuate if i should add keyw into to_start_dict
+						log.debug('expanding ='+keyw.keyword)
+						exp_ress = expand(keyw)
+						log.debug('expanded and saved into database ='+str([x.keyword for x in exp_ress]))
+						ilist.extend(exp_ress)
 				for x in ilist:
-					if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
+					if self.collection.find(dict(keyword=re.compile(re.escape(x.keyword)))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
 						to_start_dict.append(x)
 						log.debug('ADDED to the list of dict ='+x.keyword)
 						
