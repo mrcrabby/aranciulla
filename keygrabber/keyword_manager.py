@@ -118,7 +118,7 @@ class KeywordManager():
 		for key in to_start_dict:
 			dicts = dicts + 1
 			d = SmartDict(size=4)
-			log.debug('starting dict for ='+key.keyword) 
+			log.warning('starting dict for ='+key.keyword) 
 			for word in d.get():
 				ilist=list()
 				log.debug('SEARCHING for ='+key.keyword+' '+word)
@@ -143,6 +143,7 @@ class KeywordManager():
 					if self.collection.find(dict(keyword=re.compile(re.escape(x.keyword)))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
 						to_start_dict.append(x)
 						log.debug('ADDED to the list of dict ='+x.keyword)
+		log.warning('Algorithm Finished')
 						
 class KeywordManagerTest(unittest.TestCase):
     
