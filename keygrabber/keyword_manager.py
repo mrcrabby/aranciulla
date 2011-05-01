@@ -144,7 +144,7 @@ class KeywordManager():
 					exp_ress = expand(keyw)
 					log.debug('expanded and saved into database ='+str([x.keyword for x in exp_ress]))
 					for x in exp_ress:
-						if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(x.keyword != exp_res.keyword for x in to_start_dict):
+						if self.collection.find(dict(keyword=re.compile(x.keyword))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
 							to_start_dict.append(exp_res)
 							log.debug('ADDED to the list of dict ='+exp_res.keyword)
 						
