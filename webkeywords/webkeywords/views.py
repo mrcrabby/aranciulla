@@ -37,7 +37,7 @@ def search_keyword(context, request):
 		else:
 			if request.GET.get(field):
 				setattr(context, field, int(request.GET.get(field)))
-	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in request.db.keywords.find(context.to_dict()).sort([('has_child', pymongo.DESCENDING), ('level',pymongo.ASCENDING), ('dicts', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])]
+	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in request.db.keywords.find(context.to_dict()).sort([('level',pymongo.ASCENDING), ('dicts', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])]
 	count = len(insts)
 	cur_page = int(get_args.pop('page', 1))
 	insts = insts[(cur_page-1)*items_per_page:cur_page*items_per_page]
