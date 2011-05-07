@@ -48,7 +48,7 @@ class KeywordManager():
 		self.db = self.connection.webkeywords
 		self.collection = self.db.keywords
 		self.collection.ensure_index('keyword')
-		self.collection.ensure_index([('has_child', pymongo.DESCENDING), ('level',pymongo.ASCENDING), ('dicts', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
+		self.collection.ensure_index([('level',pymongo.ASCENDING), ('dicts', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
 
         
 	def __add_keywords_to_database(self, keywords, parent_k, **kwargs):
@@ -56,12 +56,13 @@ class KeywordManager():
 	
 	def __add_keywords_to_mongo(self, keywords, parent_k, **kwargs):
 		keys = list()
+		level = kwargs.get('level')
 		if parent_k is None:
 			parent_k = InstantKeywordMongo('parent', None, None, 0, 0, 0, 0)
 		for keyword in keywords:
 			result = self.collection.find_one({'keyword':keyword})
 			if result is None:
-				key_entry= InstantKeywordMongo(keyword, parent_k.keyword, parent_k.category, parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1)
+				key_entry= InstantKeywordMongo(keyword, parent_k.keyword, parent_k.category, level if level else parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1)
 				key_entry._id = self.collection.insert(key_entry.to_dict())
 				if parent_k._id is not None and parent_k.has_child is False:
 					parent_k.has_child = True
@@ -83,19 +84,6 @@ class KeywordManager():
 		level = 0
 		dicts = 0
 		to_start_dict = list()
-		
-		def evaluate(keys):
-			for key in keys:
-				keyword=''
-				for word in key.keyword.split():
-					keyword = keyword+ ' ' + word
-					if all(x.keyword != keyword for x in to_start_dict):
-						res = self.s_eng.search(keyword+' ')
-						log.debug('SEARCHING dict for = '+keyword+'; found results = '+str(len(res)))
-						if len(res) == max_answers:
-							k = self.__add_keywords_to_database([keyword], None)
-							to_start_dict.extend(k)
-							log.debug('ADDED to the list of dict ='+str([x.keyword for x in k]))
 						
 		def expand(mkey, *args, **kwargs):
 			'''
@@ -105,8 +93,7 @@ class KeywordManager():
 			r_search = self.s_eng.expand(mkey.keyword, mkey.level)
 			keys = list()
 			for k, lev in r_search:
-				mkey.level = lev
-				keys.extend(self.__add_keywords_to_database([k], mkey))       
+				keys.extend(self.__add_keywords_to_database([k], mkey, level=lev))       
 			return keys
 				
 		ilist=list()	
