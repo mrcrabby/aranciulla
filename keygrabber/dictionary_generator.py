@@ -24,7 +24,8 @@ class SmartDict(object):
         seq = kwargs.get('seq', self.seq)
         size = kwargs.get('size', self.size)
         blacklist = kwargs.get('blacklist', self.blacklist)
-        yield ' '
+        self.actual = ''
+        yield ''
         for p in itertools.chain.from_iterable(map(lambda x: itertools.product(seq, repeat=x), range(1,size+1))):
             joined = ''.join(p)
             if not any(joined.startswith(prefix) for prefix in blacklist):
