@@ -44,16 +44,17 @@ def search_keyword(context, request):
 	inst_list = list()
 	res = list()
 	root = request.db.keywords.find_one(dict(dicts=0, parent=None))
-	inst_list.extend(request.db.keywords.find(dict(parent=root.get('keyword'), dicts=1, depth=1))[:10])
+	ten_items = request.db.keywords.find(dict(parent=root.get('keyword'), dicts=1))[:10]
+	inst_list.extend(ten_items)
 	max_items = 0
 	for letter in ascii_lowercase:
-		items = request.db.keywords.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING)])
+		items = request.db.keywords.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
 		n_items = items.count()
 		res.append(items)
 		max_items = n_items if n_items >= max_items else max_items
 	for n in range(max_items):
 		for r in res:
-			if r.count() > n:
+			if r.count() > n and r[n] not in ten_items:
 				inst_list.append(r[n])
 		
 		
