@@ -143,7 +143,7 @@ class KeywordManager():
 		root = self.collection.find_one(dict(dicts=0, parent=None))
 		ten_items = self.collection.find(dict(parent=root.get('keyword'), dicts=1))[:10]
 		ten_items_list = [x for x in ten_items]
-		
+		inst_list.extend(ten_items_list)
 		max_items = 0
 		for letter in ascii_lowercase:
 			items = self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
@@ -160,14 +160,16 @@ class KeywordManager():
 				inst_list.append(itera[0])
 			
 		'''
+		cursor_slice=dict([(x, 0) for x in res])
 		for n in range(max_items):
 			for r in res:
 				if r.count() > n+1:
-					inst_list.append(r[n])
-		
-		for i in ten_items_list[::-1]:
-			inst_list.remove(i)
-			inst_list.insert(0, i)
+					if r[n] not in ten_items_list:
+						c_slice = cursor_slice.get(r,0)
+						if r.count() > n+1+c_slice:
+							inst_list.append(r[c_slice+n])
+					else:
+						cursor_slice[r]=cursor_slice[r]+1
 		
 		#add index
 		for i, key in enumerate(inst_list):
