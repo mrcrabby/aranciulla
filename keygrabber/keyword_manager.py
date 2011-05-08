@@ -11,6 +11,8 @@ import logging
 from google import Google, max_answers
 from dictionary_generator import SmartDict
 import re
+from string import ascii_lowercase
+
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -72,13 +74,10 @@ class KeywordManager():
     
 	    
 	def export_keywords(self, *args, **kwargs):
-		self.order_and_publish()
-		'''
-		keywords = self.collection.find()
+		keywords = self.order_and_publish()
 		print('keyword, depth')
 		for key in keywords:
 			print('%s, %s' % (key.get('keyword'), key.get('depth')))
-		'''
 	
 	def drop_database(self):
 		self.collection.drop()
@@ -153,7 +152,14 @@ class KeywordManager():
 			for r in res:
 				if r.count() > n and r[n] not in ten_items_list:
 					inst_list.append(r[n])
-		print(inst_list)
+		#add index
+		for i, key in enumerate(inst_list):
+			key['index']=i 
+		#save to orderedkeys collection
+		self.db.orderedkeys.drop()
+		self.db.orderedkeys.insert(inst_list)
+		return inst_list
+			
 						
 class KeywordManagerTest(unittest.TestCase):
     

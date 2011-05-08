@@ -16,6 +16,7 @@ from dictionary_generator import SmartDict
 import settings
 import string
 
+
     
 def main(argv=None):
     if argv is None:

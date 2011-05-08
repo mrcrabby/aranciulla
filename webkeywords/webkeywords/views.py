@@ -4,7 +4,6 @@ import re
 import resources
 from math import ceil
 import pymongo
-from string import ascii_lowercase
 
 @view_config(name='logs-google',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
 @view_config(name='logs',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
