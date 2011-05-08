@@ -165,6 +165,10 @@ class KeywordManager():
 				if r.count() > n+1:
 					inst_list.append(r[n])
 		
+		for i in ten_items_list[::-1]:
+			inst_list.remove(i)
+			inst_list.insert(0, i)
+		
 		#add index
 		for i, key in enumerate(inst_list):
 			key['index']=i 

@@ -40,7 +40,6 @@ def search_keyword(context, request):
 	
 	
 	inst_list = request.db.orderedkeys.find(context.to_dict())
-	print len(inst_list)
 	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in inst_list]
 	count = len(insts)
 	cur_page = int(get_args.pop('page', 1))
