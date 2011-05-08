@@ -12,6 +12,7 @@ from google import Google, max_answers
 from dictionary_generator import SmartDict
 import re
 from string import ascii_lowercase
+import itertools
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -142,7 +143,7 @@ class KeywordManager():
 		root = self.collection.find_one(dict(dicts=0, parent=None))
 		ten_items = self.collection.find(dict(parent=root.get('keyword'), dicts=1))[:10]
 		ten_items_list = [x for x in ten_items]
-		inst_list.extend(ten_items_list)
+		
 		max_items = 0
 		for letter in ascii_lowercase:
 			items = self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
@@ -150,10 +151,20 @@ class KeywordManager():
 			items.batch_size(1000)
 			res.append(items)
 			max_items = n_items if n_items >= max_items else max_items
+			
+		'''
+		key_iter = itertools.cycle(res)
+		for itera in key_iter:
+			print(itera.count(True))
+			if itera.count(True) > 0:
+				inst_list.append(itera[0])
+			
+		'''
 		for n in range(max_items):
 			for r in res:
-				if r.count() > n and r[n] not in ten_items_list:
+				if r.count() > n+1:
 					inst_list.append(r[n])
+		
 		#add index
 		for i, key in enumerate(inst_list):
 			key['index']=i 

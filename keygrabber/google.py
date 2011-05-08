@@ -102,7 +102,6 @@ class GoogleTest(unittest.TestCase):
         res = google.expand('come due numeri primi separati da un solo numero pari. vicini ma mai abbastanza per toccarsi')
         self.assertEqual(len(res), 1)
     
-    @unittest.skip("Should be updated to python 3")
     def test_tor(self):
        
         def get_ip(page):
