@@ -46,7 +46,7 @@ class KeywordManager():
 		self.s_eng = s_eng
 		self.connection = pymongo.Connection()
 		self.db = self.connection.webkeywords
-		self.collection = self.db.keywords
+		self.collection = self.db.crawler
 		self.collection.ensure_index('keyword')
 		self.collection.ensure_index([('level',pymongo.ASCENDING), ('dicts', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
 
@@ -72,10 +72,13 @@ class KeywordManager():
     
 	    
 	def export_keywords(self, *args, **kwargs):
+		self.order_and_publish()
+		'''
 		keywords = self.collection.find()
 		print('keyword, depth')
 		for key in keywords:
 			print('%s, %s' % (key.get('keyword'), key.get('depth')))
+		'''
 	
 	def drop_database(self):
 		self.collection.drop()
@@ -131,6 +134,26 @@ class KeywordManager():
 						to_start_dict.append(x)
 						log.debug('ADDED to the list of dict ='+x.keyword)
 		log.warning('Algorithm Finished')
+		
+	def order_and_publish(self):
+		inst_list = list()
+		res = list()
+		root = self.collection.find_one(dict(dicts=0, parent=None))
+		ten_items = self.collection.find(dict(parent=root.get('keyword'), dicts=1))[:10]
+		ten_items_list = [x for x in ten_items]
+		inst_list.extend(ten_items_list)
+		max_items = 0
+		for letter in ascii_lowercase:
+			items = self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
+			n_items = items.count()
+			items.batch_size(1000)
+			res.append(items)
+			max_items = n_items if n_items >= max_items else max_items
+		for n in range(max_items):
+			for r in res:
+				if r.count() > n and r[n] not in ten_items_list:
+					inst_list.append(r[n])
+		print(inst_list)
 						
 class KeywordManagerTest(unittest.TestCase):
     

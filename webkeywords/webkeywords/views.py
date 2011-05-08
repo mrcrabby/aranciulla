@@ -41,24 +41,6 @@ def search_keyword(context, request):
 	
 	
 	inst_list = request.db.keywords.find(context.to_dict()).sort([('dicts', pymongo.ASCENDING)])
-	inst_list = list()
-	res = list()
-	root = request.db.keywords.find_one(dict(dicts=0, parent=None))
-	ten_items = request.db.keywords.find(dict(parent=root.get('keyword'), dicts=1))[:10]
-	ten_items_list = [x for x in ten_items]
-	inst_list.extend(ten_items_list)
-	max_items = 0
-	for letter in ascii_lowercase:
-		items = request.db.keywords.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
-		n_items = items.count()
-		items.batch_size(1000)
-		res.append(items)
-		max_items = n_items if n_items >= max_items else max_items
-	for n in range(max_items):
-		for r in res:
-			if r.count() > n and r[n] not in ten_items_list:
-				inst_list.append(r[n])
-		
 		
 	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in inst_list]
 	count = len(insts)
