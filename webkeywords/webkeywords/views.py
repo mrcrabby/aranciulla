@@ -39,8 +39,7 @@ def search_keyword(context, request):
 				setattr(context, field, int(request.GET.get(field)))
 	
 	
-	inst_list = request.db.keywords.find(context.to_dict()).sort([('dicts', pymongo.ASCENDING)])
-		
+	inst_list = request.db.orderedkeys.find(context.to_dict())
 	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in inst_list]
 	count = len(insts)
 	cur_page = int(get_args.pop('page', 1))
