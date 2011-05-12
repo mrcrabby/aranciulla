@@ -140,16 +140,18 @@ class KeywordManager():
 	def order_and_publish(self):
 		inst_list = list()
 		res = list()
+		res_index = list()
 		root = self.collection.find_one(dict(dicts=0, parent=None))
 		ten_items = self.collection.find(dict(parent=root.get('keyword'), dicts=1))[:10]
 		ten_items_list = [x for x in ten_items]
 		inst_list.extend(ten_items_list)
 		max_items = 0
 		for letter in ascii_lowercase:
-			items = self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING)])
+			items = self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING), ('keyword', pymongo.ASCENDING)])
 			n_items = items.count()
 			items.batch_size(1000)
 			res.append(items)
+			res_index.append(0)
 			max_items = n_items if n_items >= max_items else max_items
 			
 		'''
@@ -160,16 +162,16 @@ class KeywordManager():
 				inst_list.append(itera[0])
 			
 		'''
-		cursor_slice=dict([(x, 0) for x in res])
 		for n in range(max_items):
 			for r in res:
-				if r.count() > n+1:
-					if r[n] not in ten_items_list:
-						c_slice = cursor_slice.get(r,0)
-						if r.count() > n+1+c_slice:
-							inst_list.append(r[c_slice+n])
+				index = res_index[res.index(r)]
+				while r.count() > index:
+					if r[index] in inst_list:
+						index=index+1
 					else:
-						cursor_slice[r]=cursor_slice[r]+1
+						inst_list.append(r[index])
+						break
+					
 		
 		#add index
 		for i, key in enumerate(inst_list):
@@ -177,6 +179,7 @@ class KeywordManager():
 		#save to orderedkeys collection
 		self.db.orderedkeys.drop()
 		self.db.orderedkeys.insert(inst_list)
+		return []
 		return inst_list
 			
 						
