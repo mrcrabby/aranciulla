@@ -174,10 +174,9 @@ class KeywordManager():
 					print('cursor index: ', c_index)
 					index = cursors_indexes[c_index]
 					print('index: ', index)
-					if cursor.count() > index:
+					while cursor.count() > index:
 						if cursor[index] in base_list:
 							index=index+1
-							cursors_indexes[c_index] = index
 						else:
 							key = cursor[index]
 							print(key)
@@ -188,6 +187,7 @@ class KeywordManager():
 								cursors_indexes[c_index] = index + 1
 								print('updating index: ', cursors_indexes[c_index])
 								yield key
+							break
 				
 		'''	
 		for n in range(max_items):
