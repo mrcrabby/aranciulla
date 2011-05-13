@@ -154,24 +154,67 @@ class KeywordManager():
 			res_index.append(0)
 			max_items = n_items if n_items >= max_items else max_items
 			
-		'''
-		key_iter = itertools.cycle(res)
-		for itera in key_iter:
-			print(itera.count(True))
-			if itera.count(True) > 0:
-				inst_list.append(itera[0])
+		
+		def smart_ordering(cursors, **kwargs):			
+				
+			def continue_iteration(cursors):
+				return False if all([cursor.count() <= cursors_indexes[cursors.index(cursor)] for cursor in cursors]) else True
 			
-		'''
+			cursors_indexes = [0 for i in cursors]
+			base_list = kwargs.get('base_list', list())
+			dicts = 0
+			level = 0
+			depth = 0
+			
+			num = 0
+			
+			while continue_iteration(cursors):
+				for cursor in cursors:
+					c_index = cursors.index(cursor)
+					print('cursor index: ', c_index)
+					index = cursors_indexes[c_index]
+					print('index: ', index)
+					if cursor.count() > index:
+						if cursor[index] in base_list:
+							index=index+1
+							cursors_indexes[c_index] = index
+						else:
+							key = cursor[index]
+							print(key)
+							print(dicts, level, depth)
+							if key.get('dicts') >= dicts and  key.get('level') >= level and key.get('depth') >= depth:
+								print('added')
+								inst_list.append(key)
+								cursors_indexes[c_index] = index + 1
+								print('updating index: ', cursors_indexes[c_index])
+								yield key
+				
+		'''	
 		for n in range(max_items):
 			for r in res:
-				index = res_index[res.index(r)]
+				r_ind = res.index(r)
+				index = res_index[r_ind]
 				while r.count() > index:
 					if r[index] in inst_list:
 						index=index+1
 					else:
-						inst_list.append(r[index])
+						key = r[index]
+						print('key:')
+						print(key)
+						print('ref_key')
+						print(ref_key)
+						if ref_key.get('dicts') <= key.get('dicts') and ref_key.get('depth') <= key.get('depth'):
+							print('valid key')
+							inst_list.append(key)
+							res_index[r_ind] = index + 1
+							if r_ind == 0:
+								print('update ref_key')
+								ref_key = key
 						break
 					
+		'''
+		
+		inst_list.extend([i for i in smart_ordering(res, base_list=inst_list)])
 		
 		#add index
 		for i, key in enumerate(inst_list):
