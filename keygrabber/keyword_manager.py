@@ -156,24 +156,36 @@ class KeywordManager():
 			
 		
 		def smart_ordering(cursors, **kwargs):			
-				
-			def continue_iteration(cursors):
-				return False if all([cursor.count() <= cursors_indexes[cursors.index(cursor)] for cursor in cursors]) else True
 			
 			cursors_indexes = [0 for i in cursors]
 			base_list = kwargs.get('base_list', list())
-			dicts = 0
+			dicts = 1
 			level = 0
 			depth = 0
 			
-			num = 0
+			skipped_counter = [0, 0, 0]
+				
+			def continue_iteration(cursors):
+				return False if all([cursor.count() <= cursors_indexes[cursors.index(cursor)] for cursor in cursors]) else True
+				
+			def __update_counter(counter, value):
+				print("skipped are: ", counter)
+				if counter == 26:
+					value = value +1 
+					return 0, value
+				else:
+					return counter + 1, value
 			
+			start_from_a = False
 			while continue_iteration(cursors):
 				for cursor in cursors:
 					c_index = cursors.index(cursor)
-					print('cursor index: ', c_index)
+					if start_from_a:
+						if c_index != 0:
+							break
+						else:
+							start_from_a = False
 					index = cursors_indexes[c_index]
-					print('index: ', index)
 					while cursor.count() > index:
 						if cursor[index] in base_list:
 							index=index+1
@@ -181,38 +193,33 @@ class KeywordManager():
 							key = cursor[index]
 							print(key)
 							print(dicts, level, depth)
-							if key.get('dicts') >= dicts and  key.get('level') >= level and key.get('depth') >= depth:
-								print('added')
-								inst_list.append(key)
-								cursors_indexes[c_index] = index + 1
-								print('updating index: ', cursors_indexes[c_index])
-								yield key
+							if key.get('dicts') <= dicts:
+								skipped_counter[0] = 0
+								if key.get('level') <= level: 
+									skipped_counter[1] = 0
+									if key.get('depth') <= depth:
+										skipped_counter[2] = 0
+										print('added')
+										inst_list.append(key)
+										cursors_indexes[c_index] = index + 1
+										print('updating index: ', cursors_indexes[c_index])
+										yield key
+									else:
+										skipped_counter[2], depth = __update_counter(skipped_counter[2], depth) 
+										if skipped_counter[2] == 0:
+											start_from_a = True
+								else:
+									skipped_counter[1], level = __update_counter(skipped_counter[1], level)
+									if skipped_counter[1] == 0:
+										depth = 0
+										start_from_a = True
+							else:
+								skipped_counter[0], dicts = __update_counter(skipped_counter[0], dicts)
+								if skipped_counter[0] == 0:
+									depth = 0
+									level = 0
+									start_from_a = True
 							break
-				
-		'''	
-		for n in range(max_items):
-			for r in res:
-				r_ind = res.index(r)
-				index = res_index[r_ind]
-				while r.count() > index:
-					if r[index] in inst_list:
-						index=index+1
-					else:
-						key = r[index]
-						print('key:')
-						print(key)
-						print('ref_key')
-						print(ref_key)
-						if ref_key.get('dicts') <= key.get('dicts') and ref_key.get('depth') <= key.get('depth'):
-							print('valid key')
-							inst_list.append(key)
-							res_index[r_ind] = index + 1
-							if r_ind == 0:
-								print('update ref_key')
-								ref_key = key
-						break
-					
-		'''
 		
 		inst_list.extend([i for i in smart_ordering(res, base_list=inst_list)])
 		
