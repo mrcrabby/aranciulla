@@ -73,12 +73,14 @@ class KeywordManager():
 				keys.append(key_entry)
 		return keys       
     
+	def order_keywords(self, *args, **kwargs):
+		self.order_and_publish()
 	    
 	def export_keywords(self, *args, **kwargs):
-		keywords = self.order_and_publish()
-		print('keyword, depth')
+		keywords = self.db.orderedkeys.find()
+		print('keyword')
 		for key in keywords:
-			print('%s, %s' % (key.get('keyword'), key.get('depth')))
+			print('%s' % (key.get('keyword')))
 	
 	def drop_database(self):
 		self.collection.drop()
