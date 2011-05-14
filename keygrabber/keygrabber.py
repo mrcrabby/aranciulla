@@ -51,6 +51,7 @@ def main(argv=None):
 	    
 	if order:
 		km.order_keywords()
+		return 0
     
 	if export:
 		km.export_keywords()
