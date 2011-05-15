@@ -139,7 +139,7 @@ class KeywordManager():
 						to_start_dict.append(x)
 						log.debug('ADDED to the list of dict ='+x.keyword)
 		log.warning('Algorithm Finished')
-		log.warging('Ordering and publishing')
+		log.warning('Ordering and publishing')
 		self.order_and_publish()
 		
 	def order_and_publish(self):
