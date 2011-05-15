@@ -152,7 +152,7 @@ class KeywordManager():
 		inst_list.extend(ten_items_list)
 		max_items = 0
 		for letter in ascii_lowercase:
-			items = self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('place', pymongo.ASCENDING), ('keyword', pymongo.ASCENDING)])
+			items = self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter))).sort([('dicts', pymongo.ASCENDING), ('level', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('dbplace', pymongo.ASCENDING), ('keyword', pymongo.ASCENDING)])
 			n_items = items.count()
 			items.batch_size(1000)
 			res.append(items)
