@@ -34,7 +34,7 @@ class InstantKeywordMongo(object):
         self._id = None
         self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id']
     def __str__(self):
-        return '%s' % (self.keyword)
+        return 'keyword: %s, parent: %s, dicts: %s, level: %s, depth: %s, dbplace: %s, place: %s' % (self.keyword, self.parent, self.dicts, self.level, self.depth, self.dbplace, self.place)
     
     def to_dict(self):
         d = dict()
@@ -56,19 +56,25 @@ class KeywordManager():
 		self.collection.ensure_index([('level',pymongo.ASCENDING), ('dicts', pymongo.ASCENDING), ('depth', pymongo.ASCENDING), ('dbplace', pymongo.ASCENDING)])
 
         
-	def __add_keywords_to_database(self, keywords, parent_k, **kwargs):
+	def __add_keywords_to_database(self, keywords=None, parent_k=None, **kwargs):
 		return self.__add_keywords_to_mongo(keywords, parent_k, **kwargs)
 	
-	def __add_keywords_to_mongo(self, keywords, parent_k, **kwargs):
+	def __add_keywords_to_mongo(self, keywords=None, parent_k=None, **kwargs):
 		keys = list()
-		level = kwargs.get('level')
-		items = kwargs.get('items')
+		d_lev = None
+		expans = kwargs.get('expanded_list')
+		if expans is not None:
+			d_lev = dict()
+			keywords = list() if keywords is None else keywords
+			for key,lev in expans:
+				keywords.append(key)
+				d_lev[key]=lev
 		if parent_k is None:
 			parent_k = InstantKeywordMongo('parent', None, None, 0, 0, 0, 0)
 		for keyword in keywords:
 			result = self.collection.find_one({'keyword':keyword})
 			if result is None:
-				key_entry= InstantKeywordMongo(keyword, parent_k.keyword, parent_k.category, level if level else parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1 if items is None else items.index(keyword)+1, len(keys)+1)
+				key_entry= InstantKeywordMongo(keyword, parent_k.keyword, parent_k.category, d_lev[keyword] if d_lev else parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1, len(keys)+1)
 				key_entry._id = self.collection.insert(key_entry.to_dict())
 				if parent_k._id is not None and parent_k.has_child is False:
 					parent_k.has_child = True
@@ -100,8 +106,10 @@ class KeywordManager():
 			#TODO: split the extended in multiple keywords
 			r_search = self.s_eng.expand(mkey.keyword, mkey.level)
 			keys = list()
-			for k, lev, items in r_search:
-				keys.extend(self.__add_keywords_to_database([k], mkey, level=lev, items=items))       
+			keys_got = list()
+			for k, lev in r_search:
+				keys_got.append((k, lev))
+			keys.extend(self.__add_keywords_to_database(expanded_list=keys_got))       
 			return keys
 				
 		ilist=list()	
@@ -143,6 +151,7 @@ class KeywordManager():
 		self.order_and_publish()
 		
 	def order_and_publish(self):
+		log.warning('Starting ordering')
 		inst_list = list()
 		res = list()
 		res_index = list()
@@ -158,7 +167,7 @@ class KeywordManager():
 			res.append(items)
 			res_index.append(0)
 			max_items = n_items if n_items >= max_items else max_items
-			
+		log.info('cursors built')	
 		
 		def smart_ordering(cursors, **kwargs):			
 			
@@ -174,7 +183,6 @@ class KeywordManager():
 				return False if all([cursor.count() <= cursors_indexes[cursors.index(cursor)] for cursor in cursors]) else True
 				
 			def __update_counter(counter, value):
-				print("skipped are: ", counter)
 				if counter == 26:
 					value = value +1 
 					return 0, value
@@ -196,8 +204,8 @@ class KeywordManager():
 							index=index+1
 						else:
 							key = cursor[index]
-							print(key)
-							print(dicts, level, depth)
+							log.info('selected key ' + key)
+							log.info('threshold: dicts: %s level: %s depth: %s' % (dicts, level, depth))
 							if key.get('dicts') <= dicts:
 								skipped_counter[0] = 0
 								if key.get('level') <= level: 
@@ -229,6 +237,7 @@ class KeywordManager():
 		inst_list.extend([i for i in smart_ordering(res, base_list=inst_list)])
 		
 		#add index
+		log.info('do ordering')
 		for i, key in enumerate(inst_list):
 			key['index']=i 
 		#save to orderedkeys collection

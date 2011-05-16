@@ -83,7 +83,7 @@ class Google():
 		'''
 		items = self.getInstantKeys(keyword+' ')
 		for item in items:
-			yield (item, level+1, items)
+			yield (item, level+1)
 			if len(items) == max_answers:
 				for subitem in self.expand(item, level + 1):
 					yield subitem
