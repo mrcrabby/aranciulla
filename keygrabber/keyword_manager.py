@@ -204,7 +204,7 @@ class KeywordManager():
 							index=index+1
 						else:
 							key = cursor[index]
-							log.info('selected key ' + key.get('keyword')
+							log.info('selected key ' + key.get('keyword'))
 							log.info('threshold: dicts: %s level: %s depth: %s' % (dicts, level, depth))
 							if key.get('dicts') <= dicts:
 								skipped_counter[0] = 0
