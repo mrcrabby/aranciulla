@@ -89,7 +89,7 @@ class KeywordManager():
 		keywords = self.db.orderedkeys.find()
 		print('keyword, dicts, level, depth, dbplace')
 		for key in keywords:
-			print('%s, %s, %s, %s, %s' % (key.get('keyword')), key.get('dicts'), key.get('level'), key.get('depth'), key.get('dbplace'))))))
+			print('%s, %s, %s, %s, %s' % (key.get('keyword'), key.get('dicts'), key.get('level'), key.get('depth'), key.get('dbplace')))
 	
 	def drop_database(self):
 		self.collection.drop()
@@ -176,8 +176,9 @@ class KeywordManager():
 			dicts = 1
 			level = 0
 			depth = 0
+			dbplace = 1
 			
-			skipped_counter = [0, 0, 0]
+			skipped_counter = [0, 0, 0, 0]
 				
 			def continue_iteration(cursors):
 				return False if all([cursor.count() <= cursors_indexes[cursors.index(cursor)] for cursor in cursors]) else True
@@ -205,32 +206,41 @@ class KeywordManager():
 						else:
 							key = cursor[index]
 							log.info('selected key ' + key.get('keyword'))
-							log.info('threshold: dicts: %s level: %s depth: %s' % (dicts, level, depth))
+							log.info('threshold: dicts: %s level: %s depth: %s dbplace: %s' % (dicts, level, depth, dbplace))
 							if key.get('dicts') <= dicts:
 								skipped_counter[0] = 0
 								if key.get('level') <= level: 
 									skipped_counter[1] = 0
 									if key.get('depth') <= depth:
 										skipped_counter[2] = 0
-										print('added')
-										inst_list.append(key)
-										cursors_indexes[c_index] = index + 1
-										print('updating index: ', cursors_indexes[c_index])
-										yield key
+										if key.get('dbplace') <= dbplace:
+											skipped_counter[3] = 0
+											print('added')
+											inst_list.append(key)
+											cursors_indexes[c_index] = index + 1
+											print('updating index: ', cursors_indexes[c_index])
+											yield key
+										else:
+											skipped_counter[3], dbplace = __update_counter(skipped_counter[3], dbplace) 
+											if skipped_counter[3] == 0:
+												start_from_a = True
 									else:
 										skipped_counter[2], depth = __update_counter(skipped_counter[2], depth) 
 										if skipped_counter[2] == 0:
+											dbplace = 0
 											start_from_a = True
 								else:
 									skipped_counter[1], level = __update_counter(skipped_counter[1], level)
 									if skipped_counter[1] == 0:
 										depth = 0
+										dbplace = 0
 										start_from_a = True
 							else:
 								skipped_counter[0], dicts = __update_counter(skipped_counter[0], dicts)
 								if skipped_counter[0] == 0:
 									depth = 0
 									level = 0
+									dbplace = 0
 									start_from_a = True
 							break
 		
