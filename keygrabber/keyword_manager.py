@@ -109,7 +109,7 @@ class KeywordManager():
 			keys_got = list()
 			for k, lev in r_search:
 				keys_got.append((k, lev))
-			keys.extend(self.__add_keywords_to_database(expanded_list=keys_got))       
+			keys.extend(self.__add_keywords_to_database(parent=mkey, expanded_list=keys_got))       
 			return keys
 				
 		ilist=list()	
