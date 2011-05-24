@@ -1,0 +1,25 @@
+<metal:html use-macro="base.macros['main']">
+     <metal:content fill-slot="content">
+		<form id="login" name="input" action="${url}" method="POST" autocomplete="off">
+			<fieldset>
+				<input type="hidden" name="came_from" value="${came_from}"/>
+				<ul>
+					<li>
+						<label for="login_field_1">Email:</label>
+						<input id="login_field_1" type="text" name="login" value="${login}"/>
+					</li>
+					<li>
+						<label for="password">Password:</label>
+						<input id="password" type="password" name="password" value="${password}"/>
+					</li>
+					<li>
+						<input id="login_button" type="submit" name="form.submitted" value="Login"/>
+					</li>
+				</ul>
+			</fieldset>
+		</form><!-- login-form -->
+		<h2>${message}</h2>
+     </metal:content>
+     <metal:sidebar fill-slot="sidebar">
+     </metal:sidebar>
+</metal:html>

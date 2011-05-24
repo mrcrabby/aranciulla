@@ -24,7 +24,8 @@ input{
 	font:12px/15px Arial, Helvetica, sans-serif;
 	vertical-align:top;
 	outline:none;
-	color:#000;	
+	color:#000;
+	border-radius: 7px;
 }
 .page{
 	min-height:100%;
@@ -320,3 +321,18 @@ input{
 	padding:12px 0;
 }
 .text-box p{margin:0;}
+
+
+#login {
+	margin: 0 auto;
+	width:450px;
+}
+
+#login li {
+	list-style:none;
+}
+
+#login label {
+	float:left;
+	width:80px;
+}

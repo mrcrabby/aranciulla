@@ -1,9 +1,29 @@
 from pyramid.view import view_config
 from pyramid.renderers import get_renderer
 import re
-import resources
+from resources import *
 from math import ceil
 import pymongo
+from mongoalchemy.session import Session
+
+@view_config(name='admin', context='webkeywords.resources.Root', renderer='webkeywords:templates/admin.pt', permission='view')
+def admin(request): 
+	if 'form.submitted' in request.params:
+		login = request.params['login']
+		password = request.params['password']
+		max_keys = request.params['max_keys']
+		try:
+			max_keys = int(max_keys)
+		except:
+			max_keys = -1
+		with Session.connect(request.registry.settings['db_name'] ) as s:
+			try:
+				user = s.query(User).filter_by(email=login).one()
+			except:
+				user = User(email=login, password=password, max_keys=max_keys)
+				s.insert(user)
+	count = request.db.orderedkeys.find().count()
+	return dict(max_keywords=count)
 
 @view_config(name='logs-google',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
 @view_config(name='logs',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
@@ -21,12 +41,11 @@ def show_logs(request):
 	return dict(filecontent=data)	
 
 def my_view(request):
-	print('passing here')
-	c = resources.InstantKeywordMongo()    
+	c = InstantKeywordMongo()    
 	return search_keyword(c, request)
 
 items_per_page = 30
-@view_config(context='webkeywords.resources.InstantKeywordMongo', renderer='webkeywords:templates/index.pt')
+@view_config(context='webkeywords.resources.InstantKeywordMongo', renderer='webkeywords:templates/index.pt', permission='view')
 def search_keyword(context, request):
 	get_args = request.GET.copy()
 	fields = list(context.fields)
@@ -45,8 +64,7 @@ def search_keyword(context, request):
 	cur_page = int(get_args.pop('page', 1))
 	insts = insts[(cur_page-1)*items_per_page:cur_page*items_per_page]
 	pages = int(ceil(count / items_per_page)+1) 
-	more_pages = True if cur_page+9 < pages else False
-	end_page = min(cur_page+9, pages)
+	more_pages = True if cur_page+3 < pages else False
 	first_args = get_args.copy()
 	first_args['page'] = 1
 	preview_args = get_args.copy()
@@ -56,7 +74,16 @@ def search_keyword(context, request):
 	end_args = get_args.copy()
 	end_args['page'] = max(cur_page + 1, 1)
 	list_page_args = list()
-	for i in range(cur_page, end_page+1):
+	if cur_page > 3:
+		start_page = cur_page -3
+	elif cur_page == 3:
+		start_page = cur_page -2
+	elif cur_page == 2:
+		start_page = cur_page -1
+	else:
+		start_page = cur_page
+	end_page = cur_page + 3
+	for i in range(start_page, end_page+1):
 		d = get_args.copy()
 		d['page'] = i
 		list_page_args.append(d)

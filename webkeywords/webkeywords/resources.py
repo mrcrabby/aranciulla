@@ -1,7 +1,19 @@
+from mongoalchemy.document import Document, Index, DocumentField
+from mongoalchemy.fields import *
+from pyramid.security import Allow, Everyone, Authenticated
+
+class User(Document):
+	email = StringField()
+	password = StringField()
+	max_keys = IntField()
+	
+	
 class Root(object):
 	__parent__ = None
 	__name__ = ''
-	
+	__acl__ = [ (Allow, Authenticated, 'view'),
+                (Allow, 'group:admin', 'admin') ]
+                
 	def __init__(self, request):
 		self.request = request
         
@@ -25,6 +37,8 @@ class ByParent(object):
 class Category(object):
 	__parent__= Root
 	__name__ = 'category'
+	__acl__ = [ (Allow, Everyone, 'view'),
+                (Allow, 'group:editors', 'edit') ]
 	
 	categories = ['ambiente','tecnologia','auto_e_moto','bellezza_e_benessere','casa_e_decorazione',
 	'cucina_e_alimentazione','cultura', 'economia_e_finanza','educazione_e_lavoro', 'moda_e_tendenza', 'sport'
@@ -33,6 +47,7 @@ class Category(object):
 	def __getitem__(self,key):
 		if key in self.categories:
 			return InstantKeywordMongo(category=key)
+
 		
         
 class InstantKeywordMongo(object):

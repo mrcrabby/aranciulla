@@ -1,0 +1,35 @@
+<metal:html use-macro="base.macros['main']">
+     <metal:content fill-slot="content">
+		<h1>Admin</h1>
+		<div>
+			<h2>Create new user</h2>
+			<form name="input" action="${request.resource_url(request.root, 'admin')}" method="POST" autocomplete="off">
+			<fieldset>
+				<ul>
+					<li>
+						<label for="login_field_1">Email:</label>
+						<input id="login_field_1" type="text" name="login" value=""/>
+					</li>
+					<li>
+						<label for="password">Password:</label>
+						<input id="password" type="password" name="password" value=""/>
+					</li>
+					<li>
+						<label for="num_keywords">Keyword visualizzate:</label>
+						<select id="num_keywords" name="max_keys">
+						  <option>Tutte</option>
+						  <tal:options repeat="item range(max_keywords)">
+							<option>${item}</option>
+						  </tal:options>
+						</select>
+					</li>
+					<li>
+						<input id="login_button" type="submit" name="form.submitted" value="Crea"/>
+					</li>
+				</ul>
+			</fieldset>
+		</div>
+     </metal:content>
+     <metal:sidebar fill-slot="sidebar">
+     </metal:sidebar>
+</metal:html>
