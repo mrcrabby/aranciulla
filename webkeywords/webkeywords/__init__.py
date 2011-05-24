@@ -4,7 +4,7 @@ from pyramid.events import NewRequest, BeforeRender
 from gridfs import GridFS
 import pymongo
 from mongoalchemy.session import Session
-from milo_app import helpers
+import helpers
 from pyramid.renderers import get_renderer
 
 from pyramid.authentication import AuthTktAuthenticationPolicy
