@@ -61,7 +61,7 @@ def main(argv=None):
 		km.drop_database()
 		return 0
 
-	km.not_so_simple_search(base='come cucinare')
+	km.not_so_simple_search(base='come')
 
 	return 0
             
