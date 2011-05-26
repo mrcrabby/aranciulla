@@ -54,6 +54,9 @@ input{
 }
 .headline h1 a{color:#375da2;}
 .headline a{color:#6d6d6d;}
+.headline a + a {
+	margin: 0px 5px;
+}
 #main{
 	width:100%;
 	overflow:hidden;
@@ -328,11 +331,16 @@ input{
 	width:450px;
 }
 
-#login li {
+#login li, #user_creation li {
 	list-style:none;
 }
 
 #login label {
 	float:left;
 	width:80px;
+}
+
+#user_creation label {
+	float:left;
+	width:190px;
 }

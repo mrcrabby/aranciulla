@@ -6,8 +6,9 @@ from math import ceil
 import pymongo
 from mongoalchemy.session import Session
 
-@view_config(name='admin', context='webkeywords.resources.Root', renderer='webkeywords:templates/admin.pt', permission='view')
-def admin(request): 
+@view_config(name='admin', context='webkeywords.resources.Root', renderer='webkeywords:templates/admin.pt', permission='administer')
+def admin(request):
+	message = '' 
 	if 'form.submitted' in request.params:
 		login = request.params['login']
 		password = request.params['password']
@@ -20,10 +21,11 @@ def admin(request):
 			try:
 				user = s.query(User).filter_by(email=login).one()
 			except:
-				user = User(email=login, password=password, max_keys=max_keys)
+				user = User(email=login, password=password, max_keys=max_keys, groups=['admin'] if request.params.get('admin') else [])
 				s.insert(user)
-	count = request.db.orderedkeys.find().count()
-	return dict(max_keywords=count)
+				message = 'user created'
+	
+	return dict(message=message)
 
 @view_config(name='logs-google',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
 @view_config(name='logs',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
@@ -55,8 +57,10 @@ def search_keyword(context, request):
 			context.keyword = re.compile(request.GET.get('keyword')) if request.GET.get('keyword') else None
 		else:
 			if request.GET.get(field):
-				setattr(context, field, int(request.GET.get(field)))
-	
+				try:
+					setattr(context, field, int(request.GET.get(field)))
+				except:
+					setattr(context, field, request.GET.get(field))
 	
 	inst_list = request.db.orderedkeys.find(context.to_dict())
 	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in inst_list]
@@ -82,13 +86,13 @@ def search_keyword(context, request):
 		start_page = cur_page -1
 	else:
 		start_page = cur_page
-	end_page = cur_page + 3
+	end_page = cur_page + 3 if more_pages else 1
 	for i in range(start_page, end_page+1):
 		d = get_args.copy()
 		d['page'] = i
 		list_page_args.append(d)
 	category_name = context.category.replace('_', ' ')	if context.category else None
-	print(request.resource_url(context, query=get_args))	
+	
 	return {'total': count, 'more_pages':more_pages, 'category':context.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
 	'end_args':end_args}

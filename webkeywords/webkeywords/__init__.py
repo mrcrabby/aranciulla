@@ -5,6 +5,7 @@ from gridfs import GridFS
 import pymongo
 from mongoalchemy.session import Session
 import helpers
+from resources import groupfinder
 from pyramid.renderers import get_renderer
 
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -13,7 +14,8 @@ from pyramid.authorization import ACLAuthorizationPolicy
 def main(global_config, **settings):
 	""" This function returns a Pyramid WSGI application.
 	"""
-	authn_policy = AuthTktAuthenticationPolicy(secret='webkeywordsSecretMessageForAuthToken')
+	authn_policy = AuthTktAuthenticationPolicy(secret='webkeywordsSecretMessageForAuthToken',
+											   callback=groupfinder)
 	authz_policy = ACLAuthorizationPolicy()
 	config = Configurator(root_factory=Root, settings=settings,
 							authentication_policy=authn_policy,

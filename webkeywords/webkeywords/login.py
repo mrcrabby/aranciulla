@@ -27,7 +27,6 @@ def login(request):
 	if 'form.submitted' in request.params:
 		login = request.params['login']
 		password = request.params['password']
-		print login, password
 		with Session.connect(request.registry.settings['db_name'] ) as s:
 			try:
 				user = s.query(User).filter_by(email=login).one()
@@ -53,4 +52,3 @@ def logout(request):
     headers = forget(request)
     return HTTPFound(location = resource_url(request.context, request),
                      headers = headers)
-    

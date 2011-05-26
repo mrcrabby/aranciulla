@@ -3,7 +3,7 @@
 		<h1>Admin</h1>
 		<div>
 			<h2>Create new user</h2>
-			<form name="input" action="${request.resource_url(request.root, 'admin')}" method="POST" autocomplete="off">
+			<form id="user_creation" name="input" action="${request.resource_url(request.root, 'admin')}" method="POST" autocomplete="off">
 			<fieldset>
 				<ul>
 					<li>
@@ -14,6 +14,7 @@
 						<label for="password">Password:</label>
 						<input id="password" type="password" name="password" value=""/>
 					</li>
+					<!--
 					<li>
 						<label for="num_keywords">Keyword visualizzate:</label>
 						<select id="num_keywords" name="max_keys">
@@ -23,12 +24,22 @@
 						  </tal:options>
 						</select>
 					</li>
+					-->
+					<li>
+						<label for="limit_keys">Numero keyword da visualizzare:</label>
+						<input id="limit_keys" type="text" name="max_keys" value=""/>
+					</li>
+					<li>
+						<label for="admin-checkbox">Privilegi amministratore:</label>
+						<input id="admin-checkbox" type="checkbox" name="admin" value="checkbox"/>
+					</li>
 					<li>
 						<input id="login_button" type="submit" name="form.submitted" value="Crea"/>
 					</li>
 				</ul>
 			</fieldset>
 		</div>
+		${message}
      </metal:content>
      <metal:sidebar fill-slot="sidebar">
      </metal:sidebar>

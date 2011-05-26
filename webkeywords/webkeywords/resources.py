@@ -1,19 +1,34 @@
 from mongoalchemy.document import Document, Index, DocumentField
 from mongoalchemy.fields import *
 from pyramid.security import Allow, Everyone, Authenticated
+from mongoalchemy.session import Session
 
+#admin user
+#{"max_keys" : -1, "password" : "test1", "email" : "test1", "groups" : [ "admin" ] }
 class User(Document):
 	email = StringField()
 	password = StringField()
 	max_keys = IntField()
+	groups = ListField(StringField())
 	
+	def __str__(self):
+		return '%s %s %i %s' % (self.email, self.password, self.max_keys, self.groups)	
+		
+def groupfinder(userid, request):
+	with Session.connect(request.registry.settings['db_name'] ) as s:
+		user = s.query(User).filter_by(email=userid).one()
+	try:
+		r = user.groups
+	except AttributeError:
+		r = []
+	return r
+
 	
 class Root(object):
 	__parent__ = None
 	__name__ = ''
 	__acl__ = [ (Allow, Authenticated, 'view'),
-                (Allow, 'group:admin', 'admin') ]
-                
+                (Allow, 'admin', 'administer') ]
 	def __init__(self, request):
 		self.request = request
         
@@ -21,7 +36,9 @@ class Root(object):
 		if key == 'category':
 			return Category()
 		if key == 'parent':
-			return ByParent()
+			p = ByParent()
+			p.__parent__= self
+			return p
 		raise KeyError      	
 
 class ByParent(object):
@@ -30,8 +47,7 @@ class ByParent(object):
 	
 	def __getitem__(self, key):
 		i = InstantKeywordMongo(parent=key)
-		i.__parent__= ByParent
-		i.__name__= key
+		i.__parent__= self 
 		return i
         
 class Category(object):
