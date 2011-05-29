@@ -209,13 +209,13 @@ class KeywordManager():
 							log.info('counters%s' % (str(skipped_counter),))
 							log.info('threshold: dicts: %s level: %s depth: %s dbplace: %s' % (dicts, level, depth, dbplace))
 							if key.get('dicts') <= dicts:
-								skipped_counter[0] = 0
+								#skipped_counter[0] = 0
 								if key.get('level') <= level: 
-									skipped_counter[1] = 0
+									#skipped_counter[1] = 0
 									if key.get('depth') <= depth:
-										skipped_counter[2] = 0
+										#skipped_counter[2] = 0
 										if key.get('dbplace') <= dbplace:
-											skipped_counter[3] = 0
+											#skipped_counter[3] = 0
 											print('added')
 											inst_list.append(key)
 											cursors_indexes[c_index] = index + 1
