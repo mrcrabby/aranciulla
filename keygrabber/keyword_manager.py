@@ -184,7 +184,7 @@ class KeywordManager():
 				return False if all([cursor.count() <= cursors_indexes[cursors.index(cursor)] for cursor in cursors]) else True
 				
 			def __update_counter(counter, value):
-				if counter == 26:
+				if counter >= 26:
 					value = value +1 
 					return 0, value
 				else:
@@ -206,6 +206,7 @@ class KeywordManager():
 						else:
 							key = cursor[index]
 							log.info('selected key ' + key.get('keyword'))
+							log.info('counters%s' % (str(skipped_counter),))
 							log.info('threshold: dicts: %s level: %s depth: %s dbplace: %s' % (dicts, level, depth, dbplace))
 							if key.get('dicts') <= dicts:
 								skipped_counter[0] = 0
