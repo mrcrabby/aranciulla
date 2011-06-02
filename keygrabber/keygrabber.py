@@ -50,9 +50,7 @@ def main(argv=None):
 	km = KeywordManager(di, google)
 	    
 	if order:
-		keywords = km.order_keywords()
-		print('in keygrabber: '+str(len(keywords)))
-		km.create_orderedkeys_collection(keywords)
+		km.order_keywords()
 		return 0
     
 	if export:

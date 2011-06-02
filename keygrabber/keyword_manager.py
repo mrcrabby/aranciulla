@@ -207,8 +207,14 @@ class KeywordManager():
 			log.info("successfully ordered :"+str(len(inst_list)))
 			if dicts >= max_dict:
 					break
-		print(inst_list)
-		return inst_list
+		#add index
+		log.info('do ordering')
+		for i, key in enumerate(inst_list):
+			key['index']=i 
+		#save to orderedkeys collection
+		self.db.orderedkeys.drop()
+		self.db.orderedkeys.insert(inst_list)
+		return []
 			
 		
 	def order_and_publish(self):
