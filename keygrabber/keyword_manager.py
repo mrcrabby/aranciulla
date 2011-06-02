@@ -102,7 +102,9 @@ class KeywordManager():
 		#save to orderedkeys collection
 		self.db.orderedkeys.drop()
 		log.info('adding ordered keys :'+str(len(inst_list)))
-		self.db.orderedkeys.insert(inst_list)
+		a = self.db.orderedkeys.insert(inst_list)
+		print(a)
+		print(len(a))
 		return inst_list
 		
 	
@@ -195,7 +197,7 @@ class KeywordManager():
 		
 		root = self.collection.find_one(dict(dicts=0, parent=None))
 		max_dict = self.collection.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
-		max_dict = 10
+		max_dict = 2
 		
 		for (dicts, level, depth, dbplace) in _update_threshold():
 			for letter in ascii_lowercase:
