@@ -197,11 +197,10 @@ class KeywordManager():
 		
 		root = self.collection.find_one(dict(dicts=0, parent=None))
 		max_dict = self.collection.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
-		
 		for (dicts, level, depth, dbplace) in _update_threshold():
 			log.info("threashold:"+str(dicts)+" "+str(level)+" "+str(depth)+" "+str(dbplace))
 			for letter in ascii_lowercase:
-				items = [item for item in self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
+				items = [item for item in self.collection.find(dict(keyword=re.compile('^'+root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
 				if len(items) > 0:
 					inst_list.extend(items)
 			log.info("successfully ordered :"+str(len(inst_list)))
