@@ -195,6 +195,8 @@ class KeywordManager():
 				yield (m_dicts, m_level, m_depth, m_dbplace)
 		
 		root = self.collection.find_one(dict(dicts=0, parent=None))
+		ten_items = self.collection.find(dict(parent=root.get('keyword'), dicts=1))[:10]
+		inst_list.extend([x for x in ten_items])
 		max_dict = self.collection.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
 		max_dict = 2
 		
