@@ -83,7 +83,7 @@ class KeywordManager():
 		return keys       
     
 	def order_keywords(self, *args, **kwargs):
-		self.order_and_publish()
+		return self.fast_order()
 	    
 	def export_keywords(self, *args, **kwargs):
 		keywords = self.db.orderedkeys.find()
@@ -93,6 +93,17 @@ class KeywordManager():
 	
 	def drop_database(self):
 		self.collection.drop()
+		
+	def create_orderedkeys_collection(self, inst_list):
+		#add index
+		log.info('adding index')
+		for i, key in enumerate(inst_list):
+			key['index']=i 
+		#save to orderedkeys collection
+		self.db.orderedkeys.drop()
+		self.db.orderedkeys.insert(inst_list)
+		return inst_list
+		
 	
 	def not_so_simple_search(self, base='', **kwargs):
 		level = 0
@@ -148,7 +159,54 @@ class KeywordManager():
 						log.debug('ADDED to the list of dict ='+x.keyword)
 		log.warning('Algorithm Finished')
 		log.warning('Ordering and publishing')
-		self.order_and_publish()
+		keywords = self.order_keywords()
+		self.create_orderedkeys_collection(keywords)
+		
+	def fast_order(self):
+		log.warning('Start fast ordering')
+		
+		inst_list = list()
+		cursors = list()
+		
+		def _update_threshold(level = 5, depth =4, dbplace=10):	
+			m_dicts = 1
+			m_level = 0
+			m_depth = 0
+			m_dbplace = 1
+			
+			yield (m_dicts, m_level, m_depth, m_dbplace)
+			
+			while True:
+				m_dbplace = m_dbplace + 1
+				if m_dbplace > dbplace:
+					m_depth = m_depth +1
+					m_dbplace = 1
+				if m_depth > depth:
+					m_level = m_level + 1
+					m_depth = 0
+					m_dbplace = 0
+				if m_level > level:
+					m_dicts = m_dicts +1
+					m_level = 0
+					m_depth = 0
+					m_dbplace = 0
+				yield (m_dicts, m_level, m_depth, m_dbplace)
+		
+		root = self.collection.find_one(dict(dicts=0, parent=None))
+		max_dict = self.collection.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
+		
+		for (dicts, level, depth, dbplace) in _update_threshold():
+			for letter in ascii_lowercase:
+				log.info("threashold:"+str(dicts)+" "+str(level)+" "+str(depth)+" "+str(dbplace))
+				items = [item for item in self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
+				if len(items) > 0:
+					inst_list.extend(items)
+			log.info("successfully ordered :"+str(len(inst_list)))
+			if dicts >= max_dict:
+					break
+					
+		return inst_list
+			
 		
 	def order_and_publish(self):
 		log.warning('Starting ordering')
