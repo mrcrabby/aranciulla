@@ -201,20 +201,13 @@ class KeywordManager():
 		for (dicts, level, depth, dbplace) in _update_threshold():
 			for letter in ascii_lowercase:
 				log.info("threashold:"+str(dicts)+" "+str(level)+" "+str(depth)+" "+str(dbplace))
-				items = [item for item in self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
+				items = [item for item in self.collection.find(dict(keyword=re.compile(root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace)) if item not in inst_list]
 				if len(items) > 0:
 					inst_list.extend(items)
 			log.info("successfully ordered :"+str(len(inst_list)))
 			if dicts >= max_dict:
 					break
-		#add index
-		log.info('do ordering')
-		for i, key in enumerate(inst_list):
-			key['index']=i 
-		#save to orderedkeys collection
-		self.db.orderedkeys.drop()
-		self.db.orderedkeys.insert(inst_list)
-		return []
+		return inst_list
 			
 		
 	def order_and_publish(self):
