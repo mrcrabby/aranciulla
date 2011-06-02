@@ -89,7 +89,7 @@ class KeywordManager():
 		keywords = self.db.orderedkeys.find()
 		print('keyword, dicts, level, depth, dbplace')
 		for key in keywords:
-			print('%s, %s, %s, %s, %s' % (key.get('keyword'), key.get('dicts'), key.get('level'), key.get('depth'), key.get('dbplace')))
+			print('%s, %s, %s, %s, %s, %s' % (key.get('keyword'), key.get('index'), key.get('dicts'), key.get('level'), key.get('depth'), key.get('dbplace')))
 	
 	def drop_database(self):
 		self.collection.drop()
