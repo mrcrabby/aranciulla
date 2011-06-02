@@ -196,7 +196,7 @@ class KeywordManager():
 		
 		root = self.collection.find_one(dict(dicts=0, parent=None))
 		max_dict = self.collection.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
-		max_dict = 2
+		max_dict = 1
 		
 		for (dicts, level, depth, dbplace) in _update_threshold():
 			for letter in ascii_lowercase:
@@ -207,6 +207,7 @@ class KeywordManager():
 			log.info("successfully ordered :"+str(len(inst_list)))
 			if dicts >= max_dict:
 					break
+		print(inst_list)
 		return inst_list
 			
 		
