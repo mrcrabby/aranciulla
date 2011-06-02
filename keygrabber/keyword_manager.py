@@ -87,7 +87,7 @@ class KeywordManager():
 	    
 	def export_keywords(self, *args, **kwargs):
 		keywords = self.db.orderedkeys.find()
-		print('keyword, dicts, level, depth, dbplace')
+		print('keyword, index, dicts, level, depth, dbplace')
 		for key in keywords:
 			print('%s, %s, %s, %s, %s, %s' % (key.get('keyword'), key.get('index'), key.get('dicts'), key.get('level'), key.get('depth'), key.get('dbplace')))
 	
@@ -171,7 +171,7 @@ class KeywordManager():
 		cursors = list()
 		wrong_list = list()
 		
-		def _update_threshold(level = 5, depth =4, dbplace=10):	
+		def _update_threshold(dicts= 100, level = 7, depth =4, dbplace=10):	
 			m_dicts = 1
 			m_level = 0
 			m_depth = 0
@@ -179,7 +179,7 @@ class KeywordManager():
 			
 			yield (m_dicts, m_level, m_depth, m_dbplace)
 			
-			while True:
+			while m_dicts < dicts:
 				m_dbplace = m_dbplace + 1
 				if m_dbplace > dbplace:
 					m_depth = m_depth +1
@@ -196,16 +196,18 @@ class KeywordManager():
 				yield (m_dicts, m_level, m_depth, m_dbplace)
 		
 		root = self.collection.find_one(dict(dicts=0, parent=None))
-		max_dict = self.collection.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
-		for (dicts, level, depth, dbplace) in _update_threshold():
+		max_dicts = self.collection.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
+		max_level = self.collection.find().sort([('level',pymongo.DESCENDING),])[0].get('level')
+		max_depth = self.collection.find().sort([('depth',pymongo.DESCENDING),])[0].get('depth')
+		max_dbplace = self.collection.find().sort([('dbplace',pymongo.DESCENDING),])[0].get('dbplace')
+
+		for (dicts, level, depth, dbplace) in _update_threshold(max_dicts, max_level, max_depth, max_dbplace):
 			log.info("threashold:"+str(dicts)+" "+str(level)+" "+str(depth)+" "+str(dbplace))
 			for letter in ascii_lowercase:
 				items = [item for item in self.collection.find(dict(keyword=re.compile('^'+root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
 				if len(items) > 0:
 					inst_list.extend(items)
 			log.info("successfully ordered :"+str(len(inst_list)))
-			if dicts >= max_dict:
-					break
 		return inst_list
 			
 		
