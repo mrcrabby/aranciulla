@@ -101,6 +101,7 @@ class KeywordManager():
 			key['index']=i 
 		#save to orderedkeys collection
 		self.db.orderedkeys.drop()
+		log.info('adding ordered keys :'+str(len(inst_list)))
 		self.db.orderedkeys.insert(inst_list)
 		return inst_list
 		
@@ -204,7 +205,6 @@ class KeywordManager():
 			log.info("successfully ordered :"+str(len(inst_list)))
 			if dicts >= max_dict:
 					break
-					
 		return inst_list
 			
 		

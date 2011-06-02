@@ -51,6 +51,7 @@ def main(argv=None):
 	    
 	if order:
 		keywords = km.order_keywords()
+		print('in keygrabber: '+str(len(keywords)))
 		km.create_orderedkeys_collection(keywords)
 		return 0
     
