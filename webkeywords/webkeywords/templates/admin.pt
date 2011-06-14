@@ -8,11 +8,11 @@
 				<ul>
 					<li>
 						<label for="login_field_1">Email:</label>
-						<input id="login_field_1" type="text" name="login" value=""/>
+						<input id="login_field_1" type="text" name="login" value="" class="field"/>
 					</li>
 					<li>
 						<label for="password">Password:</label>
-						<input id="password" type="password" name="password" value=""/>
+						<input id="password" type="password" name="password" value="" class="field"/>
 					</li>
 					<!--
 					<li>
@@ -26,12 +26,12 @@
 					</li>
 					-->
 					<li>
-						<label for="limit_keys">Numero keyword da visualizzare:</label>
-						<input id="limit_keys" type="text" name="max_keys" value=""/>
+						<label for="limit_keys">Numero keyword da visualizzare (opzionale):</label>
+						<input id="limit_keys" type="text" name="max_keys" value="" class="field"/>
 					</li>
 					<li>
 						<label for="admin-checkbox">Privilegi amministratore:</label>
-						<input id="admin-checkbox" type="checkbox" name="admin" value="checkbox"/>
+						<input id="admin-checkbox" type="checkbox" name="admin" value="checkbox" class="field"/>
 					</li>
 					<li>
 						<input id="login_button" type="submit" name="form.submitted" value="Crea"/>

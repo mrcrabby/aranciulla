@@ -25,8 +25,12 @@ input{
 	vertical-align:top;
 	outline:none;
 	color:#000;
-	border-radius: 7px;
 }
+
+input.field {
+	width:250px;
+}
+
 .page{
 	min-height:100%;
 	background:url(../images/bg-page.gif) repeat-x 0 100%;

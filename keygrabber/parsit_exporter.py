@@ -10,7 +10,7 @@ for item in db.orderedkeys.find():
 	text = etree.SubElement(document,'text')
 	text.text = item.get('keyword')
 
-print(etree.tostring(root, pretty_print=True))
+print(etree.tostring(root, pretty_print=True, xml_declaration=True, encoding="UTF-8"))
 
 
 """

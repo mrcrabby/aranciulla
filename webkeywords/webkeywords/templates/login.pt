@@ -6,11 +6,11 @@
 				<ul>
 					<li>
 						<label for="login_field_1">Email:</label>
-						<input id="login_field_1" type="text" name="login" value="${login}"/>
+						<input id="login_field_1" type="text" name="login" value="${login}" class="field"/>
 					</li>
 					<li>
 						<label for="password">Password:</label>
-						<input id="password" type="password" name="password" value="${password}"/>
+						<input id="password" type="password" name="password" value="${password}" class="field"/>
 					</li>
 					<li>
 						<input id="login_button" type="submit" name="form.submitted" value="Login"/>

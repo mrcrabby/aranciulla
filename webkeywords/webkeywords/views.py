@@ -5,6 +5,7 @@ from resources import *
 from math import ceil
 import pymongo
 from mongoalchemy.session import Session
+from pyramid.security import authenticated_userid, has_permission
 
 @view_config(name='admin', context='webkeywords.resources.Root', renderer='webkeywords:templates/admin.pt', permission='administer')
 def admin(request):
@@ -64,6 +65,12 @@ def search_keyword(context, request):
 	
 	inst_list = request.db.orderedkeys.find(context.to_dict())
 	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in inst_list]
+	#crop keywords
+	email = authenticated_userid(request)
+	with Session.connect(request.registry.settings['db_name'] ) as s:
+		user = s.query(User).filter_by(email=email).one()
+		if user.max_keys > 0:
+			insts = insts[:user.max_keys]
 	count = len(insts)
 	cur_page = int(get_args.pop('page', 1))
 	insts = insts[(cur_page-1)*items_per_page:cur_page*items_per_page]
