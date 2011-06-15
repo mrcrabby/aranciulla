@@ -38,8 +38,8 @@ def admin(request):
 			try:
 				user = s.query(User).filter_by(email=login).one()
 			except:
-				user = User(email=login, password=password, max_keys=max_keys, groups=['admin'] if request.params.get('admin') else []
-							scritti = []
+				user = User(email=login, password=password, max_keys=max_keys, groups=['admin'] if request.params.get('admin') else [],
+							scritti = [],
 							bloccati = [])
 				s.insert(user)
 				message = 'user created'
