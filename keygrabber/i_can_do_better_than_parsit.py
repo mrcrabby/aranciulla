@@ -1,7 +1,7 @@
 import pymongo
 
 connection = pymongo.Connection()
-db = connection.orderedkeys
+db = connection.webkeywords
 
 print "keyword, index"
 
