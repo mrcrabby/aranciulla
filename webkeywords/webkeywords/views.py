@@ -90,14 +90,14 @@ def search_keyword(context, request):
 		if keys_to_get:
 			filt = { '$or' : [dict(keyword=v) for v in  keys_to_get] }
 		else:
-			filt = dict()
+			filt = None
 	else:
 		if user.scritti + user.bloccati:
 			filt = {'$nor': [dict(keyword=v) for v in  user.scritti+user.bloccati]}
 		else:
 			filt = dict()
 	
-	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items()))
+	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items())) if filt is not None else []
 	insts = [dict([(field, x.get(field)) for field in k_mongo.fields]) for x in inst_list]
 	#crop keywords
 	email = authenticated_userid(request)
