@@ -85,11 +85,18 @@ def search_keyword(context, request):
 	
 	if request.view_name == 'scritti' or request.view_name == 'bloccati':
 		keys_to_get = getattr(user, request.view_name)
-		inst_list = request.db.orderedkeys.find(dict({ '$or' : [dict(keyword=v) for v in  keys_to_get] }.items() + k_mongo.to_dict().items()))
+		if keys_to_get:
+			filt = { '$or' : [dict(keyword=v) for v in  keys_to_get] }
+		else:
+			filt = dict()
 	else:
-		filt = dict(k_mongo.to_dict().items() + {'$nor': [dict(keyword=v) for v in  user.scritti+user.bloccati]}.items())
-		inst_list = request.db.orderedkeys.find(filt)
-
+		if user.scritti + user.bloccati:
+			filt = {'$nor': [dict(keyword=v) for v in  user.scritti+user.bloccati]}
+		else:
+			filt = dict()
+	
+	print filt
+	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items()))
 	insts = [dict([(field, x.get(field)) for field in k_mongo.fields]) for x in inst_list]
 	#crop keywords
 	email = authenticated_userid(request)
