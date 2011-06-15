@@ -5,14 +5,17 @@ from mongoalchemy.session import Session
 
 #admin user
 #{"max_keys" : -1, "password" : "test1", "email" : "test1", "groups" : [ "admin" ] }
+#> db.User.save({"password" : "test1", "email" : "test1", "groups" : [ "admin" ], scritti: [], bloccati: [] })
 class User(Document):
 	email = StringField()
 	password = StringField()
-	max_keys = IntField()
-	groups = ListField(StringField())
+	max_keys = IntField(required=False)
+	groups = ListField(StringField(), required=False)
+	scritti = ListField(StringField(), required=False)
+	bloccati = ListField(StringField(), required=False)
 	
 	def __str__(self):
-		return '%s %s %i %s' % (self.email, self.password, self.max_keys, self.groups)	
+		return '%s %s %s' % (self.email, self.password, self.groups)	
 		
 def groupfinder(userid, request):
 	with Session.connect(request.registry.settings['db_name'] ) as s:

@@ -25,10 +25,6 @@ def main(global_config, **settings):
 	config.registry.settings['db_conn'] = conn
 	config.add_subscriber(add_mongo_db, NewRequest)
 	config.add_subscriber(add_renderer_globals, BeforeRender)
-	config.add_view('webkeywords.views.my_view',
-                    context='webkeywords:resources.Root',
-                    renderer='webkeywords:templates/index.pt',
-                    permission='view')
 	config.add_static_view('static', 'webkeywords:static')
 	config.scan()
 	return config.make_wsgi_app()

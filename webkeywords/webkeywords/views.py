@@ -6,6 +6,22 @@ from math import ceil
 import pymongo
 from mongoalchemy.session import Session
 from pyramid.security import authenticated_userid, has_permission
+	
+def _get_user(request):
+	email = authenticated_userid(request)
+	with Session.connect(request.registry.settings['db_name'] ) as s:
+		user = s.query(User).filter_by(email=email).one()
+	return user
+
+@view_config(name='pop', context='webkeywords.resources.Root', renderer='json')
+def pop(context, request):
+	with Session.connect(request.registry.settings['db_name'] ) as s:
+		s.clear_collection(User)
+		u = User(email='test1', password='test1', groups = ['admin'], scritti=[], bloccati=[])
+		s.insert(u)
+		return dict()
+
+	
 
 @view_config(name='admin', context='webkeywords.resources.Root', renderer='webkeywords:templates/admin.pt', permission='administer')
 def admin(request):
@@ -48,29 +64,42 @@ def my_view(request):
 	return search_keyword(c, request)
 
 items_per_page = 30
-@view_config(context='webkeywords.resources.InstantKeywordMongo', renderer='webkeywords:templates/index.pt', permission='view')
+@view_config(context='webkeywords.resources.Root', renderer='webkeywords:templates/index.pt', permission='view')
+@view_config(name='scritti', context='webkeywords.resources.Root', renderer='webkeywords:templates/index.pt', permission='view')
+@view_config(name='bloccati', context='webkeywords.resources.Root', renderer='webkeywords:templates/index.pt', permission='view')
 def search_keyword(context, request):
+	k_mongo = InstantKeywordMongo()
 	get_args = request.GET.copy()
-	fields = list(context.fields)
-	fields.remove('category')	
+	fields = list(k_mongo.fields)
+	fields.remove('category')
+	user = _get_user(request)	
 	for field in fields:
 		if field == 'keyword':
-			context.keyword = re.compile(request.GET.get('keyword')) if request.GET.get('keyword') else None
+			k_mongo.keyword = re.compile(request.GET.get('keyword')) if request.GET.get('keyword') else None
 		else:
 			if request.GET.get(field):
 				try:
-					setattr(context, field, int(request.GET.get(field)))
+					setattr(k_mongo, field, int(request.GET.get(field)))
 				except:
-					setattr(context, field, request.GET.get(field))
+					setattr(k_mongo, field, request.GET.get(field))
 	
-	inst_list = request.db.orderedkeys.find(context.to_dict())
-	insts = [dict([(field, x.get(field)) for field in context.fields]) for x in inst_list]
+	if request.view_name == 'scritti' or request.view_name == 'bloccati':
+		keys_to_get = getattr(user, request.view_name)
+		inst_list = request.db.orderedkeys.find(dict({ '$or' : [dict(keyword=v) for v in  keys_to_get] }.items() + k_mongo.to_dict().items()))
+	else:
+		filt = dict(k_mongo.to_dict().items() + {'$nor': [dict(keyword=v) for v in  user.scritti+user.bloccati]}.items())
+		inst_list = request.db.orderedkeys.find(filt)
+
+	insts = [dict([(field, x.get(field)) for field in k_mongo.fields]) for x in inst_list]
 	#crop keywords
 	email = authenticated_userid(request)
 	with Session.connect(request.registry.settings['db_name'] ) as s:
 		user = s.query(User).filter_by(email=email).one()
-		if user.max_keys > 0:
-			insts = insts[:user.max_keys]
+		try:
+			if user.max_keys > 0:
+				insts = insts[:user.max_keys]
+		except AttributeError:
+			pass
 	count = len(insts)
 	cur_page = int(get_args.pop('page', 1))
 	insts = insts[(cur_page-1)*items_per_page:cur_page*items_per_page]
@@ -98,8 +127,27 @@ def search_keyword(context, request):
 		d = get_args.copy()
 		d['page'] = i
 		list_page_args.append(d)
-	category_name = context.category.replace('_', ' ')	if context.category else None
+	category_name = k_mongo.category.replace('_', ' ')	if k_mongo.category else None
 	
-	return {'total': count, 'more_pages':more_pages, 'category':context.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
+	return {'total': count, 'more_pages':more_pages, 'category':k_mongo.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
 	'end_args':end_args}
+
+@view_config(name='scritto', context='webkeywords.resources.Root', renderer='json', permission='view')
+@view_config(name='bloccato', context='webkeywords.resources.Root', renderer='json', permission='view')
+def scritto(context, request):
+	user = _get_user(request)
+	keyword = request.GET.get('keyword')
+	if request.view_name == 'scritto':
+		attribute = 'scritti'
+	else:
+		attribute = 'bloccati'
+	if keyword:
+		try:
+			getattr(user, attribute).append(keyword)
+		except AttributeError:
+			setattr(user, attribute, list())
+			getattr(user, attribute).append(keyword)
+	with Session.connect(request.registry.settings['db_name'] ) as s:
+		s.insert(user)
+	return dict()

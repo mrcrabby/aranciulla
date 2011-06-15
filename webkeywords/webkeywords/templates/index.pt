@@ -9,10 +9,10 @@
 </head>
 <body>
 	<div class="page">
-		<div id="wrapper">			<div class="headline">				<h1 tal:content="username"></h1>				<a href="${request.resource_url(request.root, 'logout')}">Disconnetti</a>				<a tal:condition="h.has_permission('administer', request.root, request)" href="${request.resource_url(request.root, 'admin')}">Admin</a>			</div>			<div id="main">				<div id="content">					<ul class="breadcrumbs">						<li><a href="/">HOME</a></li>						<li tal:condition="get_args.get('parent')"><a tal:attributes="href request.resource_url(request.root, query=get_args)">${get_args.get('parent')}</a></li>						<li><a href="" tal:content="category_name"></a></li>						<li tal:content="request.GET.get('keyword')">custom search</li>					</ul>					<div class="table-container">						<div class="holder">							<div class="frame">								<table>									<tr>										<th class="col1">ARGOMENTI TROVATI</th>										<th class="col2">
-											<ul>												<li class="active"><a href="#">DA SCRIVERE</a></li>
-												<li><a href="#">SCRITTI</a></li>
-												<li><a href="#">BLOCCATI</a></li>											</ul>
+		<div id="wrapper">			<div class="headline">				<h1 tal:content="username"></h1>				<a href="${request.resource_url(request.root, 'logout')}">Disconnetti</a>				<a tal:condition="h.has_permission('administer', request.root, request)" href="${request.resource_url(request.root, 'admin')}">Admin</a>			</div>			<div id="main">				<div id="content">					<ul class="breadcrumbs">						<li><a href="/">HOME</a></li>						<li tal:condition="get_args.get('parent')"><a tal:attributes="href request.resource_url(request.root, query=get_args)">${get_args.get('parent')}</a></li>						<li tal:condition="category_name"><a href="" tal:content="category_name"></a></li>						<li tal:condition="request.GET.get('keyword')"><a tal:attributes="href request.resource_url(request.root, query=get_args)">${request.GET.get('keyword')}</a></li>					</ul>					<div class="table-container">						<div class="holder">							<div class="frame">								<table>									<tr>										<th class="col1">ARGOMENTI TROVATI</th>										<th class="col2">
+											<ul>												<li class="${'active' if not request.view_name else ''}"><a tal:attributes="href request.resource_url(request.root, query=get_args)">DA SCRIVERE</a></li>
+												<li class="${'active' if request.view_name == 'scritti' else ''}"><a tal:attributes="href request.resource_url(request.root, 'scritti', query=get_args)">SCRITTI</a></li>
+												<li class="${'active' if request.view_name == 'bloccati' else ''}"><a tal:attributes="href request.resource_url(request.root, 'bloccati', query=get_args)">BLOCCATI</a></li>											</ul>
 										</th>									</tr>
 									<tal:r repeat="item keywords"> 
 									<tr tal:attributes="class repeat.item.even + repeat.item.odd">
@@ -26,9 +26,8 @@
 											</tal:e>
 										</td>
 										<td class="col2">
-											<a href="" ><img src="${request.static_url('webkeywords:static/images/ico01.png')}" alt="" width="22" height="22" /></a>
-											<img src="${request.static_url('webkeywords:static/images/ico02.png')}" alt="" width="23" height="22" />
-											<img src="${request.static_url('webkeywords:static/images/ico03.png')}" alt="" width="24" height="24" />
+											<img class="muovi_scritti link" keyword="${item.keyword}" src="${request.static_url('webkeywords:static/images/ico01.png')}" alt="" width="22" height="22" />
+											<img class="muovi_bloccati link" keyword= "${item.keyword}" src="${request.static_url('webkeywords:static/images/ico02.png')}" alt="" width="23" height="22" />
 										</td>
 									</tr>
 									</tal:r>								</table>							</div>						</div>					</div>					<div class="paging">						<a href="${request.resource_url(request.root, query=first_args)}" class="first">&laquo;</a>						<a href="${request.resource_url(request.root, query=preview_args)}" class="preview">&lt;</a>						<tal:more condition="more_pages">						<a href="${request.resource_url(request.root, query=last_args)}" class="next">&raquo;</a>						<a href="${request.resource_url(request.root, query=end_args)}" class="last">&gt;</a>						</tal:more>						<ul>

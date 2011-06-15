@@ -91,6 +91,11 @@ input.field {
 	color:#484848;
 	font-weight:normal;
 }
+
+.breadcrumbs li:last-child a{
+	font-weight:bold;
+}
+
 .table-container{
 	width:100%;
 	margin:0 0 12px;
@@ -347,4 +352,9 @@ input.field {
 #user_creation label {
 	float:left;
 	width:190px;
+}
+
+.link:hover {
+	cursor:pointer;
+	text-decoration:underline;
 }
