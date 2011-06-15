@@ -112,7 +112,7 @@ def search_keyword(context, request):
 	cur_page = int(get_args.pop('page', 1))
 	insts = insts[(cur_page-1)*items_per_page:cur_page*items_per_page]
 	pages = int(ceil(count / items_per_page)+1) 
-	more_pages = True if cur_page+3 < pages else False
+	more_pages = True if cur_page < pages else False
 	first_args = get_args.copy()
 	first_args['page'] = 1
 	preview_args = get_args.copy()
@@ -130,7 +130,15 @@ def search_keyword(context, request):
 		start_page = cur_page -1
 	else:
 		start_page = cur_page
-	end_page = cur_page + 3 if more_pages else 1
+		
+	if cur_page < pages:
+		if cur_page + 3 >= pages:
+			end_page = pages
+		else:
+			end_page = cur_page + 3
+	else:
+		end_page = 1
+		
 	for i in range(start_page, end_page+1):
 		d = get_args.copy()
 		d['page'] = i
