@@ -139,7 +139,7 @@ def search_keyword(context, request):
 	
 	return {'total': count, 'more_pages':more_pages, 'category':k_mongo.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
-	'end_args':end_args}
+	'end_args':end_args, 'cur_page': cur_page}
 
 @view_config(name='scritto', context='webkeywords.resources.Root', renderer='json', permission='view')
 @view_config(name='bloccato', context='webkeywords.resources.Root', renderer='json', permission='view')

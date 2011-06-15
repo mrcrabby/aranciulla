@@ -30,7 +30,7 @@
 											<img class="muovi_bloccati link" keyword= "${item.keyword}" src="${request.static_url('webkeywords:static/images/ico02.png')}" alt="" width="23" height="22" />
 										</td>
 									</tr>
-									</tal:r>								</table>							</div>						</div>					</div>					<div class="paging">						<a href="${request.resource_url(request.root, query=first_args)}" class="first">&laquo;</a>						<a href="${request.resource_url(request.root, query=preview_args)}" class="preview">&lt;</a>						<tal:more condition="more_pages">						<a href="${request.resource_url(request.root, query=last_args)}" class="next">&raquo;</a>						<a href="${request.resource_url(request.root, query=end_args)}" class="last">&gt;</a>						</tal:more>						<ul>
+									</tal:r>								</table>							</div>						</div>					</div>					<div class="paging">						<a tal:condition="cur_page != 1" href="${request.resource_url(request.root, query=first_args)}" class="first">&laquo;</a>						<a tal:condition="cur_page != 1" href="${request.resource_url(request.root, query=preview_args)}" class="preview">&lt;</a>						<tal:more condition="more_pages">						<a href="${request.resource_url(request.root, query=last_args)}" class="next">&raquo;</a>						<a href="${request.resource_url(request.root, query=end_args)}" class="last">&gt;</a>						</tal:more>						<ul>
 							<li tal:repeat="i list_page_args">
 								<a href="${request.resource_url(request.root, query=i)}" tal:content="i.get('page')"></a>
 							</li>
