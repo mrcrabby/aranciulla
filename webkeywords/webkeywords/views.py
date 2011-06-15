@@ -38,7 +38,9 @@ def admin(request):
 			try:
 				user = s.query(User).filter_by(email=login).one()
 			except:
-				user = User(email=login, password=password, max_keys=max_keys, groups=['admin'] if request.params.get('admin') else [])
+				user = User(email=login, password=password, max_keys=max_keys, groups=['admin'] if request.params.get('admin') else []
+							scritti = []
+							bloccati = [])
 				s.insert(user)
 				message = 'user created'
 	
@@ -95,7 +97,6 @@ def search_keyword(context, request):
 		else:
 			filt = dict()
 	
-	print filt
 	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items()))
 	insts = [dict([(field, x.get(field)) for field in k_mongo.fields]) for x in inst_list]
 	#crop keywords

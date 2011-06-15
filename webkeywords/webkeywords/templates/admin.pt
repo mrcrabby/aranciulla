@@ -14,17 +14,6 @@
 						<label for="password">Password:</label>
 						<input id="password" type="password" name="password" value="" class="field"/>
 					</li>
-					<!--
-					<li>
-						<label for="num_keywords">Keyword visualizzate:</label>
-						<select id="num_keywords" name="max_keys">
-						  <option>Tutte</option>
-						  <tal:options repeat="item range(max_keywords)">
-							<option>${item}</option>
-						  </tal:options>
-						</select>
-					</li>
-					-->
 					<li>
 						<label for="limit_keys">Numero keyword da visualizzare (opzionale):</label>
 						<input id="limit_keys" type="text" name="max_keys" value="" class="field"/>
