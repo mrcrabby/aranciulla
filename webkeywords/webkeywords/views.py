@@ -166,4 +166,17 @@ def scritto(context, request):
 			getattr(user, attribute).append(keyword)
 	with Session.connect(request.registry.settings['db_name'] ) as s:
 		s.insert(user)
+	return dict(success=True)
+	
+@view_config(name='back', context='webkeywords.resources.Root', renderer='json', permission='view')
+def back(context, request):
+	user = _get_user(request)
+	keyword = request.GET.get('keyword')
+	try:
+		user.scritti.remove(keyword)
+		user.bloccati.remove(keyword)
+	except ValueError:
+		pass
+	with Session.connect(request.registry.settings['db_name'] ) as s:
+		s.insert(user)
 	return dict()
