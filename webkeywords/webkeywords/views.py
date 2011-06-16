@@ -145,9 +145,16 @@ def search_keyword(context, request):
 		list_page_args.append(d)
 	category_name = k_mongo.category.replace('_', ' ')	if k_mongo.category else None
 	
+	orientation = list()
+	orientation_item = get_args.get('parent')
+	while orientation_item:
+		key = request.db.orderedkeys.find_one(dict(keyword=orientation_item))
+		orientation.insert(0, dict(title=key.get('keyword'), href=request.resource_url(request.root, query=dict(get_args, parent=key.get('keyword')))))
+		orientation_item = key.get('parent')
+	
 	return {'total': count, 'more_pages':more_pages, 'category':k_mongo.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
-	'end_args':end_args, 'cur_page': cur_page}
+	'end_args':end_args, 'cur_page': cur_page, 'orientation':orientation}
 
 @view_config(name='scritto', context='webkeywords.resources.Root', renderer='json', permission='view')
 @view_config(name='bloccato', context='webkeywords.resources.Root', renderer='json', permission='view')
