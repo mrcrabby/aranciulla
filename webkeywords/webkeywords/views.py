@@ -180,11 +180,10 @@ def scritto(context, request):
 def back(context, request):
 	user = _get_user(request)
 	keyword = request.GET.get('keyword')
-	try:
+	if keyword in user.scritti:
 		user.scritti.remove(keyword)
+	if keyword in user.bloccati:
 		user.bloccati.remove(keyword)
-	except ValueError:
-		pass
 	with Session.connect(request.registry.settings['db_name'] ) as s:
 		s.insert(user)
 	return dict()
