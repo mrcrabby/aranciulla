@@ -147,7 +147,7 @@ def search_keyword(context, request):
 	
 	orientation = list()
 	orientation_item = get_args.get('keyword')
-	if orientation_item:
+	if orientation_item and not get_args.get('parent'):
 		orientation.insert(0, dict(title=orientation_item, href=request.resource_url(request.root, query=dict(get_args, keyword=orientation_item))))
 	orientation_item = get_args.get('parent')
 	key = request.db.orderedkeys.find_one(dict(keyword=orientation_item))
