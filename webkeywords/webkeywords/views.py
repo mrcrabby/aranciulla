@@ -72,6 +72,12 @@ items_per_page = 30
 def search_keyword(context, request):
 	k_mongo = InstantKeywordMongo()
 	get_args = request.GET.copy()
+	get_args_keyword = request.GET.copy()
+	if 'keyword' in get_args_keyword:
+		get_args_keyword.pop('keyword')
+	if 'page' in get_args_keyword:
+		get_args_keyword.pop('page') 
+	
 	fields = list(k_mongo.fields)
 	fields.remove('category')
 	user = _get_user(request)	
@@ -147,7 +153,7 @@ def search_keyword(context, request):
 	
 	orientation = list()
 	orientation_item = get_args.get('keyword')
-	if orientation_item and not get_args.get('parent'):
+	if orientation_item:
 		orientation.insert(0, dict(title=orientation_item, href=request.resource_url(request.root, query=dict(get_args, keyword=orientation_item))))
 	orientation_item = get_args.get('parent')
 	key = request.db.orderedkeys.find_one(dict(keyword=orientation_item))
@@ -158,7 +164,7 @@ def search_keyword(context, request):
 	
 	return {'total': count, 'more_pages':more_pages, 'category':k_mongo.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
-	'end_args':end_args, 'cur_page': cur_page, 'orientation':orientation}
+	'end_args':end_args, 'cur_page': cur_page, 'orientation':orientation, 'get_args_keyword':get_args_keyword}
 
 @view_config(name='scritto', context='webkeywords.resources.Root', renderer='json', permission='view')
 @view_config(name='bloccato', context='webkeywords.resources.Root', renderer='json', permission='view')
