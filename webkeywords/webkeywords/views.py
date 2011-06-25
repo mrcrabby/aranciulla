@@ -76,10 +76,11 @@ def search_keyword(context, request):
 	if 'keyword' in get_args_keyword:
 		get_args_keyword.pop('keyword')
 	if 'page' in get_args_keyword:
-		get_args_keyword.pop('page') 
+		get_args_keyword.pop('page')
+	if 'category' in get_args_keyword:
+		get_args_keyword.pop('category')  
 	
 	fields = list(k_mongo.fields)
-	fields.remove('category')
 	user = _get_user(request)	
 	for field in fields:
 		if field == 'keyword':
@@ -103,7 +104,7 @@ def search_keyword(context, request):
 		else:
 			filt = dict()
 	
-	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items())) if filt is not None else []
+	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items())).sort('index') if filt is not None else []
 	insts = [dict([(field, x.get(field)) for field in k_mongo.fields]) for x in inst_list]
 	#crop keywords
 	email = authenticated_userid(request)
@@ -149,7 +150,6 @@ def search_keyword(context, request):
 		d = get_args.copy()
 		d['page'] = i
 		list_page_args.append(d)
-	category_name = k_mongo.category.replace('_', ' ')	if k_mongo.category else None
 	
 	orientation = list()
 	orientation_item = get_args.get('keyword')
@@ -162,7 +162,9 @@ def search_keyword(context, request):
 		orientation_item = key.get('parent')
 		key = request.db.orderedkeys.find_one(dict(keyword=orientation_item))
 	
-	return {'total': count, 'more_pages':more_pages, 'category':k_mongo.category, 'category_name':category_name, 'keywords':insts, 'get_args':get_args,
+	categories = request.db.orderedkeys.distinct('category')
+	categories.sort()
+	return {'total': count, 'more_pages':more_pages, 'category':k_mongo.category, 'categories':categories, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
 	'end_args':end_args, 'cur_page': cur_page, 'orientation':orientation, 'get_args_keyword':get_args_keyword}
 

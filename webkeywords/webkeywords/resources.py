@@ -37,7 +37,9 @@ class Root(object):
         
 	def __getitem__(self,key):
 		if key == 'category':
-			return Category()
+			c = Category(self.request)
+			c.__parent__ = self
+			return c
 		if key == 'parent':
 			p = ByParent()
 			p.__parent__= self
@@ -56,16 +58,16 @@ class ByParent(object):
 class Category(object):
 	__parent__= Root
 	__name__ = 'category'
-	__acl__ = [ (Allow, Everyone, 'view'),
-                (Allow, 'group:editors', 'edit') ]
 	
-	categories = ['ambiente','tecnologia','auto_e_moto','bellezza_e_benessere','casa_e_decorazione',
-	'cucina_e_alimentazione','cultura', 'economia_e_finanza','educazione_e_lavoro', 'moda_e_tendenza', 'sport'
-	, 'svago_e_tempo_libero', 'tecnologia', 'viaggi']
+	def __init__(self, request):
+		self.request = request
+		self.categories = self.request.db.orderedkeys.distinct('category')
 		
 	def __getitem__(self,key):
 		if key in self.categories:
-			return InstantKeywordMongo(category=key)
+			i = InstantKeywordMongo(category=key)
+			i.__parent__= self 
+			return i
 
 		
         

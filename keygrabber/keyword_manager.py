@@ -103,6 +103,7 @@ class KeywordManager():
 		self.db.orderedkeys.drop()
 		log.info('adding ordered keys :'+str(len(inst_list)))
 		a = self.db.orderedkeys.insert(inst_list)
+		self.db.orderedkeys.ensure_index('index')
 		print(len(a))
 		return inst_list
 		
