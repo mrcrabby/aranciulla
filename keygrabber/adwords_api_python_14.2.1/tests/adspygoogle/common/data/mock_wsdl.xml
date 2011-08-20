@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<!--
+This example WSDL tests the features of the WSDL-parsing script, including:
+1) Standard simple and complex type definitions.
+2) Complex types which extend other complex types.
+3) WSDL-defined arrays of the 'soapenc:arrayType' variety.
+4) Generated arrays of the 'maxOccurs > 1' variety.
+5) Standard operation definitions.
+6) Operation definitions whose return values are top-level element declarations.
+7) Complex types which have a native type element.
+-->
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://www.example.com" xmlns:intf="http://www.example.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.com">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.com">
+      <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+      <complexType name="ArrayOf_xsd_long">
+        <complexContent>
+          <restriction base="soapenc:Array">
+            <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:long[]"/>
+          </restriction>
+        </complexContent>
+      </complexType>
+      <complexType abstract="true" name="SearchCriteriaBase">
+        <sequence>
+          <element name="ids" nillable="true" type="impl:ArrayOf_xsd_long"/>
+          <element name="searchString" nillable="true" type="soapenc:string"/>
+        </sequence>
+      </complexType>
+      <complexType abstract="true" name="PageableSearchCriteriaBase">
+        <complexContent>
+          <extension base="impl:SearchCriteriaBase">
+            <sequence>
+              <element name="pageNumber" type="xsd:int"/>
+              <element name="pageSize" type="xsd:int"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="ObjectSearchCriteria">
+        <complexContent>
+          <extension base="impl:PageableSearchCriteriaBase">
+            <sequence>
+              <element name="objectGroupIds" nillable="true" type="impl:ArrayOf_xsd_long"/>
+              <element name="includeObjectsWithOutGroupOnly" type="xsd:boolean"/>
+              <element name="spotIds" nillable="true" type="impl:ArrayOf_xsd_long"/>
+              <element name="subnetworkId" type="xsd:long"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType abstract="true" name="PagedRecordSet">
+        <sequence>
+          <element name="pageNumber" type="xsd:int"/>
+          <element name="totalNumberOfPages" type="xsd:int"/>
+          <element name="totalNumberOfRecords" type="xsd:int"/>
+        </sequence>
+      </complexType>
+      <complexType name="ObjectRecordSet">
+        <complexContent>
+          <extension base="impl:PagedRecordSet">
+            <sequence>
+              <element name="records" nillable="true" type="impl:ArrayOfObject"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <simpleType name="Test.Status">
+        <annotation>
+          <documentation>Test enumeration.</documentation>
+        </annotation>
+        <restriction base="xsd:string">
+          <enumeration value="ENABLED">
+            <annotation>
+              <documentation>Active.</documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="PAUSED">
+            <annotation>
+              <documentation>Paused.</documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="DELETED">
+            <annotation>
+              <documentation>Deleted.</documentation>
+            </annotation>
+          </enumeration>
+        </restriction>
+      </simpleType>
+      <element name="getResponse">
+        <complexType>
+          <sequence>
+            <element maxOccurs="1" minOccurs="0" name="rval" type="tns:PredicatePage"/>
+          </sequence>
+        </complexType>
+      </element>
+      <complexType name="Predicate">
+        <annotation>
+          <documentation>
+This complex type contains an element with maxOccurs > 1.
+          </documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="field" type="xsd:string">
+            <annotation>
+              <documentation>
+A standard element.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="type" type="tns:Test.Status">
+            <annotation>
+              <documentation>
+A standard element.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="3" minOccurs="0" name="values" type="xsd:string">
+            <annotation>
+              <documentation>
+An element with maxoccurs greater than one.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="PredicatePage">
+        <annotation>
+          <documentation>
+This complex type contains an element with an unbounded maxOccurs.
+          </documentation>
+        </annotation>
+        <complexContent>
+          <extension base="tns:Page">
+            <sequence>
+              <element maxOccurs="unbounded" minOccurs="0" name="entries" type="tns:Predicate">
+                <annotation>
+                  <documentation>
+An element with unbounded maxoccurs.
+                  </documentation>
+                </annotation>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType abstract="true" name="Page">
+        <annotation>
+          <documentation>An abstract complex type.</documentation>
+        </annotation>
+        <sequence>
+          <element maxOccurs="1" minOccurs="0" name="totalNumEntries" type="xsd:int">
+            <annotation>
+              <documentation>
+Total number of entries in the result that this page is a part of.
+              </documentation>
+            </annotation>
+          </element>
+          <element maxOccurs="1" minOccurs="0" name="Page.Type" type="xsd:string">
+            <annotation>
+              <documentation>
+A standard element.
+              </documentation>
+            </annotation>
+          </element>
+        </sequence>
+      </complexType>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="getResponse">
+    <wsdl:part element="tns:getResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="ApiException">
+    <wsdl:part name="fault" type="impl:ApiException"/>
+  </wsdl:message>
+  <wsdl:message name="getObjectsResponse">
+    <wsdl:part name="ObjectRecordSet" type="impl:ObjectRecordSet"/>
+  </wsdl:message>
+  <wsdl:message name="getObjectsRequest">
+    <wsdl:part name="objectSearchCriteria" type="impl:ObjectSearchCriteria"/>
+  </wsdl:message>
+  <wsdl:portType name="ExampleRemote">
+    <wsdl:operation name="get">
+      <wsdl:documentation>
+This is an example get operation.
+      </wsdl:documentation>
+      <wsdl:input message="tns:getRequest" name="getRequest"/>
+      <wsdl:output message="tns:getResponse" name="getResponse"/>
+      <wsdl:fault message="tns:ApiException" name="ApiException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getObjects" parameterOrder="objectSearchCriteria">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+Returns the objects matching the given criteria
+      </wsdl:documentation>
+      <wsdl:input message="impl:getObjectsRequest" name="getObjectsRequest"/>
+      <wsdl:output message="impl:getObjectsResponse" name="getObjectsResponse"/>
+      <wsdl:fault message="impl:ApiException" name="ApiException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="exampleSoapBinding" type="impl:ExampleRemote">
+    <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="get">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getRequest">
+        <wsdlsoap:header message="tns:RequestHeader" part="RequestHeader" use="literal"/>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResponse">
+        <wsdlsoap:header message="tns:ResponseHeader" part="ResponseHeader" use="literal"/>
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ApiException">
+        <wsdlsoap:fault name="ApiException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getObjects">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getObjectsRequest">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.example.com" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="getObjectsResponse">
+        <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.example.com" use="encoded"/>
+      </wsdl:output>
+      <wsdl:fault name="ApiException">
+        <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="ApiException" namespace="http://www.example.com" use="encoded"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ExampleWebService">
+    <wsdl:port binding="impl:exampleSoapBinding" name="example">
+      <wsdlsoap:address location="http://webservices.example.com/version/service/example"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,164 @@
+
+AdWords and DoubleClick Ad Exchange Buyer API Python Client Library
+===================================================================
+
+Google's AdWords and DoubleClick Ad Exchange API service lets developers design
+computer programs that interact directly with the AdWords and DoubleClick Ad
+Exchange platform. With these applications, advertisers and third parties can
+more efficiently -- and creatively -- manage their large or complex AdWords and
+DoubleClick Ad Exchange accounts and campaigns.
+
+AdWords and DoubleClick Ad Exchange API Python Client Library makes it easier to
+write Python clients to programmatically access AdWords and DoubleClick Ad
+Exchange accounts. One of the main features of this client library is that it
+hides SOAP layer from end user, which makes it much easier to interact with API.
+The outgoing and incoming SOAP messages are monitored and logged on demand. The
+response headers like responseTime, units, requestId, etc. can also be logged on
+demand. Another nice feature of this client library is that it handles data
+types for all API call parameters. All variables are passed in as either dict,
+list, or str. The conversion to the right type is handled internally by the
+client library. Each client instance keeps track of its own number of API units
+and operations consumed during the program run.
+
+The client library provides support for SOAPpy and ZSI, which are two well
+known web services toolkits from http://pywebsvcs.sourceforge.net/. A single
+implementation of the client code can be used with either toolkit. Once you
+decide which SOAP toolkit to use, client library will take care of proper type
+conversions, instantiation of classes, etc.
+
+The two toolkits are very different and both have their pluses and minuses. The
+SOAPpy toolkit hasn't been updated for some time. The latest version 0.12.0_rc1
+is dated 2005-02-22. However, from the tests, it seem to be faster than ZSI. On
+the other hand, ZSI is the primary and most active web services toolkit from
+the "Python Web Services" project. ZSI uses code generated from the WSDL to
+make web service requests, so the structure of objects returned very closely
+match the WSDL. SOAPpy, on the other hand, does not have this information
+available and will return an object structures matching the returned XML. This
+means that sometimes SOAPpy and ZSI can return back responses that do not match
+one another (as of 14.0.3). For example, when an element is defined in the WSDL
+with maxOccurs > 1, this is traditionally represented as a list (and ZSI and
+SOAPpy would both return back a list of elements when more than one element is
+present in the response). However, when only a single element is returned in
+the response, ZSI will return a list of a single element, but SOAPpy will return
+back just the element, not the element wrapped in a list. This makes it very
+difficult to write one piece of code that can handle responses from both
+libraries. The code examples are generally tested with ZSI and may not run
+without modifications to the response processing code with SOAPpy.
+
+Multiple modules are supported for parsing SOAP XML messages. By default, the
+client library uses the PyXML module in order to parse SOAP XML messages. In
+addition, the SOAPpy library supports ElementTree module, which may be activated
+simply by setting the appropriate config value (i.e. config['xml_parser']). Note
+that if you already have an lxml module installed and wish to use ElementTree,
+you do not need to install ElementTree. The lxml module is mostly compatible
+with ElementTree. Also, if you have Python v2.5+, the ElementTree comes with it.
+The cElementTree module is now also supported. Please note that ZSI has a hard
+dependency on PyXML and cannot work with ElementTree alone.
+
+Although there are projects out there that still support PyXML, it is no longer
+maintained. The last update for ElementTree library is dated 2007-09-12. Out of
+these three modules, the lxml is the one that was updated most recently.
+
+The code examples, located in "examples/", demonstrate how to use the client
+library. For additional examples, take a look at the unit tests in "tests/".
+
+Useful scripts are located in "scripts/" directory.
+
+The documentation was generated using Epydoc, a nice tool for generating API
+documentation for Python modules, and is located in "docs/".
+
+The client library includes a set of unit tests located in "tests/". All unit
+tests are (and should be) executed against the Sandbox environment. Whenever
+changes are made to the clien library, the appropriate unit test should be
+executed to make sure that everything is working as intended and no new bugs
+were introduced.
+
+
+How do I start?
+---------------
+
+Start by making sure that you have Python and [SOAPpy or ZSI] installed on your
+machine. If you don't have one already, sign up for a Google Account at
+https://www.google.com/accounts/NewAccount. Once that's taken care of, proceed
+to the step-by-step guide below. Write some code and enjoy!
+
+
+Step-by-step guide for accessing the sandbox:
+-----------------------------------------
+
+1) Make sure you have Python v2.4 or above installed. The latest stable version
+   can be fetched from http://www.python.org/.
+
+2) One of the two web services toolkits is needed, either SOAPpy or ZSI. Both
+   of them can be fetched from http://pywebsvcs.sourceforge.net/.
+
+3) If using PyXML, fetch the latest version of PyXML module from
+   http://sourceforge.net/projects/pyxml/.
+
+4) Sign up for a Google Account. In later steps, we'll assume that the new login
+   is joe.shmoe@gmail.com.
+
+5) Navigate to the directory that contains your downloaded unzipped client
+   library and run the "setup.py" script to install the "adspygoogle.adwords"
+   module.
+
+   $ python setup.py build install
+
+6) From the same directory, run the "config.py" script to set authentication
+   headers. More information about the format of each header is
+   at http://code.google.com/apis/adwords/docs/developer/adwords_api_sandbox.html#requestheaders.
+   Example,
+
+   Your AdWords account's login email: joe.shmoe@gmail.com
+   Login password: secret
+   Login client email: client_1+joe.shmoe@gmail.com
+   Login client customer id:
+   User agent: GoogleTest
+   Developer token: joe.shmoe@gmail.com++USD
+
+   Select SOAP library [1=SOAPpy, 2=ZSI]: 2
+   Select XML parser [1=PyXML, 2=ElementTree]: 1
+   Enable debugging mode [y/n]: n
+   Enable SOAP XML logging mode [y/n]: y
+   Enable API request logging mode [y/n]: y
+
+7) Run "examples/adspygoogle/adwords/v200909/get_unit_count.py", which will set
+   up your Sandbox with five client accounts.
+
+8) Read over the documentation in "docs/index.html" to familiarize yourself with
+   the API of the client library.
+
+
+Where do I submit bug reports and/or feature requests?
+---------------------------------------------------
+
+Use the issue tracker at http://code.google.com/p/google-api-adwords-python-lib/issues/list.
+
+
+External Dependencies:
+----------------------
+
+    - Python v2.4+         -- http://www.python.org/
+    - PyXML v0.8.3+        -- http://sourceforge.net/projects/pyxml/
+                           or
+      ElementTree v1.2.6+  -- http://effbot.org/zone/element-index.htm
+                           or
+      cElementTree v1.0.6+ -- http://www.python.org/
+                           (part of the Python v2.5+)
+                           or
+      lxml v2.2+           -- http://codespeak.net/lxml/index.html
+    - SOAPpy v0.12.0       -- http://pywebsvcs.sourceforge.net/
+                           or
+      ZSI v2.0             -- http://pywebsvcs.sourceforge.net/
+                           (requires PyXML v0.8.3+)
+    - Epydoc               -- http://epydoc.sourceforge.net/
+                           (only if you will be generating docs)
+    - Google Account       -- https://www.google.com/accounts/NewAccount
+
+
+Author:
+    api.sgrinberg@gmail.com (Stan Grinberg)
+    api.kwinter@gmail.com (Kevin Winter)
+
+Maintainer:
+    api.kwinter@gmail.com (Kevin Winter)

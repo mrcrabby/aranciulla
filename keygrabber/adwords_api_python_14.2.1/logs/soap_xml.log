@@ -1,0 +1,68 @@
+[2011-08-20 17:48:51,201::DEBUG::AwApi-Python-14.2.1] StartTime: 2011-08-20 17:48:49
+*** Outgoing HTTP headers **********************************************
+User-Agent: ZSI 2.0.0 (http://pywebsvcs.sf.net); PyXML v0.8.3
+************************************************************************
+*** Outgoing SOAP ******************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ZSI="http://www.zolera.com/schemas/ZSI/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <SOAP-ENV:Header>
+  <RequestHeader xmlns="https://adwords.google.com/api/adwords/cm/v201101">
+   <authToken>xxxxxx</authToken>
+   <userAgent>AwApi-Python-14.2.1</userAgent>
+   <developerToken>h7Dla5_XkRhLmSmAg91eNA</developerToken>
+  </RequestHeader>
+ </SOAP-ENV:Header>
+ <SOAP-ENV:Body xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201101">
+  <ns1:get xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201101">
+   <ns1:serviceSelector xsi:type="ns1:Selector">
+    <ns1:fields>Id</ns1:fields>
+    <ns1:fields>Name</ns1:fields>
+    <ns1:fields>Status</ns1:fields>
+   </ns1:serviceSelector>
+  </ns1:get>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+************************************************************************
+*** Incoming HTTP headers **********************************************
+200 OK 
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Sat, 20 Aug 2011 15:48:50 GMT
+Expires: Sat, 20 Aug 2011 15:48:50 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 364
+Server: GSE
+************************************************************************
+*** Incoming SOAP ******************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+ <soap:Header>
+  <ResponseHeader xmlns="https://adwords.google.com/api/adwords/cm/v201101">
+   <requestId>0004aaf1c83c16800a96492024dd5fe1</requestId>
+   <operations>1</operations>
+   <responseTime>564</responseTime>
+   <units>1</units>
+  </ResponseHeader>
+ </soap:Header>
+ <soap:Body>
+  <getResponse xmlns="https://adwords.google.com/api/adwords/cm/v201101">
+   <rval>
+    <totalNumEntries>0</totalNumEntries>
+    <Page.Type>CampaignPage</Page.Type>
+    <totalBudget>
+     <period>DAILY</period>
+     <amount>
+      <ComparableValue.Type>Money</ComparableValue.Type>
+      <microAmount>0</microAmount>
+     </amount>
+     <deliveryMethod>STANDARD</deliveryMethod>
+    </totalBudget>
+   </rval>
+  </getResponse>
+ </soap:Body>
+</soap:Envelope>
+************************************************************************
+EndTime: 2011-08-20 17:48:51

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>adspygoogle.common.zsi.Transformation</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="adspygoogle-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://code.google.com/p/google-api-adwords-python-lib">AdWords API Python Client Library</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="adspygoogle-module.html">Package&nbsp;adspygoogle</a> ::
+        <a href="adspygoogle.common-module.html">Package&nbsp;common</a> ::
+        <a href="adspygoogle.common.zsi-module.html">Package&nbsp;zsi</a> ::
+        Module&nbsp;Transformation
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="adspygoogle.common.zsi.Transformation-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="adspygoogle.common.zsi.Transformation-module.html">Module adspygoogle.common.zsi.Transformation</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2011 Google Inc. All Rights Reserved.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># Licensed under the Apache License, Version 2.0 (the "License");</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># you may not use this file except in compliance with the License.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># You may obtain a copy of the License at</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">#      http://www.apache.org/licenses/LICENSE-2.0</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># Unless required by applicable law or agreed to in writing, software</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># distributed under the License is distributed on an "AS IS" BASIS,</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># See the License for the specific language governing permissions and</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment"># limitations under the License.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">"""Transforms python objects into ZSI-compatible form."""</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-name">__author__</tt> <tt class="py-op">=</tt> <tt class="py-string">'api.jdilallo@gmail.com (Joseph DiLallo)'</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package adspygoogle=adspygoogle-module.html"><a title="adspygoogle" class="py-name" href="#" onclick="return doclink('link-0', 'adspygoogle', 'link-0');">adspygoogle</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package adspygoogle.common=adspygoogle.common-module.html"><a title="adspygoogle.common" class="py-name" href="#" onclick="return doclink('link-1', 'common', 'link-1');">common</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Module adspygoogle.common.Utils=adspygoogle.common.Utils-module.html"><a title="adspygoogle.common.Utils" class="py-name" href="#" onclick="return doclink('link-2', 'Utils', 'link-2');">Utils</a></tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="adspygoogle" class="py-name" href="#" onclick="return doclink('link-3', 'adspygoogle', 'link-0');">adspygoogle</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name"><a title="adspygoogle.common" class="py-name" href="#" onclick="return doclink('link-4', 'common', 'link-1');">common</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Package adspygoogle.adwords.zsi=adspygoogle.adwords.zsi-module.html,Package adspygoogle.common.zsi=adspygoogle.common.zsi-module.html"><a title="adspygoogle.adwords.zsi
+adspygoogle.common.zsi" class="py-name" href="#" onclick="return doclink('link-5', 'zsi', 'link-5');">zsi</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Module adspygoogle.adwords.soappy.SanityCheck=adspygoogle.adwords.soappy.SanityCheck-module.html,Module adspygoogle.adwords.zsi.SanityCheck=adspygoogle.adwords.zsi.SanityCheck-module.html,Module adspygoogle.common.SanityCheck=adspygoogle.common.SanityCheck-module.html,Module adspygoogle.common.soappy.SanityCheck=adspygoogle.common.soappy.SanityCheck-module.html,Module adspygoogle.common.zsi.SanityCheck=adspygoogle.common.zsi.SanityCheck-module.html"><a title="adspygoogle.adwords.soappy.SanityCheck
+adspygoogle.adwords.zsi.SanityCheck
+adspygoogle.common.SanityCheck
+adspygoogle.common.soappy.SanityCheck
+adspygoogle.common.zsi.SanityCheck" class="py-name" href="#" onclick="return doclink('link-6', 'SanityCheck', 'link-6');">SanityCheck</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">ZsiSanityCheck</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="MakeZsiCompatible"></a><div id="MakeZsiCompatible-def"><a name="L25"></a><tt class="py-lineno"> 25</tt> <a class="py-toggle" href="#" id="MakeZsiCompatible-toggle" onclick="return toggle('MakeZsiCompatible');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="adspygoogle.common.zsi.Transformation-module.html#MakeZsiCompatible">MakeZsiCompatible</a><tt class="py-op">(</tt><tt class="py-param">obj</tt><tt class="py-op">,</tt> <tt class="py-param">xsi_type</tt><tt class="py-op">,</tt> <tt class="py-param">wsdl_types</tt><tt class="py-op">,</tt> <tt class="py-param">web_service</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="MakeZsiCompatible-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="MakeZsiCompatible-expanded"><a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">  <tt class="py-docstring">"""Ensures a given object is compatible with ZSI, possibly by transforming it.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">  Dictionaries with valid xsi_types are transformed into ZSI objects. Everything</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">  else is returned in the same data type as it was given. List and dictionary</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">  contents will be recursively checked/altered for compatibility.</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">  Args:</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">    obj: obj The python object to make ZSI compatible. Should be a dict,</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">         list, or string depending on the xsi_type. May also already be a ZSI</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">         object, in which case it is returned unaltered.</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">    xsi_type: str The WSDL-defined type of the given object.</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">    wsdl_types: dict A map of all WSDL-defined types in the same service as the</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">                given type.</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">    web_service: module The generated web service which uses this object.</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">  Returns:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">    obj The python object passed in, compatible with ZSI.</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">  """</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">  <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">ZsiSanityCheck</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Function adspygoogle.common.zsi.SanityCheck.IsPyClass()=adspygoogle.common.zsi.SanityCheck-module.html#IsPyClass"><a title="adspygoogle.common.zsi.SanityCheck.IsPyClass" class="py-name" href="#" onclick="return doclink('link-7', 'IsPyClass', 'link-7');">IsPyClass</a></tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-keyword">not</tt> <tt class="py-name">xsi_type</tt> <tt class="py-keyword">in</tt> <tt class="py-name">wsdl_types</tt> <tt class="py-keyword">or</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">      <tt class="py-name">wsdl_types</tt><tt class="py-op">[</tt><tt class="py-name">xsi_type</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'soap_type'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'simple'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">obj</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">  <tt class="py-keyword">elif</tt> <tt class="py-name">wsdl_types</tt><tt class="py-op">[</tt><tt class="py-name">xsi_type</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'soap_type'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'complex'</tt><tt class="py-op">:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-8" class="py-name" targets="Function adspygoogle.common.zsi.Transformation.ZsiTransfomComplexType()=adspygoogle.common.zsi.Transformation-module.html#ZsiTransfomComplexType"><a title="adspygoogle.common.zsi.Transformation.ZsiTransfomComplexType" class="py-name" href="#" onclick="return doclink('link-8', 'ZsiTransfomComplexType', 'link-8');">ZsiTransfomComplexType</a></tt><tt class="py-op">(</tt><tt class="py-name">wsdl_types</tt><tt class="py-op">,</tt> <tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">xsi_type</tt><tt class="py-op">,</tt> <tt class="py-name">web_service</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">  <tt class="py-keyword">elif</tt> <tt class="py-name">wsdl_types</tt><tt class="py-op">[</tt><tt class="py-name">xsi_type</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'soap_type'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'array'</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-9" class="py-name" targets="Function adspygoogle.common.zsi.Transformation.ZsiTransfomArray()=adspygoogle.common.zsi.Transformation-module.html#ZsiTransfomArray"><a title="adspygoogle.common.zsi.Transformation.ZsiTransfomArray" class="py-name" href="#" onclick="return doclink('link-9', 'ZsiTransfomArray', 'link-9');">ZsiTransfomArray</a></tt><tt class="py-op">(</tt><tt class="py-name">wsdl_types</tt><tt class="py-op">,</tt> <tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">xsi_type</tt><tt class="py-op">,</tt> <tt class="py-name">web_service</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"> </tt>
+<a name="ZsiTransfomComplexType"></a><div id="ZsiTransfomComplexType-def"><a name="L53"></a><tt class="py-lineno"> 53</tt> <a class="py-toggle" href="#" id="ZsiTransfomComplexType-toggle" onclick="return toggle('ZsiTransfomComplexType');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="adspygoogle.common.zsi.Transformation-module.html#ZsiTransfomComplexType">ZsiTransfomComplexType</a><tt class="py-op">(</tt><tt class="py-param">wsdl_types</tt><tt class="py-op">,</tt> <tt class="py-param">obj</tt><tt class="py-op">,</tt> <tt class="py-param">xsi_type</tt><tt class="py-op">,</tt> <tt class="py-param">web_service</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZsiTransfomComplexType-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ZsiTransfomComplexType-expanded"><a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">  <tt class="py-docstring">"""Transforms a python dictionary into a ZSI object.</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">  Args:</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring">    wsdl_types: dict WSDL definitions of all types in the same service as the</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring">                given xsi_type.</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">    obj: dict Dictionary to be made into a ZSI object.</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    xsi_type: str The name of the complex type this dictionary represents.</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">    web_service: module The generated web service which uses this complex type.</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring">  Returns:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">    obj A ZSI object representing this complex type.</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring">  """</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">  <tt class="py-name">obj_contained_type</tt><tt class="py-op">,</tt> <tt class="py-name">contained_type_key</tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="adspygoogle.common.Utils" class="py-name" href="#" onclick="return doclink('link-10', 'Utils', 'link-2');">Utils</a></tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Function adspygoogle.common.Utils.GetExplicitType()=adspygoogle.common.Utils-module.html#GetExplicitType"><a title="adspygoogle.common.Utils.GetExplicitType" class="py-name" href="#" onclick="return doclink('link-11', 'GetExplicitType', 'link-11');">GetExplicitType</a></tt><tt class="py-op">(</tt><tt class="py-name">wsdl_types</tt><tt class="py-op">,</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">                                                                 <tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">xsi_type</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">  <tt class="py-keyword">if</tt> <tt class="py-name">obj_contained_type</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-name">xsi_type</tt> <tt class="py-op">=</tt> <tt class="py-name">obj_contained_type</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">  <tt class="py-name">new_object</tt> <tt class="py-op">=</tt> <tt class="py-name">ZsiSanityCheck</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Function adspygoogle.common.zsi.SanityCheck.GetPyClass()=adspygoogle.common.zsi.SanityCheck-module.html#GetPyClass"><a title="adspygoogle.common.zsi.SanityCheck.GetPyClass" class="py-name" href="#" onclick="return doclink('link-12', 'GetPyClass', 'link-12');">GetPyClass</a></tt><tt class="py-op">(</tt><tt class="py-name">xsi_type</tt><tt class="py-op">,</tt> <tt class="py-name">web_service</tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">  <tt class="py-name">parameters</tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name"><a title="adspygoogle.common.Utils" class="py-name" href="#" onclick="return doclink('link-13', 'Utils', 'link-2');">Utils</a></tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Function adspygoogle.common.Utils.GenParamOrder()=adspygoogle.common.Utils-module.html#GenParamOrder"><a title="adspygoogle.common.Utils.GenParamOrder" class="py-name" href="#" onclick="return doclink('link-14', 'GenParamOrder', 'link-14');">GenParamOrder</a></tt><tt class="py-op">(</tt><tt class="py-name">wsdl_types</tt><tt class="py-op">,</tt> <tt class="py-name">xsi_type</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">  <tt class="py-keyword">for</tt> <tt class="py-name">key</tt> <tt class="py-keyword">in</tt> <tt class="py-name">obj</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> <tt class="py-keyword">or</tt> <tt class="py-name">key</tt> <tt class="py-op">==</tt> <tt class="py-name">contained_type_key</tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">      <tt class="py-keyword">continue</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">parameter</tt><tt class="py-op">,</tt> <tt class="py-name">param_type</tt> <tt class="py-keyword">in</tt> <tt class="py-name">parameters</tt><tt class="py-op">:</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">      <tt class="py-keyword">if</tt> <tt class="py-name">parameter</tt> <tt class="py-op">==</tt> <tt class="py-name">key</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-name">new_object</tt><tt class="py-op">.</tt><tt class="py-name">__dict__</tt><tt class="py-op">.</tt><tt class="py-name">__setitem__</tt><tt class="py-op">(</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-string">'_%s'</tt> <tt class="py-op">%</tt> <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-15" class="py-name" targets="Function adspygoogle.common.zsi.Transformation.MakeZsiCompatible()=adspygoogle.common.zsi.Transformation-module.html#MakeZsiCompatible"><a title="adspygoogle.common.zsi.Transformation.MakeZsiCompatible" class="py-name" href="#" onclick="return doclink('link-15', 'MakeZsiCompatible', 'link-15');">MakeZsiCompatible</a></tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">param_type</tt><tt class="py-op">,</tt> <tt class="py-name">wsdl_types</tt><tt class="py-op">,</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">                                           <tt class="py-name">web_service</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-keyword">break</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">  <tt class="py-keyword">return</tt> <tt class="py-name">new_object</tt> </tt>
+</div><a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="ZsiTransfomArray"></a><div id="ZsiTransfomArray-def"><a name="L86"></a><tt class="py-lineno"> 86</tt> <a class="py-toggle" href="#" id="ZsiTransfomArray-toggle" onclick="return toggle('ZsiTransfomArray');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="adspygoogle.common.zsi.Transformation-module.html#ZsiTransfomArray">ZsiTransfomArray</a><tt class="py-op">(</tt><tt class="py-param">wsdl_types</tt><tt class="py-op">,</tt> <tt class="py-param">obj</tt><tt class="py-op">,</tt> <tt class="py-param">xsi_type</tt><tt class="py-op">,</tt> <tt class="py-param">web_service</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ZsiTransfomArray-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ZsiTransfomArray-expanded"><a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">  <tt class="py-docstring">"""Ensures a list is compatible with ZSI, possibly by altering its contents.</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring">  Args:</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">    wsdl_types: dict WSDL definitions of all types in the same service as the</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">                given xsi_type.</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring">    obj: list List to be made ready for ZSI-transport.</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring">    xsi_type: str The WSDL-defined type name that the given list represents.</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring">    web_service: module The generated web service which uses this list.</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">  Returns:</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">    obj A list whose contents have been transformed into ZSI-acceptable form.</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">  """</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">  <tt class="py-name">new_array</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">  <tt class="py-keyword">for</tt> <tt id="link-16" class="py-name" targets="Variable adspygoogle.adwords.item=adspygoogle.adwords-module.html#item,Variable adspygoogle.adwords.soappy.item=adspygoogle.adwords.soappy-module.html#item"><a title="adspygoogle.adwords.item
+adspygoogle.adwords.soappy.item" class="py-name" href="#" onclick="return doclink('link-16', 'item', 'link-16');">item</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">obj</tt><tt class="py-op">:</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-name">new_array</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt id="link-17" class="py-name"><a title="adspygoogle.common.zsi.Transformation.MakeZsiCompatible" class="py-name" href="#" onclick="return doclink('link-17', 'MakeZsiCompatible', 'link-15');">MakeZsiCompatible</a></tt><tt class="py-op">(</tt><tt id="link-18" class="py-name"><a title="adspygoogle.adwords.item
+adspygoogle.adwords.soappy.item" class="py-name" href="#" onclick="return doclink('link-18', 'item', 'link-16');">item</a></tt><tt class="py-op">,</tt> <tt class="py-name">wsdl_types</tt><tt class="py-op">[</tt><tt class="py-name">xsi_type</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'base_type'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">                                       <tt class="py-name">wsdl_types</tt><tt class="py-op">,</tt> <tt class="py-name">web_service</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">  <tt class="py-keyword">return</tt> <tt class="py-name">new_array</tt> </tt>
+</div><a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="adspygoogle-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://code.google.com/p/google-api-adwords-python-lib">AdWords API Python Client Library</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

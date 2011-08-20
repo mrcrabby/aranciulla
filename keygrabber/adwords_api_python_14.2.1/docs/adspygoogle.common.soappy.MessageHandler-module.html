@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>adspygoogle.common.soappy.MessageHandler</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="adspygoogle-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://code.google.com/p/google-api-adwords-python-lib">AdWords API Python Client Library</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="adspygoogle-module.html">Package&nbsp;adspygoogle</a> ::
+        <a href="adspygoogle.common-module.html">Package&nbsp;common</a> ::
+        <a href="adspygoogle.common.soappy-module.html">Package&nbsp;soappy</a> ::
+        Module&nbsp;MessageHandler
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="adspygoogle.common.soappy.MessageHandler-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module MessageHandler</h1><p class="nomargin-top"><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html">source&nbsp;code</a></span></p>
+<p>Handler functions for outgoing and incoming messages.</p>
+
+<hr />
+<div class="fields">      <p><strong>Author:</strong>
+        api.sgrinberg@gmail.com (Stan Grinberg)
+      </p>
+</div><!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#GetServiceConnection" class="summary-sig-name">GetServiceConnection</a>(<span class="summary-sig-arg">headers</span>,
+        <span class="summary-sig-arg">config</span>,
+        <span class="summary-sig-arg">url</span>,
+        <span class="summary-sig-arg">http_proxy</span>,
+        <span class="summary-sig-arg">is_jaxb_api</span>)</span><br />
+      Get SOAP service connection.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#GetServiceConnection">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#PackDictAsXml" class="summary-sig-name">PackDictAsXml</a>(<span class="summary-sig-arg">obj</span>,
+        <span class="summary-sig-arg">key</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">key_map</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
+        <span class="summary-sig-arg">order</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
+        <span class="summary-sig-arg">wrap_list</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Pack a Python dictionary object into an XML string.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#PackDictAsXml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#_PackDictionaryAsXml" class="summary-sig-name" onclick="show_private();">_PackDictionaryAsXml</a>(<span class="summary-sig-arg">obj</span>,
+        <span class="summary-sig-arg">xml_tag_name</span>,
+        <span class="summary-sig-arg">wsdl_type_map</span>,
+        <span class="summary-sig-arg">wrap_list</span>,
+        <span class="summary-sig-arg">xsi_type</span>)</span><br />
+      Pack a Python dictionary object into an XML string.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_PackDictionaryAsXml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#_PackListAsXml" class="summary-sig-name" onclick="show_private();">_PackListAsXml</a>(<span class="summary-sig-arg">obj</span>,
+        <span class="summary-sig-arg">xml_tag_name</span>,
+        <span class="summary-sig-arg">wsdl_type_map</span>,
+        <span class="summary-sig-arg">wrap_list</span>,
+        <span class="summary-sig-arg">xsi_type</span>)</span><br />
+      Pack a Python list object into an XML string.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_PackListAsXml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#_PackStringAsXml" class="summary-sig-name" onclick="show_private();">_PackStringAsXml</a>(<span class="summary-sig-arg">obj</span>,
+        <span class="summary-sig-arg">xml_tag_name</span>)</span><br />
+      Pack a Python string into an XML string.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_PackStringAsXml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#PackVarAsXml" class="summary-sig-name">PackVarAsXml</a>(<span class="summary-sig-arg">obj</span>,
+        <span class="summary-sig-arg">xml_tag_name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">wsdl_type_map</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">wrap_list</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">xsi_type</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+      Pack a Python object into an XML string.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#PackVarAsXml">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#SetRequestParams" class="summary-sig-name">SetRequestParams</a>(<span class="summary-sig-arg">config</span>,
+        <span class="summary-sig-arg">method_name</span>,
+        <span class="summary-sig-arg">params</span>)</span><br />
+      Set SOAP request parameters.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#SetRequestParams">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#UnpackResponseAsDict" class="summary-sig-name">UnpackResponseAsDict</a>(<span class="summary-sig-arg">response</span>)</span><br />
+      Unpack (recursively) SOAP data holder into a Python dict object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#UnpackResponseAsDict">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#RestoreListType" class="summary-sig-name">RestoreListType</a>(<span class="summary-sig-arg">response</span>,
+        <span class="summary-sig-arg">key_triggers</span>=<span class="summary-sig-default"><code class="variable-group">(</code><code class="variable-group">)</code></span>)</span><br />
+      Restores a response object's list types which were overwritten by SOAPpy.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#RestoreListType">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#RestoreListTypeWithWsdl" class="summary-sig-name">RestoreListTypeWithWsdl</a>(<span class="summary-sig-arg">response</span>,
+        <span class="summary-sig-arg">service_type_map</span>,
+        <span class="summary-sig-arg">operation_return_types</span>)</span><br />
+      Restores list types within given response which were overwritten by SOAPpy.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#RestoreListTypeWithWsdl">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="adspygoogle.common.soappy.MessageHandler-module.html#_RestoreListTypesForResponse" class="summary-sig-name" onclick="show_private();">_RestoreListTypesForResponse</a>(<span class="summary-sig-arg">response</span>,
+        <span class="summary-sig-arg">xsi_type</span>,
+        <span class="summary-sig-arg">service_type_map</span>)</span><br />
+      Restores list types for an individual response object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_RestoreListTypesForResponse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="msg"></a><span class="summary-name">msg</span> = <code title="'SOAPpy v%s or newer is required.' % MIN_SOAPPY_VERSION">'SOAPpy v%s or newer is required.' % MIN_SOAPPY_VERSION</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'adspygoogle.common.soappy'"><code class="variable-quote">'</code><code class="variable-string">adspygoogle.common.soappy</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="GetServiceConnection"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">GetServiceConnection</span>(<span class="sig-arg">headers</span>,
+        <span class="sig-arg">config</span>,
+        <span class="sig-arg">url</span>,
+        <span class="sig-arg">http_proxy</span>,
+        <span class="sig-arg">is_jaxb_api</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#GetServiceConnection">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Get SOAP service connection.
+
+Args:
+  headers: dict Dictionary object with populated authentication
+           credentials.
+  config: dict Dictionary object with populated configuration values.
+  url: str URL of the web service to call.
+  http_proxy: str HTTP proxy to use.
+  is_jaxb_api: bool Whether API uses JAXB.
+
+Returns:
+  instance SOAPpy.SOAPProxy with set headers.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="PackDictAsXml"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">PackDictAsXml</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">key</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">key_map</span>=<span class="sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
+        <span class="sig-arg">order</span>=<span class="sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
+        <span class="sig-arg">wrap_list</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#PackDictAsXml">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Pack a Python dictionary object into an XML string.
+
+DEPRECATED. As of version 2.0.0, use PackVarAsXml instead.
+
+For example, an input in a form of &quot;dct = {'ids': [12345, 67890]}&quot;, where
+&quot;dct&quot; is key and &quot;{'ids': ['12345', '67890']}&quot; is obj, the output will be
+&quot;&lt;dct&gt;&lt;ids&gt;12345&lt;/ids&gt;&lt;ids&gt;67890&lt;/ids&gt;&lt;/dct&gt;&quot;.
+
+Args:
+  obj: dict Python dictionary to pack.
+  [optional]
+  key: str Key that maps to this Python dictionary.
+  key_map: dict Object key order map.
+  order: list Order of sub keys for this Python dictionary.
+  wrap_list: bool If True, wraps list into an extra layer (e.g.,
+             &quot;'ids': ['12345']&quot;  becomes &quot;&lt;ids&gt;&lt;ids&gt;12345&lt;/ids&gt;&lt;/ids&gt;&quot;). If
+             False, &quot;'ids': ['12345']&quot; becomes &quot;&lt;ids&gt;12345&lt;/ids&gt;&quot;.
+
+Returns:
+  str XML snippet.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_PackDictionaryAsXml"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_PackDictionaryAsXml</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">xml_tag_name</span>,
+        <span class="sig-arg">wsdl_type_map</span>,
+        <span class="sig-arg">wrap_list</span>,
+        <span class="sig-arg">xsi_type</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_PackDictionaryAsXml">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Pack a Python dictionary object into an XML string.
+
+Args:
+  obj: dict Python dictionary to pack.
+  xml_tag_name: str The name of the XML tag that will house this dict.
+  wsdl_type_map: dict Information on all WSDL-defined types.
+  wrap_list: bool If true, wraps lists in an extra layer (e.g.,
+             &quot;'ids': ['12345']&quot;  becomes &quot;&lt;ids&gt;&lt;ids&gt;12345&lt;/ids&gt;&lt;/ids&gt;&quot;). If
+             False, &quot;'ids': ['12345']&quot; becomes &quot;&lt;ids&gt;12345&lt;/ids&gt;&quot;.
+  xsi_type: str The WSDL-defined type of this object, if applicable.
+
+Returns:
+  str An XML element representing the given dictionary.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_PackListAsXml"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_PackListAsXml</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">xml_tag_name</span>,
+        <span class="sig-arg">wsdl_type_map</span>,
+        <span class="sig-arg">wrap_list</span>,
+        <span class="sig-arg">xsi_type</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_PackListAsXml">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Pack a Python list object into an XML string.
+
+For compatibility reasons, this does not pack an empty list into XML at all.
+
+Args:
+  obj: list Python list to pack.
+  xml_tag_name: str The name of the XML tag that will house this list.
+  wsdl_type_map: dict Information on all WSDL-defined types.
+  wrap_list: bool If true, wraps lists in an extra layer (e.g.,
+             &quot;'ids': ['12345']&quot;  becomes &quot;&lt;ids&gt;&lt;ids&gt;12345&lt;/ids&gt;&lt;/ids&gt;&quot;). If
+             False, &quot;'ids': ['12345']&quot; becomes &quot;&lt;ids&gt;12345&lt;/ids&gt;&quot;.
+  xsi_type: str The WSDL-defined type of this object, if applicable.
+
+Returns:
+  str An XML element representing the given list.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_PackStringAsXml"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_PackStringAsXml</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">xml_tag_name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_PackStringAsXml">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Pack a Python string into an XML string.
+
+Args:
+  obj: str Python string to pack.
+  xml_tag_name: str The name of the XML tag that will house this string.
+
+Returns:
+  str An XML element representing the given string.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="PackVarAsXml"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">PackVarAsXml</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">xml_tag_name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">wsdl_type_map</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">wrap_list</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">xsi_type</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#PackVarAsXml">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Pack a Python object into an XML string.
+
+For example, an input in a form of &quot;dct = {'ids': [12345, 67890]}&quot;, where
+&quot;dct&quot; is xml_tag_name and &quot;{'ids': ['12345', '67890']}&quot; is obj, the output
+will be &quot;&lt;dct&gt;&lt;ids&gt;12345&lt;/ids&gt;&lt;ids&gt;67890&lt;/ids&gt;&lt;/dct&gt;&quot;.
+
+Args:
+  obj: object Python object to pack.
+  [optional]
+  xml_tag_name: str Key that maps to this Python dictionary.
+  wsdl_type_map: dict Object key order map.
+  wrap_list: bool If True, wraps lists into an extra layer (e.g.,
+             &quot;'ids': ['12345']&quot;  becomes &quot;&lt;ids&gt;&lt;ids&gt;12345&lt;/ids&gt;&lt;/ids&gt;&quot;). If
+             False, &quot;'ids': ['12345']&quot; becomes &quot;&lt;ids&gt;12345&lt;/ids&gt;&quot;.
+  xsi_type: str The WSDL-defined type of this object, if applicable.
+
+Returns:
+  str An XML element representing the given object.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetRequestParams"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetRequestParams</span>(<span class="sig-arg">config</span>,
+        <span class="sig-arg">method_name</span>,
+        <span class="sig-arg">params</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#SetRequestParams">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Set SOAP request parameters.
+
+Args:
+  config: dict Dictionary object with populated configuration values.
+  method_name: str API method name.
+  params: list List of parameters to send to the API method.
+
+Returns:
+  instance SOAPpy.Types.bodyType with set parameters.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="UnpackResponseAsDict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">UnpackResponseAsDict</span>(<span class="sig-arg">response</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#UnpackResponseAsDict">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Unpack (recursively) SOAP data holder into a Python dict object.
+
+Args:
+  response: instance SOAP data holder object.
+
+Returns:
+  dict Unpacked SOAP data holder.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="RestoreListType"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">RestoreListType</span>(<span class="sig-arg">response</span>,
+        <span class="sig-arg">key_triggers</span>=<span class="sig-default"><code class="variable-group">(</code><code class="variable-group">)</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#RestoreListType">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Restores a response object's list types which were overwritten by SOAPpy.
+
+Lists with only one element are converted by SOAPpy into a dictionary. This
+handler function restores the proper type.
+
+Args:
+  response: dict Response data object.
+  key_triggers: tuple Names of the parameters which should contain list types
+                in the response object.
+
+Returns:
+  dict Restored data object.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="RestoreListTypeWithWsdl"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">RestoreListTypeWithWsdl</span>(<span class="sig-arg">response</span>,
+        <span class="sig-arg">service_type_map</span>,
+        <span class="sig-arg">operation_return_types</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#RestoreListTypeWithWsdl">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Restores list types within given response which were overwritten by SOAPpy.
+
+Args:
+  response: tuple Response data object.
+  service_type_map: dict Information on WSDL-defined types in one service.
+  operation_return_types: list Data types this operation returns, in order.
+
+Returns:
+  tuple Responses, each with list types restored.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_RestoreListTypesForResponse"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_RestoreListTypesForResponse</span>(<span class="sig-arg">response</span>,
+        <span class="sig-arg">xsi_type</span>,
+        <span class="sig-arg">service_type_map</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="adspygoogle.common.soappy.MessageHandler-pysrc.html#_RestoreListTypesForResponse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+Restores list types for an individual response object.
+
+Args:
+  response: obj An individual object returned by the webservice. May be a
+            dictionary, list, or string depending on what it represents.
+  xsi_type: str The WSDL-defined type of this response.
+  service_type_map: dict Information on WSDL-defined types in one service.
+
+Returns:
+  obj The response in its proper format. May be a dictionary, list, or string
+  depending on what was input. Not guaranteed to output the same data type
+  that was input - may output a list instead.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="adspygoogle-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://code.google.com/p/google-api-adwords-python-lib">AdWords API Python Client Library</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
