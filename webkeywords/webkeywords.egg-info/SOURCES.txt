@@ -6,6 +6,8 @@ production.ini
 setup.cfg
 setup.py
 webkeywords/__init__.py
+webkeywords/helpers.py
+webkeywords/login.py
 webkeywords/resources.py
 webkeywords/tests.py
 webkeywords/views.py
@@ -37,5 +39,8 @@ webkeywords/static/images/separator.gif
 webkeywords/static/js/jquery-1.5.1.js
 webkeywords/static/js/jquery.js
 webkeywords/static/js/main.js
+webkeywords/templates/admin.pt
+webkeywords/templates/base.pt
 webkeywords/templates/index.pt
+webkeywords/templates/login.pt
 webkeywords/templates/logs.pt

@@ -15,10 +15,13 @@ from string import ascii_lowercase
 import itertools
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 log = logging.getLogger('keywordManager')
-log.addHandler(logging.FileHandler('/tmp/keygrabber.log', 'w'))
+hdlr = logging.FileHandler('/tmp/keygrabber.log', 'w')
+formatter = logging.Formatter('%(asctime)s %(message)s')
+hdlr.setFormatter(formatter)
+log.addHandler(hdlr)
 
 class InstantKeywordMongo(object):
     def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, dbplace=None, **kwargs):
@@ -60,6 +63,7 @@ class KeywordManager():
 		return self.__add_keywords_to_mongo(keywords, parent_k, **kwargs)
 	
 	def __add_keywords_to_mongo(self, keywords=None, parent_k=None, **kwargs):
+		log.debug('Adding keywords to database part')
 		keys = list()
 		d_lev = None
 		expans = kwargs.get('expanded_list')
@@ -74,12 +78,15 @@ class KeywordManager():
 		for keyword in keywords:
 			result = self.collection.find_one({'keyword':keyword})
 			if result is None:
+				log.debug('keyword NOT found in database: '+ keyword)
 				key_entry= InstantKeywordMongo(keyword, parent_k.keyword, parent_k.category, d_lev[keyword] if d_lev else parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1, len(keys)+1)
 				key_entry._id = self.collection.insert(key_entry.to_dict())
 				if parent_k._id is not None and parent_k.has_child is False:
 					parent_k.has_child = True
 					self.collection.save(parent_k.to_dict())
 				keys.append(key_entry)
+			else:
+				log.debug('keyword found in database: '+ keyword)
 		return keys       
     
 	def order_keywords(self, *args, **kwargs):
@@ -112,6 +119,9 @@ class KeywordManager():
 		level = 0
 		dicts = 0
 		to_start_dict = list()
+		to_start_dict_removed = set()
+		already_done_dicts = set()
+		to_start_dict_less_of_ten_results = set()
 						
 		def expand(mkey, *args, **kwargs):
 			'''
@@ -125,41 +135,82 @@ class KeywordManager():
 				keys_got.append((k, lev))
 			keys.extend(self.__add_keywords_to_database(parent_k=mkey, expanded_list=keys_got))       
 			return keys
-				
+		
+		self.collection.drop()
 		ilist=list()	
 		#first of all look for keywords with just the BASE
 		base_k = InstantKeywordMongo(base, None, None, level, dicts, 0)
 		base_k._id = self.collection.insert(base_k.to_dict())
 		to_start_dict.append(base_k)			
-			
+		
 		for key in to_start_dict:
+			if key.keyword in already_done_dicts:
+				log.warning('found keyword which has already been processed... skipping ' + key.keyword)
+				continue
+			if key.keyword in to_start_dict_less_of_ten_results:
+				log.warning('this keyword has been removed... skipping '+ key.keyword)
+				continue
+				
 			dicts = dicts + 1
 			d = SmartDict(size=4)
 			log.warning('starting dict for ='+key.keyword) 
+			already_done_dicts.add(key.keyword)
 			for word in d.get():
 				ilist=list()
 				log.debug('SEARCHING for ='+key.keyword+' '+word)
 				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word))
 				r_search = self.s_eng.search(key.keyword+' '+word)
+				keyws = self.__add_keywords_to_database(r_search, key)
+				for x in keyws:
+					log.debug('ADDED into the database: '+x.keyword)
+				ilist.extend(keyws)
 				if len(r_search) < max_answers:
 					d.jump()
-				keyws = self.__add_keywords_to_database(r_search, key)
-				log.debug('ADDED into the database ='+str([x.keyword for x in keyws]))
-				ilist.extend(keyws)
-				#evaluate(keyws)
-				if len(r_search) == max_answers:
-					log.debug('starting expansion results == 10')
-					for keyw in keyws:
-						#TODO: valuate if i should add keyw into to_start_dict
-						log.debug('expanding ='+keyw.keyword)
-						exp_ress = expand(keyw)
-						log.debug('expanded and saved into database ='+str([x.keyword for x in exp_ress]))
-						ilist.extend(exp_ress)
+					log.debug('reached < 10 answers and SmartDict word is '+word)
+					#key_to_check = key.keyword+' '+word+' ' if word != '' else key.keyword+' '
+					if word == '':
+						key_to_check = key.keyword+' '
+						for x in to_start_dict:
+							if x.keyword.startswith(key_to_check) and x.keyword not in to_start_dict_less_of_ten_results:
+								log.debug('removing '+x.keyword+' from the list_of_dict')
+								to_start_dict_less_of_ten_results.add(x.keyword)
+					continue
+				
+				
+				log.debug('starting expansion results >= 10')
+				for keyw in keyws:
+					#TODO: valuate if i should add keyw into to_start_dict
+					log.debug('expanding :'+keyw.keyword)
+					exp_ress = expand(keyw)
+					log.debug('Len of expanded and added to database keywords is '+str(len(exp_ress)))
+					ilist.extend(exp_ress)
+					
 				for x in ilist:
-					log.debug('Evaluating ='+x.keyword)
-					if self.collection.find(dict(keyword=re.compile(re.escape(x.keyword)))).count() >= max_answers and all(y.keyword != x.keyword for y in to_start_dict):
-						to_start_dict.append(x)
-						log.debug('ADDED to the list of dict ='+x.keyword)
+					log.debug('Evaluating :'+x.keyword)
+					'''
+						Adding multiple dicts support
+						Add a keyword to the list of keywords to start in any case
+					'''
+					keyword = x.keyword[len(base_k.keyword):]
+					log.debug('decomposing: '+ x.keyword)
+					past_words = ''
+					for word in keyword.split()[:-1]:
+						possible_keyword = base_k.keyword + past_words +' '+ word
+						if all(y.keyword != possible_keyword for y in to_start_dict) and not any(possible_keyword.startswith(x+' ') for x in to_start_dict_removed) and possible_keyword not in to_start_dict_removed and possible_keyword not in already_done_dicts:
+							k = InstantKeywordMongo(possible_keyword, None, None, 0, 0, 0)
+							k._id = self.collection.insert(k.to_dict())
+							to_start_dict.append(k)
+							log.debug('ADDED to the list of dict :'+k.keyword)
+						past_words = past_words + ' ' + word
+								
+					if self.collection.find(dict(keyword=re.compile(re.escape(x.keyword)))).count() >= max_answers:
+						if all(y.keyword != x.keyword for y in to_start_dict) and x.keyword not in already_done_dicts:
+							to_start_dict.append(x)
+							log.debug('ADDED to the list of dict :'+x.keyword)
+					else:
+						to_start_dict_removed.add(x.keyword)
+						log.debug('added to the list of to_start_dict_removed '+ x.keyword)
+							
 		log.warning('Algorithm Finished')
 		log.warning('Ordering and publishing')
 		keywords = self.order_keywords()

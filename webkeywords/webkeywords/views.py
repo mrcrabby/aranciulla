@@ -1,5 +1,6 @@
 from pyramid.view import view_config
 from pyramid.renderers import get_renderer
+from pyramid.response import Response
 import re
 from resources import *
 from math import ceil
@@ -60,6 +61,15 @@ def show_logs(request):
 		except:
 			pass
 	return dict(filecontent=data)	
+
+@view_config(name='logs-google-download', context='webkeywords.resources.Root')
+@view_config(name='logs-download', context='webkeywords.resources.Root')
+def download_logs(request):
+	ufile = '/tmp/keygrabber.log'
+	if request.view_name == 'logs-google-download':
+		ufile = '/tmp/keygrabber-google.log'
+	f = open(ufile)
+	return Response(content_type='text/plain', body=f.read())
 
 def my_view(request):
 	c = InstantKeywordMongo()    
