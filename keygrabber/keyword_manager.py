@@ -35,7 +35,9 @@ class InstantKeywordMongo(object):
         self.dbplace = dbplace
         self.has_child = False
         self._id = None
-        self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id']
+        self.global_searches = None
+        self.regional_searches = None
+        self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id', 'global_searches', 'regional_searches']
     def __str__(self):
         return 'keyword: %s, parent: %s, dicts: %s, level: %s, depth: %s, dbplace: %s, place: %s' % (self.keyword, self.parent, self.dicts, self.level, self.depth, self.dbplace, self.place)
     

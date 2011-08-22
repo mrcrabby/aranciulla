@@ -35,7 +35,7 @@ client = AdWordsClient(path=os.path.join('..', '..', '..', '..'))
 
 # Initialize appropriate service.
 bulk_opportunity_service = client.GetBulkOpportunityService(
-    'https://adwords-sandbox.google.com', 'v201101')
+    'https://adwords.google.com', 'v201101')
 
 # Construct selector and get all campaigns.
 selector = {
