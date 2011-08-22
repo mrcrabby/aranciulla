@@ -54,6 +54,10 @@ class Google():
 						return []
 					time.sleep(10)
 					continue
+				except:
+					#something weird happened
+					log.warning('something weird happened while dealing with google instant')
+
 			HTMLtag = re.compile('<\/*b>')      # Matches HTML tags
 			data = data.decode('iso-8859-15')
 			if data[0:18] != 'window.google.ac.h':
