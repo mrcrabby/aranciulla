@@ -1,12 +1,10 @@
 import os
 import sys
-sys.path.append(os.path.join('.', 'adwords_api_python_14.2.1' ))
+sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'adwords_api_python_14.2.1' ))
 from adspygoogle.adwords.AdWordsClient import AdWordsClient
 from adspygoogle.common import Utils
 
-
-client = AdWordsClient(path=os.path.join('.', 'adwords_api_python_14.2.1' ))
-
+client = AdWordsClient(path=os.path.join(os.path.abspath(os.path.dirname(__file__)), 'adwords_api_python_14.2.1' ))
 # Initialize appropriate service.
 campaign_service = client.GetCampaignService(
     'https://adwords.google.com', 'v201101')
@@ -53,9 +51,13 @@ def get_keyword_info(keyword, mode='BROAD'):
 	
 	if 'entries' in ret and ret['entries']:
 	  for key in ret['entries']:
+			global_searches = None
+			regional_searches = None
 			data = Utils.GetDictFromMap(key['data'])
-			global_searches = data['GLOBAL_MONTHLY_SEARCHES']['value']
-			regional_searches = data['AVERAGE_TARGETED_MONTHLY_SEARCHES']['value']
+			if 'value' in data['GLOBAL_MONTHLY_SEARCHES']:
+				global_searches = data['GLOBAL_MONTHLY_SEARCHES']['value']
+			if 'value' in data['AVERAGE_TARGETED_MONTHLY_SEARCHES']:
+				regional_searches = data['AVERAGE_TARGETED_MONTHLY_SEARCHES']['value']
 	return dict(global_searches = global_searches, regional_searches = regional_searches)
         
 if __name__ == "__main__":
