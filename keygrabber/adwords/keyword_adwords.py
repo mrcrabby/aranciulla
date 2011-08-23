@@ -10,6 +10,7 @@ campaign_service = client.GetCampaignService(
     'https://adwords.google.com', 'v201101')
     
 targeting_idea_service = client.GetTargetingIdeaService('https://adwords.google.com', 'v201101')
+traffic_estimator_service = client.GetTrafficEstimatorService('https://adwords.google.com', 'v201101')
 
 
 def get_keyword_info(keyword, mode='BROAD'):
@@ -38,27 +39,82 @@ def get_keyword_info(keyword, mode='BROAD'):
 			'numberResults': '1000'
 		}
 	}
-
+	
+	selector_estimator_service = {
+		'campaignEstimateRequests': [{
+			'adGroupEstimateRequests': [{
+				'keywordEstimateRequests': [
+					{
+						'keyword': {
+							'xsi_type': 'Keyword',
+							'matchType': mode,
+							'text': keyword
+						}
+					}
+				],
+				'maxCpc': {
+					'xsi_type': 'Money',
+					'microAmount': '1000000'
+				}
+			}],
+			'targets': [
+				{
+					'xsi_type': 'CountryTarget',
+					'countryCode': 'IT'
+				},
+				{
+					'xsi_type': 'LanguageTarget',
+					'languageCode': 'it'
+				}
+			]
+		}]
+	}
+	
+	
 	#execute until no exceptions
 	for i in range(30):
 		try:
 			ret = targeting_idea_service.Get(selector)[0]
+			estimates = traffic_estimator_service.Get(selector_estimator_service)[0]
 		except:
 			continue
 		else:
 			break
 
-	
+	global_searches = None
+	regional_searches = None
 	if 'entries' in ret and ret['entries']:
 	  for key in ret['entries']:
-			global_searches = None
-			regional_searches = None
 			data = Utils.GetDictFromMap(key['data'])
 			if 'value' in data['GLOBAL_MONTHLY_SEARCHES']:
 				global_searches = data['GLOBAL_MONTHLY_SEARCHES']['value']
 			if 'value' in data['AVERAGE_TARGETED_MONTHLY_SEARCHES']:
 				regional_searches = data['AVERAGE_TARGETED_MONTHLY_SEARCHES']['value']
+	
+	if estimates:
+	  ad_group_estimate = estimates['campaignEstimates'][0]['adGroupEstimates'][0]
+	  keyword_estimates = ad_group_estimate['keywordEstimates']
+	  for index in xrange(len(keyword_estimates)):
+		estimate = keyword_estimates[index]
+
+		# Find the mean of the min and max values.
+		mean_avg_cpc = (long(estimate['max']['averageCpc']['microAmount']) +
+						long(estimate['max']['averageCpc']['microAmount'])) / 2
+		mean_avg_pos = (float(estimate['min']['averagePosition']) +
+						float(estimate['max']['averagePosition'])) / 2
+		mean_clicks = (float(estimate['min']['clicksPerDay']) +
+					   float(estimate['max']['clicksPerDay'])) / 2
+		mean_total_cost = (long(estimate['min']['totalCost']['microAmount']) +
+						   long(estimate['max']['totalCost']['microAmount'])) / 2
+
+		print ('Results for the keyword with text \'%s\' and match type \'%s\':'
+			   % (keyword, keyword))
+		print '  Estimated average CPC: %s' % mean_avg_cpc
+		print '  Estimated ad position: %s' % mean_avg_pos
+		print '  Estimated daily clicks: %s' % mean_clicks
+		print '  Estimated daily cost: %s' % mean_total_cost
+	  
 	return dict(global_searches = global_searches, regional_searches = regional_searches)
         
 if __name__ == "__main__":
-	print get_keyword_info('test')
+	print get_keyword_info('scaricare emule')

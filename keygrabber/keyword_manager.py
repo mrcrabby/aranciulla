@@ -219,6 +219,9 @@ class KeywordManager():
 		self.create_orderedkeys_collection(keywords)
 		
 	def fast_order(self):
+		'''
+		Algorithm which creates index ffor the keywords based on the values got from the crawler
+		'''
 		log.warning('Start fast ordering')
 		
 		inst_list = list()
@@ -266,6 +269,10 @@ class KeywordManager():
 			
 		
 	def order_and_publish(self):
+		'''
+		deprecated function
+		Perform a fast and incomplete order
+		'''
 		log.warning('Starting ordering')
 		inst_list = list()
 		res = list()
