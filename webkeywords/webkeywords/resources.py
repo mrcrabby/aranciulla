@@ -73,26 +73,26 @@ class InstantKeywordMongo(object):
 	__parent__= None 
 	__name__ = None
     
-    def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, dbplace=None, **kwargs):
-        self.keyword = keyword
-        self.parent = parent
-        self.category = category
-        self.level = level
-        self.dicts = dicts
-        self.depth = depth
-        self.place = place
-        self.dbplace = dbplace
-        self.has_child = False
-        self._id = None
-        self.global_searches = None
-        self.regional_searches = None
-        self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id', 'global_searches', 'regional_searches']
-    def __str__(self):
-        return 'keyword: %s, parent: %s, dicts: %s, level: %s, depth: %s, dbplace: %s, place: %s' % (self.keyword, self.parent, self.dicts, self.level, self.depth, self.dbplace, self.place)
-    
-    def to_dict(self):
-        d = dict()
-        for field in self.fields:
-        	if getattr(self, field) is not None:
-        		d[field] = getattr(self, field)
-        return d
+	def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, dbplace=None, **kwargs):
+		self.keyword = keyword
+		self.parent = parent
+		self.category = category
+		self.level = level
+		self.dicts = dicts
+		self.depth = depth
+		self.place = place
+		self.dbplace = dbplace
+		self.has_child = False
+		self._id = None
+		self.global_searches = None
+		self.regional_searches = None
+		self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id', 'global_searches', 'regional_searches']
+	def __str__(self):
+		return 'keyword: %s, parent: %s, dicts: %s, level: %s, depth: %s, dbplace: %s, place: %s' % (self.keyword, self.parent, self.dicts, self.level, self.depth, self.dbplace, self.place)
+
+	def to_dict(self):
+		d = dict()
+		for field in self.fields:
+			if getattr(self, field) is not None:
+				d[field] = getattr(self, field)
+		return d

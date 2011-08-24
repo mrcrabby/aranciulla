@@ -62,6 +62,16 @@ def adwords_ordering(limit = 0):
 	(es: come scaricare musica è figlio di come scaricare se, ad esempio,
 	come scaricare musica fa 100 ricerche al mese e come scaricare ne fa
 	10000)
+	
+	I figli sono dati dai titoli che iniziano col
+	titolo padre se i titoli figli fanno meno traffico del titolo padre
+	sia legata ad adwords 02:06:20 PM
+	se i due titoli hanno traffico 02:06:27 PM
+	0 ? 02:06:29 PM
+	 
+	Salvatore Aranzulla 02:06:35 PM
+	beh fai <=
+	e chi si è visto si è visto
 	'''
 	keys = retrieve_data_from_db(limit)
 	keys = get_adwords_data(keys)

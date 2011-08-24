@@ -200,7 +200,7 @@ class KeywordManager():
 						possible_keyword = base_k.keyword + past_words +' '+ word
 						if all(y.keyword != possible_keyword for y in to_start_dict) and not any(possible_keyword.startswith(x+' ') for x in to_start_dict_removed) and possible_keyword not in to_start_dict_removed and possible_keyword not in already_done_dicts:
 							k = InstantKeywordMongo(possible_keyword, None, None, 0, 0, 0)
-							k._id = self.collection.insert(k.to_dict())
+							#k._id = self.collection.insert(k.to_dict())
 							to_start_dict.append(k)
 							log.debug('ADDED to the list of dict :'+k.keyword)
 						past_words = past_words + ' ' + word
