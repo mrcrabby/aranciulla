@@ -16,30 +16,38 @@ def create_ordered_collection(inst_list):
 	'''
 	Create the CL_OUT collection adding an index element
 	'''
-		#add index
-		log.info('adding index')
-		for i, key in enumerate(inst_list):
-			key['index']=i 
-		#save to orderedkeys collection
-		CL_OUT.drop()
-		log.info('adding ordered keys :'+str(len(inst_list)))
-		a = CL_OUT.insert(inst_list)
-		CL_OUT.ensure_index('index')
-		log.info('collection created successfully')
-		return inst_list
+	#add index
+	log.info('adding index')
+	for i, key in enumerate(inst_list):
+		key['index']=i 
+	#save to orderedkeys collection
+	CL_OUT.drop()
+	log.info('adding ordered keys :'+str(len(inst_list)))
+	a = CL_OUT.insert(inst_list)
+	CL_OUT.ensure_index('index')
+	log.info('collection created successfully')
+	return inst_list
 
-def get_adwords_data(self, limit = 0):	
+def retrieve_data_from_db(limit=0):
+	keys = list()
+	for item in CL_IN.find().limit(limit):
+		keys.append(item)
+	return keys
+	
+def get_adwords_data(keys):	
 	'''
 	Get adwords data and save it
 	'''
-	for item in CL_IN.find().limit(limit):
+	for item in keys:
 		d = kad.get_keyword_info(item.get('keyword'))
 		item['global_searches'] = d.get('global_searches')
 		item['regional_searches'] = d.get('regional_searches')
 		CL_IN.save(item)
+	return keys
 	
 def order_by_adwords_data(keys):
-	keys.sort(key=lambda x: x['global_searches'] if 'global_searches' in x and x['global_searches'] is not None else 0 , reverse=True)
+	keys.sort(key=lambda x: x['global_searches'] if 'global_searches' in x and x['global_searches'] is not None else '0' , reverse=True)
+	print keys[0:20]
 
 def adwords_ordering(limit = 0):
 	'''
@@ -53,10 +61,8 @@ def adwords_ordering(limit = 0):
 	come scaricare musica fa 100 ricerche al mese e come scaricare ne fa
 	10000)
 	'''
-	keys = list()
-	#get_adwords_data(limit)
-	for item in CL_IN.find().limit(limit):
-		keys.append(item)
+	keys = retrieve_data_from_db(limit)
+	#keys = get_adwords_data(keys)
 	ordered_keys = order_by_adwords_data(keys)
 	create_ordered_collection(ordered_keys)
 		
