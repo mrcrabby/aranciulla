@@ -76,7 +76,8 @@ def get_keyword_info(keyword, mode='BROAD'):
 	for i in range(30):
 		try:
 			ret = targeting_idea_service.Get(selector)[0]
-			estimates = traffic_estimator_service.Get(selector_estimator_service)[0]
+			#do not get cpc for now
+			#estimates = traffic_estimator_service.Get(selector_estimator_service)[0]
 		except:
 			continue
 		else:

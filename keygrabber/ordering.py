@@ -46,8 +46,9 @@ def get_adwords_data(keys):
 	return keys
 	
 def order_by_adwords_data(keys):
-	keys.sort(key=lambda x: x['global_searches'] if 'global_searches' in x and x['global_searches'] is not None else '0' , reverse=True)
-	print keys[0:20]
+	keys.sort(key=lambda x: int(x.get('global_searches')) if x.get('global_searches') is not None else 0, reverse=True)
+	for key in keys[0:20]:
+		print key.get('keyword'), key.get('global_searches')
 	return keys
 
 def adwords_ordering(limit = 0):
@@ -63,7 +64,7 @@ def adwords_ordering(limit = 0):
 	10000)
 	'''
 	keys = retrieve_data_from_db(limit)
-	#keys = get_adwords_data(keys)
+	keys = get_adwords_data(keys)
 	ordered_keys = order_by_adwords_data(keys)
 	create_ordered_collection(ordered_keys)
 		
