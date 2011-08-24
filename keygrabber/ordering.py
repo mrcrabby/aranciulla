@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from adwords import keyword_adwords as kad
 import pymongo
 import logging
