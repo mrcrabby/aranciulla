@@ -48,6 +48,7 @@ def get_adwords_data(keys):
 def order_by_adwords_data(keys):
 	keys.sort(key=lambda x: x['global_searches'] if 'global_searches' in x and x['global_searches'] is not None else '0' , reverse=True)
 	print keys[0:20]
+	return keys
 
 def adwords_ordering(limit = 0):
 	'''
