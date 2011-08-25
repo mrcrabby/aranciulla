@@ -1,7 +1,9 @@
 from pyramid.view import view_config
 from pyramid.renderers import get_renderer
 from pyramid.response import Response
-import re
+import rei
+import codecs
+from collections import deque
 from resources import *
 from math import ceil
 import pymongo
@@ -50,26 +52,37 @@ def admin(request):
 @view_config(name='logs-google',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
 @view_config(name='logs',context='webkeywords.resources.Root', renderer='webkeywords:templates/logs.pt')
 def show_logs(request):
+	last = request.GET.get('last')
 	ufile = '/tmp/keygrabber.log'
 	if request.view_name == 'logs-google':
 		ufile = '/tmp/keygrabber-google.log'
-	f = open(ufile)
+	if last:
+		data = deque(codecs.open(ufile, "r", "utf-8"), last)
+	else:
+		data = deque(codecs.open(ufile, "r", "utf-8"))
+	'''
 	data = list()
+	
 	for line in f.readlines():
 		try:
 			data.append(unicode(line))
 		except:
 			pass
+	'''
 	return dict(filecontent=data)	
 
 @view_config(name='logs-google-download', context='webkeywords.resources.Root')
 @view_config(name='logs-download', context='webkeywords.resources.Root')
 def download_logs(request):
+	last = request.GET.get('last')
 	ufile = '/tmp/keygrabber.log'
 	if request.view_name == 'logs-google-download':
 		ufile = '/tmp/keygrabber-google.log'
-	f = open(ufile)
-	return Response(content_type='text/plain', body=f.read())
+	if last:
+		data = deque(open(ufile), last)
+	else:
+		data = deque(open(ufile))
+	return Response(content_type='text/plain', body=data)
 
 def my_view(request):
 	c = InstantKeywordMongo()    
