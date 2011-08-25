@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 from pyramid.renderers import get_renderer
 from pyramid.response import Response
-import rei
+import re
 import codecs
 from collections import deque
 from resources import *
@@ -57,7 +57,7 @@ def show_logs(request):
 	if request.view_name == 'logs-google':
 		ufile = '/tmp/keygrabber-google.log'
 	if last:
-		data = deque(codecs.open(ufile, "r", "utf-8"), last)
+		data = deque(codecs.open(ufile, "r", "utf-8"), int(last))
 	else:
 		data = deque(codecs.open(ufile, "r", "utf-8"))
 	'''
@@ -79,7 +79,7 @@ def download_logs(request):
 	if request.view_name == 'logs-google-download':
 		ufile = '/tmp/keygrabber-google.log'
 	if last:
-		data = deque(open(ufile), last)
+		data = deque(open(ufile), int(last))
 	else:
 		data = deque(open(ufile))
 	return Response(content_type='text/plain', body=data)
