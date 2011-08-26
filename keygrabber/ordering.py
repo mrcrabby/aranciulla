@@ -47,6 +47,11 @@ def get_adwords_data(keys):
 	
 def order_by_adwords_data(keys):
 	keys.sort(key=lambda x: int(x.get('global_searches')) if x.get('global_searches') is not None else 0, reverse=True)
+	for key in keys:
+		for k in keys:
+			if key.get('keyword').startswith(k.get('keyword')) and k.get('global_searches', 0) >= key.get('global_searches', 0) 
+				print 'parent of', key.get('keyword'), ' is ', k.get('keyword')
+				key['parent'] = k.get('keyword')
 	return keys
 
 def adwords_ordering(limit = 0):
