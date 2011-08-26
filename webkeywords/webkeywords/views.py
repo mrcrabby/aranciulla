@@ -78,11 +78,8 @@ def download_logs(request):
 	ufile = '/tmp/keygrabber.log'
 	if request.view_name == 'logs-google-download':
 		ufile = '/tmp/keygrabber-google.log'
-	if last:
-		data = deque(open(ufile), int(last))
-	else:
-		data = deque(open(ufile))
-	return Response(content_type='text/plain', body=data)
+	f = open(ufile)
+	return Response(content_type='text/plain', body=f.read())
 
 def my_view(request):
 	c = InstantKeywordMongo()    
