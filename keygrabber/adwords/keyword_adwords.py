@@ -72,16 +72,10 @@ def get_keyword_info(keyword, mode='BROAD'):
 	
 	estimates = None
 	ret = None	
-	#execute until no exceptions
-	for i in range(30):
-		try:
-			ret = targeting_idea_service.Get(selector)[0]
-			#do not get cpc for now
-			#estimates = traffic_estimator_service.Get(selector_estimator_service)[0]
-		except:
-			continue
-		else:
-			break
+	
+	ret = targeting_idea_service.Get(selector)[0]
+	#do not get cpc for now
+	#estimates = traffic_estimator_service.Get(selector_estimator_service)[0]
 
 	global_searches = None
 	regional_searches = None
@@ -119,4 +113,7 @@ def get_keyword_info(keyword, mode='BROAD'):
 	return dict(global_searches = global_searches, regional_searches = regional_searches)
         
 if __name__ == "__main__":
-	print get_keyword_info('scaricare emule')
+	for i in ['scaricare emule']:
+		print i
+		print get_keyword_info(i)
+

@@ -30,13 +30,8 @@ def create_ordered_collection(inst_list):
 
 def retrieve_data_from_db(limit=0):
 	keys = list()
-	print 'limit is ', limit
-	print 'count is ', CL_IN.find().limit(limit).count()
-	i = 0
 	for item in CL_IN.find().limit(limit):
 		keys.append(item)
-		print 'iteration: ', i
-		i =  i +1
 	return keys
 	
 def get_adwords_data(keys):	
@@ -52,9 +47,6 @@ def get_adwords_data(keys):
 	
 def order_by_adwords_data(keys):
 	keys.sort(key=lambda x: int(x.get('global_searches')) if x.get('global_searches') is not None else 0, reverse=True)
-	for key in keys[0:500]:
-		print key.get('keyword'), key.get('global_searches')
-	
 	return keys
 
 def adwords_ordering(limit = 0):
@@ -79,12 +71,11 @@ def adwords_ordering(limit = 0):
 	beh fai <=
 	e chi si è visto si è visto
 	'''
-	print 'limit is ', limit
 	keys = retrieve_data_from_db(limit)
-	#keys = get_adwords_data(keys)
+	keys = get_adwords_data(keys)
 	ordered_keys = order_by_adwords_data(keys)
 	create_ordered_collection(ordered_keys)
 		
 
 if __name__ == "__main__":
-	adwords_ordering(20000)
+	adwords_ordering(10000)
