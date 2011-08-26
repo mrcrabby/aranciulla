@@ -93,6 +93,7 @@ class InstantKeywordMongo(object):
 	def to_dict(self):
 		d = dict()
 		for field in self.fields:
-			if getattr(self, field) is not None:
-				d[field] = getattr(self, field)
+			value = getattr(self, field)
+			if value is not None and value is not False:
+				d[field] = value
 		return d
