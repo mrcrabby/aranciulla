@@ -22,7 +22,7 @@
 												<a href="${request.resource_url(request.root, query=dict(get_args_keyword, parent=item.keyword))}" tal:content="item.keyword"></a>
 											</tal:i>
 											<tal:e tal:condition='not item.has_child'>
-												<span tal:content="item.keyword"></span>
+												<span tal:content="item.keyword + ' global searches: ' + item.global_searches + ' regional searches: ' + item.regional_searches"></span>
 											</tal:e>
 										</td>
 										<td class="col2">											<tal:index condition="request.view_name == ''">
