@@ -123,7 +123,6 @@ def search_keyword(context, request):
 			filt = {'$nor': [dict(keyword=v) for v in  user.scritti+user.bloccati]}
 		else:
 			filt = dict()
-	print dict(k_mongo.to_dict().items()+filt.items())	
 	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items())).sort('index') if filt is not None else []
 	insts = [dict([(field, x.get(field)) for field in k_mongo.fields]) for x in inst_list]
 	#crop keywords
