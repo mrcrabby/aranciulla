@@ -81,6 +81,58 @@ def adwords_ordering(limit = 0):
 	ordered_keys = order_by_adwords_data(keys)
 	create_ordered_collection(ordered_keys)
 		
+def fast_order(self):
+	'''
+	Algorithm which creates index ffor the keywords based on the values got from the crawler
+	'''
+	log.warning('Start fast ordering')
+	
+	inst_list = list()
+	cursors = list()
+	wrong_list = list()
+	
+	def _update_threshold(dicts= 100, level = 7, depth =4, dbplace=10):	
+		m_dicts = 1
+		m_level = 0
+		m_depth = 0
+		m_dbplace = 1
+		
+		yield (m_dicts, m_level, m_depth, m_dbplace)
+		
+		while m_dicts < dicts:
+			m_dbplace = m_dbplace + 1
+			if m_dbplace > dbplace:
+				m_depth = m_depth +1
+				m_dbplace = 1
+			if m_depth > depth:
+				m_level = m_level + 1
+				m_depth = 0
+				m_dbplace = 0
+			if m_level > level:
+				m_dicts = m_dicts +1
+				m_level = 0
+				m_depth = 0
+				m_dbplace = 0
+			yield (m_dicts, m_level, m_depth, m_dbplace)
+	
+	root = CL_IN.find_one(dict(dicts=0, parent=None))
+	max_dicts = CL_IN.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
+	max_level = CL_IN.find().sort([('level',pymongo.DESCENDING),])[0].get('level')
+	max_depth = CL_IN.find().sort([('depth',pymongo.DESCENDING),])[0].get('depth')
+	max_dbplace = CL_IN.find().sort([('dbplace',pymongo.DESCENDING),])[0].get('dbplace')
 
+	for (dicts, level, depth, dbplace) in _update_threshold(max_dicts, max_level, max_depth, max_dbplace):
+		log.info("threashold:"+str(dicts)+" "+str(level)+" "+str(depth)+" "+str(dbplace))
+		for letter in ascii_lowercase:
+			items = [item for item in CL_IN.find(dict(keyword=re.compile('^'+root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
+			if len(items) > 0:
+				inst_list.extend(items)
+		log.info("successfully ordered :"+str(len(inst_list)))
+	return inst_list
+
+def do_fast_order():
+	ordered_keys = fast_order()
+	create_ordered_collection(ordered_keys)
+	
 if __name__ == "__main__":
 	adwords_ordering(10000)
