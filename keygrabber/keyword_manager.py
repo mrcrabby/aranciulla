@@ -199,7 +199,14 @@ class KeywordManager():
 					for word in keyword.split()[:-1]:
 						possible_keyword = base_k.keyword + past_words +' '+ word
 						if all(y.keyword != possible_keyword for y in to_start_dict) and not any(possible_keyword.startswith(x+' ') for x in to_start_dict_removed) and possible_keyword not in to_start_dict_removed and possible_keyword not in already_done_dicts:
-							k = InstantKeywordMongo(possible_keyword, None, None, 0, 0, 0)
+							parent = None
+							i = 0
+							log.debug('found that we should start a dictionary for '+ possible_keyword)
+							while parent is None:
+								i = i + 1
+								parent = self.collection.find_one({'keyword':' '.join(possible_keyword.split()[:-i])})
+							log.debug('parent for  '+ possible_keyword + ' is ' + parent.get('keyword'))
+							k = InstantKeywordMongo(possible_keyword, parent.get('keyword'), None, 0, 0, 0)
 							#k._id = self.collection.insert(k.to_dict())
 							to_start_dict.append(k)
 							log.debug('ADDED to the list of dict :'+k.keyword)

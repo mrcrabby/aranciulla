@@ -19,7 +19,7 @@
 										<td class="col1">
 											<tal:i tal:condition='item.has_child'>
 												<img src="${request.static_url('webkeywords:static/images/ico05.png')}" alt="" width="12" height="12" />
-												<a href="${request.resource_url(request.root, query=dict(get_args_keyword, parent=item.keyword))}" tal:content="item.keyword"></a>
+												<a href="${request.resource_url(request.root, query=dict(get_args_keyword, parent=item.keyword))}">${item.keyword} ${'- global searches: ' + item.global_searches if item.global_searches is not None else ''} ${'- regional searches: ' + item.regional_searches if item.regional_searches is not None else ''}</a>
 											</tal:i>
 											<tal:e tal:condition='not item.has_child'>
 												<span>${item.keyword} ${'- global searches: ' + item.global_searches if item.global_searches is not None else ''} ${'- regional searches: ' + item.regional_searches if item.regional_searches is not None else ''}</span>

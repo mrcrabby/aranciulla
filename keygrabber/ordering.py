@@ -25,6 +25,7 @@ def create_ordered_collection(inst_list):
 	log.info('adding ordered keys :'+str(len(inst_list)))
 	a = CL_OUT.insert(inst_list)
 	CL_OUT.ensure_index('index')
+	CL_OUT.ensure_index('parent')
 	log.info('collection created successfully')
 	return inst_list
 
@@ -49,9 +50,10 @@ def order_by_adwords_data(keys):
 	keys.sort(key=lambda x: int(x.get('global_searches')) if x.get('global_searches') is not None else 0, reverse=True)
 	for key in keys:
 		for k in keys:
-			if key.get('keyword').startswith(k.get('keyword')) and k.get('global_searches', 0) >= key.get('global_searches', 0) 
+			if key.get('keyword').startswith(k.get('keyword')+' ') and k.get('global_searches', 0) >= key.get('global_searches', 0):
 				print 'parent of', key.get('keyword'), ' is ', k.get('keyword')
-				key['parent'] = k.get('keyword')
+				key['has_child'] = True
+				break
 	return keys
 
 def adwords_ordering(limit = 0):
@@ -77,7 +79,7 @@ def adwords_ordering(limit = 0):
 	e chi si è visto si è visto
 	'''
 	keys = retrieve_data_from_db(limit)
-	keys = get_adwords_data(keys)
+	#keys = get_adwords_data(keys)
 	ordered_keys = order_by_adwords_data(keys)
 	create_ordered_collection(ordered_keys)
 		
