@@ -99,7 +99,8 @@ def search_keyword(context, request):
 		get_args_keyword.pop('page')
 	if 'category' in get_args_keyword:
 		get_args_keyword.pop('category')  
-	
+
+	sort = request.GET.get('sort_by', 'google instant')	
 	fields = list(k_mongo.fields)
 	user = _get_user(request)	
 	for field in fields:
@@ -123,7 +124,10 @@ def search_keyword(context, request):
 			filt = {'$nor': [dict(keyword=v) for v in  user.scritti+user.bloccati]}
 		else:
 			filt = dict()
-	inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items())).sort('index') if filt is not None else []
+	if sort == 'google instant':
+		inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items())).sort('index') if filt is not None else []
+	else:
+		inst_list = request.db.orderedkeys.find(dict(k_mongo.to_dict().items()+filt.items())).sort([('global_searches',pymongo.DESCENDING),]) if filt is not None else []
 	insts = [dict([(field, x.get(field)) for field in k_mongo.fields]) for x in inst_list]
 	#crop keywords
 	email = authenticated_userid(request)
@@ -185,7 +189,7 @@ def search_keyword(context, request):
 	categories.sort()
 	return {'total': count, 'more_pages':more_pages, 'category':k_mongo.category, 'categories':categories, 'keywords':insts, 'get_args':get_args,
 	 'first_args':first_args, 'preview_args':preview_args, 'last_args':last_args, 'list_page_args':list_page_args,
-	'end_args':end_args, 'cur_page': cur_page, 'orientation':orientation, 'get_args_keyword':get_args_keyword}
+	'end_args':end_args, 'cur_page': cur_page, 'orientation':orientation, 'get_args_keyword':get_args_keyword, 'sort_by':sort}
 
 @view_config(name='scritto', context='webkeywords.resources.Root', renderer='json', permission='view')
 @view_config(name='bloccato', context='webkeywords.resources.Root', renderer='json', permission='view')

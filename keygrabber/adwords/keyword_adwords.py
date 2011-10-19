@@ -83,9 +83,9 @@ def get_keyword_info(keyword, mode='BROAD'):
 	  for key in ret['entries']:
 			data = Utils.GetDictFromMap(key['data'])
 			if 'value' in data['GLOBAL_MONTHLY_SEARCHES']:
-				global_searches = data['GLOBAL_MONTHLY_SEARCHES']['value']
+				global_searches = int(data['GLOBAL_MONTHLY_SEARCHES']['value'])
 			if 'value' in data['AVERAGE_TARGETED_MONTHLY_SEARCHES']:
-				regional_searches = data['AVERAGE_TARGETED_MONTHLY_SEARCHES']['value']
+				regional_searches = int(data['AVERAGE_TARGETED_MONTHLY_SEARCHES']['value'])
 	
 	if estimates is not None:
 	  ad_group_estimate = estimates['campaignEstimates'][0]['adGroupEstimates'][0]

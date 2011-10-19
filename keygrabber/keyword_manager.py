@@ -24,29 +24,32 @@ hdlr.setFormatter(formatter)
 log.addHandler(hdlr)
 
 class InstantKeywordMongo(object):
-    def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, dbplace=None, **kwargs):
-        self.keyword = keyword
-        self.parent = parent
-        self.category = category
-        self.level = level
-        self.dicts = dicts
-        self.depth = depth
-        self.place = place
-        self.dbplace = dbplace
-        self.has_child = False
-        self._id = None
-        self.global_searches = None
-        self.regional_searches = None
-        self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id', 'global_searches', 'regional_searches']
-    def __str__(self):
-        return 'keyword: %s, parent: %s, dicts: %s, level: %s, depth: %s, dbplace: %s, place: %s' % (self.keyword, self.parent, self.dicts, self.level, self.depth, self.dbplace, self.place)
-    
-    def to_dict(self):
-        d = dict()
-        for field in self.fields:
-        	if getattr(self, field) is not None:
-        		d[field] = getattr(self, field)
-        return d
+	def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, dbplace=None, second_choice = False,  **kwargs):
+		self.keyword = keyword
+		self.parent = parent
+		self.category = category
+		self.level = level
+		self.dicts = dicts
+		self.depth = depth
+		self.place = place
+		self.dbplace = dbplace
+		self.has_child = False
+		self._id = None
+		self.global_searches = None
+		self.regional_searches = None
+		self.second_choice = second_choice
+		self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id', 'global_searches', 'regional_searches', 'second_choice']
+
+	def __str__(self):
+		return 'keyword: %s, parent: %s, dicts: %s, level: %s, depth: %s, dbplace: %s, place: %s' % (self.keyword, self.parent, self.dicts, self.level, self.depth, self.dbplace, self.place)
+
+	def to_dict(self):
+		d = dict()
+		for field in self.fields:
+			value = getattr(self, field)
+			if value is not None:
+				d[field] = value
+		return d
 
             
 class KeywordManager():    
@@ -76,12 +79,19 @@ class KeywordManager():
 				keywords.append(key)
 				d_lev[key]=lev
 		if parent_k is None:
-			parent_k = InstantKeywordMongo('parent', None, None, 0, 0, 0, 0)
+			parent_k = InstantKeywordMongo('', None, None, 0, 0, 0, 0)
+			parent_keyword = ''
+		else:
+			p_k = self.collection.find_one({'keyword':parent_k.keyword})
+			if p_k is None:
+				p_k = self.collection.find_one({'keyword': parent_k.parent})
+				
+			parent_keyword = p_k.get('keyword')
 		for keyword in keywords:
 			result = self.collection.find_one({'keyword':keyword})
 			if result is None:
 				log.debug('keyword NOT found in database: '+ keyword)
-				key_entry= InstantKeywordMongo(keyword, parent_k.keyword, parent_k.category, d_lev[keyword] if d_lev else parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1, len(keys)+1)
+				key_entry= InstantKeywordMongo(keyword, parent_keyword, parent_k.category, d_lev[keyword] if d_lev else parent_k.level, parent_k.dicts, parent_k.depth, keywords.index(keyword)+1, len(keys)+1, parent_k.second_choice)
 				key_entry._id = self.collection.insert(key_entry.to_dict())
 				if parent_k._id is not None and parent_k.has_child is False:
 					parent_k.has_child = True
@@ -160,7 +170,7 @@ class KeywordManager():
 			for word in d.get():
 				ilist=list()
 				log.debug('SEARCHING for ='+key.keyword+' '+word)
-				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word))
+				key = InstantKeywordMongo(key.keyword, key.parent, None, level, dicts, len(word), second_choice = key.second_choice)
 				r_search = self.s_eng.search(key.keyword+' '+word)
 				keyws = self.__add_keywords_to_database(r_search, key)
 				for x in keyws:
@@ -206,10 +216,10 @@ class KeywordManager():
 								i = i + 1
 								parent = self.collection.find_one({'keyword':' '.join(possible_keyword.split()[:-i])})
 							log.debug('parent for  '+ possible_keyword + ' is ' + parent.get('keyword'))
-							k = InstantKeywordMongo(possible_keyword, parent.get('keyword'), None, 0, 0, 0)
+							k = InstantKeywordMongo(possible_keyword, parent.get('keyword'), None, 0, 0, 0, second_choice=True)
 							#k._id = self.collection.insert(k.to_dict())
 							to_start_dict.append(k)
-							log.debug('ADDED to the list of dict :'+k.keyword)
+							log.debug('ADDED to the list of dict :'+k.keyword+ ' and second_choice is'+ str(k.second_choice))
 						past_words = past_words + ' ' + word
 								
 					if self.collection.find(dict(keyword=re.compile(re.escape(x.keyword)))).count() >= max_answers:

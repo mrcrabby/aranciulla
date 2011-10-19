@@ -2,7 +2,8 @@
 from adwords import keyword_adwords as kad
 import pymongo
 import logging
-
+from string import ascii_lowercase
+import re
 
 log = logging.getLogger('ordering')
 log.addHandler(logging.FileHandler('/tmp/keygrabber-ordering.log', 'w'))
@@ -41,8 +42,8 @@ def get_adwords_data(keys):
 	'''
 	for item in keys:
 		d = kad.get_keyword_info(item.get('keyword'))
-		item['global_searches'] = d.get('global_searches')
-		item['regional_searches'] = d.get('regional_searches')
+		item['global_searches'] = int(d.get('global_searches')) if d.get('global_searches') else None
+		item['regional_searches'] = int(d.get('regional_searches')) if d.get('regional_searches') else None
 		CL_IN.save(item)
 	return keys
 	
@@ -79,56 +80,100 @@ def adwords_ordering(limit = 0):
 	e chi si è visto si è visto
 	'''
 	keys = retrieve_data_from_db(limit)
-	#keys = get_adwords_data(keys)
-	ordered_keys = order_by_adwords_data(keys)
-	create_ordered_collection(ordered_keys)
+	keys = get_adwords_data(keys)
+	#ordered_keys = order_by_adwords_data(keys)
+	#create_ordered_collection(ordered_keys)
 		
-def fast_order(self):
+def fast_order():
 	'''
 	Algorithm which creates index ffor the keywords based on the values got from the crawler
 	'''
 	log.warning('Start fast ordering')
 	
 	inst_list = list()
-	cursors = list()
-	wrong_list = list()
 	
-	def _update_threshold(dicts= 100, level = 7, depth =4, dbplace=10):	
-		m_dicts = 1
-		m_level = 0
-		m_depth = 0
-		m_dbplace = 1
-		
-		yield (m_dicts, m_level, m_depth, m_dbplace)
-		
-		while m_dicts < dicts:
-			m_dbplace = m_dbplace + 1
-			if m_dbplace > dbplace:
-				m_depth = m_depth +1
-				m_dbplace = 1
-			if m_depth > depth:
-				m_level = m_level + 1
-				m_depth = 0
-				m_dbplace = 0
-			if m_level > level:
-				m_dicts = m_dicts +1
-				m_level = 0
-				m_depth = 0
-				m_dbplace = 0
-			yield (m_dicts, m_level, m_depth, m_dbplace)
+	class Iterator:
+		def __init__(self, m_dicts, m_level, m_depth, m_dbplace):
+			self.dicts = m_dicts
+			self.level = m_level
+			self.depth = m_depth
+			self.dbplace = m_dbplace
+			self.jumped = False	
+
+		def __iter__(self):
+			return self
 	
+		def iterator(self):	
+			self.m_dicts = 1
+			self.m_level = 0
+			self.m_depth = 0
+			self.m_dbplace = 1
+			self.reset = False	
+
+			yield (self.reset, self.m_dicts, self.m_level, self.m_depth, self.m_dbplace)
+			
+			while self.m_dicts < self.dicts:
+				self.m_dbplace = self.m_dbplace + 1
+				self.reset = False
+				if self.m_dbplace > self.dbplace:
+					self.m_depth = self.m_depth +1
+					self.m_dbplace = 1
+					self.reset = True
+				if self.m_depth > self.depth:
+					self.m_level = self.m_level + 1
+					self.m_depth = 0
+					self.m_dbplace = 0
+					self.reset = True
+				if self.m_level > self.level:
+					self.m_dicts = self.m_dicts +1
+					self.m_level = 0
+					self.m_depth = 0
+					self.m_dbplace = 0
+					self.reset = True
+				yield (self.reset, self.m_dicts, self.m_level, self.m_depth, self.m_dbplace)
+		
+		def jump(self):
+			self.m_dicts += 1
+			self.m_level = 0
+			self.m_depth = 0
+			self.m_dbplace = 0
+		def step_depth(self):
+			self.m_dpblace = 0
+			self.m_depth += 1
+		
 	root = CL_IN.find_one(dict(dicts=0, parent=None))
 	max_dicts = CL_IN.find().sort([('dicts',pymongo.DESCENDING),])[0].get('dicts')
 	max_level = CL_IN.find().sort([('level',pymongo.DESCENDING),])[0].get('level')
 	max_depth = CL_IN.find().sort([('depth',pymongo.DESCENDING),])[0].get('depth')
 	max_dbplace = CL_IN.find().sort([('dbplace',pymongo.DESCENDING),])[0].get('dbplace')
 
-	for (dicts, level, depth, dbplace) in _update_threshold(max_dicts, max_level, max_depth, max_dbplace):
+	blacklist = set()
+	count = 0
+	it = Iterator(max_dicts, max_level, max_depth, max_dbplace)
+	for (reset, dicts, level, depth, dbplace) in it.iterator():
 		log.info("threashold:"+str(dicts)+" "+str(level)+" "+str(depth)+" "+str(dbplace))
+		if len(blacklist) == 26:
+			it.step_depth()
+			blacklist = set()
+		print "count == ", count, 'database == ', CL_IN.find(dict(dicts=dicts)).count()
+		if count >=  CL_IN.find(dict(dicts=dicts)).count():
+			count = 0
+			it.jump()
+			blacklist = set()
+			continue
+		if reset:
+			blacklist = set()
 		for letter in ascii_lowercase:
-			items = [item for item in CL_IN.find(dict(keyword=re.compile('^'+root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
-			if len(items) > 0:
-				inst_list.extend(items)
+			if letter not in blacklist: 
+				print dicts, level, depth, dbplace
+				items = [item for item in CL_IN.find(dict(keyword=re.compile('^'+root.get('keyword')+' '+letter), dicts=dicts, level=level, depth=depth, dbplace=dbplace))]
+				print len(items)
+				if len(items) > 0:
+					count += len(items)
+					inst_list.extend(items)
+				else:
+					print 'adding %s to blacklist' % letter
+					blacklist.add(letter)
 		log.info("successfully ordered :"+str(len(inst_list)))
 	return inst_list
 
@@ -137,4 +182,5 @@ def do_fast_order():
 	create_ordered_collection(ordered_keys)
 	
 if __name__ == "__main__":
-	adwords_ordering(10000)
+	do_fast_order()
+	#adwords_ordering()

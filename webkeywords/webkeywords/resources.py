@@ -73,7 +73,7 @@ class InstantKeywordMongo(object):
 	__parent__= None 
 	__name__ = None
     
-	def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, dbplace=None, **kwargs):
+	def __init__(self, keyword=None, parent=None, category=None, level=None, dicts=None, depth=None, place=None, dbplace=None, second_choice=False, **kwargs):
 		self.keyword = keyword
 		self.parent = parent
 		self.category = category
@@ -86,7 +86,8 @@ class InstantKeywordMongo(object):
 		self._id = None
 		self.global_searches = None
 		self.regional_searches = None
-		self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id', 'global_searches', 'regional_searches']
+		self.second_choice = second_choice
+		self.fields = ['keyword', 'level', 'dicts', 'depth', 'place', 'dbplace', 'category', 'parent', 'has_child', '_id', 'global_searches', 'regional_searches', 'second_choice']
 	def __str__(self):
 		return 'keyword: %s, parent: %s, dicts: %s, level: %s, depth: %s, dbplace: %s, place: %s' % (self.keyword, self.parent, self.dicts, self.level, self.depth, self.dbplace, self.place)
 

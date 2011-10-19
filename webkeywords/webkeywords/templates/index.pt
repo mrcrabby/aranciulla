@@ -19,10 +19,10 @@
 										<td class="col1">
 											<tal:i tal:condition='item.has_child'>
 												<img src="${request.static_url('webkeywords:static/images/ico05.png')}" alt="" width="12" height="12" />
-												<a href="${request.resource_url(request.root, query=dict(get_args_keyword, parent=item.keyword))}">${item.keyword} ${'- global searches: ' + item.global_searches if item.global_searches is not None else ''} ${'- regional searches: ' + item.regional_searches if item.regional_searches is not None else ''}</a>
+												<a href="${request.resource_url(request.root, query=dict(get_args_keyword, parent=item.keyword))}">${item.keyword} ${'- global: ' + str(item.global_searches) if item.global_searches is not None else ''} ${'- regional: ' + str(item.regional_searches) if item.regional_searches is not None else ''} ${'- second choice' if item.second_choice else ''}</a>
 											</tal:i>
 											<tal:e tal:condition='not item.has_child'>
-												<span>${item.keyword} ${'- global searches: ' + item.global_searches if item.global_searches is not None else ''} ${'- regional searches: ' + item.regional_searches if item.regional_searches is not None else ''}</span>
+												<span>${item.keyword} ${'- global: ' + str(item.global_searches) if item.global_searches is not None else ''} ${'- regional: ' + str(item.regional_searches) if item.regional_searches is not None else ''} ${'- second choice' if item.second_choice else ''}</span>
 											</tal:e>
 										</td>
 										<td class="col2">											<tal:index condition="request.view_name == ''">
@@ -35,7 +35,27 @@
 								<a tal:omit-tag="i.get('page') == cur_page" href="${request.resource_url(request.root, query=i)}" tal:content="i.get('page')"></a>
 							</li>
 						</ul>
-					</div>				</div>				<div id="sidebar">					<div class="sidebox">						<div class="holder">							<div class="frame">								<div class="heading">									<h3>FILTRA PER PAROLE CHIAVE</h3>								</div>								<form action="" class="search-form" method="get">									<fieldset>										<div class="text">											<input type="text" name="keyword" />										</div>										<input type="submit" class="submit" value="Ok" />									</fieldset>								</form>							</div>						</div>					</div>					<div class="sidebox">						<div class="holder">							<div class="frame">								<div class="heading">									<h3>FILTRA PER CATEGORIA</h3>								</div>								<div class="menu">									<ul>										<li tal:repeat="category categories" class="${'active' if category == get_args.get('category') else ''}"><a href="${request.resource_url(request.root, query=dict(category=category))}">${category}</a></li>										<!--
+					</div>				</div>				<div id="sidebar">					<div class="sidebox">						<div class="holder">							<div class="frame">								<div class="heading">									<h3>FILTRA PER PAROLE CHIAVE</h3>								</div>								<form action="" class="search-form" method="get">									<fieldset>										<div class="text">											<input type="text" name="keyword" />										</div>										<input type="submit" class="submit" value="Ok" />									</fieldset>								</form>							</div>						</div>					</div>
+<div class="sidebox">
+	<div class="holder">
+		<div class="frame">
+			<div class="heading">
+				<h3>Sort by</h3>
+			</div>
+			<form action="" method="get">
+				<fieldset>
+					<select onchange="this.form.submit();" name="sort_by">
+						<option value="google instant" tal:attributes="selected sort_by=='google instant'">Google Instant</option>
+						<option value="google adwords" tal:attributes="selected sort_by=='google adwords'">Google Adwords</option>
+					</select>
+					<tal:r repeat="(arg, value) get_args.iteritems()">
+						<input tal:condition="arg != 'sort_by'" type="hidden" name="${arg}" value="${value}">
+					</tal:r>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>					<div class="sidebox">						<div class="holder">							<div class="frame">								<div class="heading">									<h3>FILTRA PER CATEGORIA</h3>								</div>								<div class="menu">									<ul>										<li tal:repeat="category categories" class="${'active' if category == get_args.get('category') else ''}"><a href="${request.resource_url(request.root, query=dict(category=category))}">${category}</a></li>										<!--
 										<li class="active"><a href="#">Tecnologia</a></li>
 										-->									</ul>									<span class="mask">&nbsp;</span>								</div>							</div>						</div>					</div>					<div class="text-box">						<p>Argomenti trovati in totale: <strong tal:content="total"></strong></p>						<!--<p>Ultimo aqgiornamento: <strong>27 Marzo 2011</strong></p>-->					</div>				</div>			</div>		</div>
 	</div>
