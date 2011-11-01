@@ -10,7 +10,7 @@ log.addHandler(logging.FileHandler('/tmp/keygrabber-ordering.log', 'w'))
 
 connection = pymongo.Connection()
 DB = connection.webkeywords
-CL_IN = DB.crawlerCopy
+CL_IN = DB.crawler
 CL_OUT = DB.orderedkeys
 
 def create_ordered_collection(inst_list):
@@ -24,10 +24,17 @@ def create_ordered_collection(inst_list):
 	#save to orderedkeys collection
 	CL_OUT.drop()
 	log.info('adding ordered keys :'+str(len(inst_list)))
-	a = CL_OUT.insert(inst_list)
+	i=0
+	maximum = len(inst_list)
+	print '#keywords: ', maximum
+	while i < maximum:
+		j = i + 1000 if i + 1000 < maximum else maximum
+		a = CL_OUT.insert(inst_list[i:j])
+		i = j
 	CL_OUT.ensure_index('index')
 	CL_OUT.ensure_index('parent')
 	log.info('collection created successfully')
+	print CL_OUT.find().count()
 	return inst_list
 
 def retrieve_data_from_db(limit=0):
@@ -89,7 +96,7 @@ def fast_order():
 	Algorithm which creates index ffor the keywords based on the values got from the crawler
 	'''
 	log.warning('Start fast ordering')
-	
+	'''
 	inst_list = list()
 	
 	class Iterator:
@@ -147,6 +154,7 @@ def fast_order():
 	max_depth = CL_IN.find().sort([('depth',pymongo.DESCENDING),])[0].get('depth')
 	max_dbplace = CL_IN.find().sort([('dbplace',pymongo.DESCENDING),])[0].get('dbplace')
 
+
 	blacklist = set()
 	count = 0
 	it = Iterator(max_dicts, max_level, max_depth, max_dbplace)
@@ -175,7 +183,11 @@ def fast_order():
 					print 'adding %s to blacklist' % letter
 					blacklist.add(letter)
 		log.info("successfully ordered :"+str(len(inst_list)))
+
 	return inst_list
+	'''
+	CL_IN.ensure_index([('dicts',pymongo.ASCENDING),('level',pymongo.ASCENDING),('depth',pymongo.ASCENDING),('dbplace',pymongo.ASCENDING),('keyword',pymongo.ASCENDING)])
+	return [item for item in CL_IN.find().sort([('dicts',pymongo.ASCENDING),('level',pymongo.ASCENDING),('depth',pymongo.ASCENDING),('dbplace',pymongo.ASCENDING),('keyword',pymongo.ASCENDING)])]
 
 def do_fast_order():
 	ordered_keys = fast_order()
